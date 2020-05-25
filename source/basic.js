@@ -77,10 +77,10 @@ function showForm(name, task, strdate) {
   }
 
   if (name=="show") {
-    elems["title"].setAttribute("data-id",task.id);
+    elems.getElementsByClassName("title")[0].setAttribute("data-id",task.id);
     d = new Date(Number(task.timeid));
-    elems["clarifyrepeat"].title = "";
-    elems["clarifyrepeat"].style.display = "none";
+    elems.getElementsByClassName("clarifyrepeat")[0].title = "";
+    elems.getElementsByClassName("clarifyrepeat")[0].style.display = "none";
     title = task.title;
     description = task.description || "";
     if (task.repeat) {
@@ -92,11 +92,11 @@ function showForm(name, task, strdate) {
         years: "rok"
       };
       var weekdays = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
-      elems["repeatamount"].innerHTML = "co " + amount + " " + units[task.repeat.unit];
+      elems.getElementsByClassName("repeatamount")[0].innerHTML = "co " + amount + " " + units[task.repeat.unit];
       if (task.repeat.unit == "months") {
-        elems["clarifyrepeat"].style.display = "inline";
+        elems.getElementsByClassName("clarifyrepeat")[0].display = "inline";
         if(task.repeat.type == "sameday")
-          elems["clarifyrepeat"].title += d.getDate()+ ". dzień każdego miesiąca\n";
+          elems.getElementsByClassName("clarifyrepeat")[0] += d.getDate()+ ". dzień każdego miesiąca\n";
         else {
           var nweekday = getWhichWeekDay(d);
           elems["clarifyrepeat"].title += nweekday+ ". "+weekdays[d.getDay()]+" każdego miesiąca\n";
@@ -104,7 +104,7 @@ function showForm(name, task, strdate) {
       } 
       $('.repeatbox').show();
       if (task.repeat.end) {
-        elems["clarifyrepeat"].style.display = "inline";
+        elems.getElementsByClassName("clarifyrepeat")[0].style.display = "inline";
         enddate = decodeDate(task.repeat.end);
         var dates = {
           year:""+enddate.getFullYear(),
@@ -114,7 +114,7 @@ function showForm(name, task, strdate) {
         var c = ["month","day"];
         for (var i = 0; i < c.length; i++)
           if ( (""+dates[ c[i] ]).length < 2) dates[c[i]] = "0"+dates[c[i]];
-        elems["clarifyrepeat"].title += "Koniec zadania: "+dates.day + "/" + dates.month + "/" + dates.year;
+        elems.getElementsByClassName("clarifyrepeat")[0].title += "Koniec zadania: "+dates.day + "/" + dates.month + "/" + dates.year;
       }
     }
 
@@ -131,7 +131,7 @@ function showForm(name, task, strdate) {
 
     document.getElementById(name+'box').style.display = 'block';
 
-    elems["title"].innerHTML = title;
+    elems.getElementsByClassName("title")[0].innerHTML = title;
 
     if (description) {
       elems["description"].value = description;
@@ -139,8 +139,8 @@ function showForm(name, task, strdate) {
       elems["description"].style.cssText = 'height:' + elems["description"].scrollHeight + 'px';
     } else elems["description"].style.display = "none";
 
-    elems["date"].innerHTML = dates.day + "/" + dates.month + "/" + dates.year;
-    elems["time"].innerHTML = dates.hours + ":" + dates.minutes;
+    elems.getElementsByClassName("date")[0].innerHTML = dates.day + "/" + dates.month + "/" + dates.year;
+    elems.getElementsByClassName("time")[0].innerHTML = dates.hours + ":" + dates.minutes;
 
     return task;
   }
@@ -272,7 +272,7 @@ function formClarify(name, date) {
 
 function getTaskFromForm(name,silent) {
   var today = new Date();
-  var elems = document.getElementsByClassName(name);
+  var elems = document.forms[name];
 
   if((!elems["title"].value || !elems["date"].value || !elems["time"].value)&&!silent){
     dialog.showMessageBoxSync(require("electron").remote.getCurrentWindow(),{type:"error", title:"Błąd", message:"Conajmniej jedno z pól nie jest uzupełnione."});
