@@ -253,7 +253,7 @@ function formClarify(name, date) {
   if (!date)
     d = decodeDate(task.date)
   else d = date;
-  var elems = document.getElementsByClassName(name);
+  var elems = document.forms[name];
   var value = elems["repeatunit"].value;
   var weekdays = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
   switch (value) {

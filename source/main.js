@@ -248,10 +248,10 @@ function createWindow (silent, startup) {
   // mainwin.webContents.openDevTools()
 
   // Emitted when the window is closed.
-  mainwin.on('close', (event) => {
-    event.preventDefault();
-    mainwin.hide();
-  });
+  // mainwin.on('close', (event) => {
+  //   event.preventDefault();
+  //   mainwin.hide();
+  // });
 }
 
 function hideWindowOnBlur(){
@@ -425,10 +425,10 @@ function loadApp() {
         });
         mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
 
-        mainwin.on('close', (event) => {
-          event.preventDefault();
-          mainwin.hide();
-        });
+        // mainwin.on('close', (event) => {
+        //   event.preventDefault();
+        //   mainwin.hide();
+        // });
         break;
       case "list":
         settings.current.mode = "list";
@@ -462,10 +462,10 @@ function loadApp() {
         });
         mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
 
-        mainwin.on('close', (event) => {
-          event.preventDefault();
-          mainwin.hide();
-        });
+        // mainwin.on('close', (event) => {
+        //   event.preventDefault();
+        //   mainwin.hide();
+        // });
         break;
     }
   });
