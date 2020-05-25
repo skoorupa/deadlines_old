@@ -91,24 +91,24 @@
 				</div>
 				<div class="dropdown icon right clickable underline" onclick="showForm('edit',editedtask);">📝</div>
 			</div>
-			<form class="form">
-				<h1 class="show" name="title"></h1>
-				<textarea class="show" name="description" placeholder="Opis zadania" readonly></textarea>
+			<form class="form" id="show">
+				<h1 name="title"></h1>
+				<textarea name="description" placeholder="Opis zadania" readonly></textarea>
 
 				<label>
 					📅:
-					<span class="show" name="date"></span><br>
+					<span name="date"></span><br>
 				</label>
 
 				<label>
 					🕓:
-					<span class="show" name="time"></span><br>
+					<span name="time"></span><br>
 				</label>
 
 				<label class="repeatbox nomargin" style="margin-left: 0px;">
 					🔁:
-					<span class="show" name="repeatamount"></span>
-					<span class="show" name="clarifyrepeat" title="" style="display: none;">💭</span>
+					<span name="repeatamount"></span>
+					<span name="clarifyrepeat" title="" style="display: none;">💭</span>
 				</label>
 			</form>
 			<div class="formbackground"></div>
@@ -124,31 +124,31 @@
 				</div>
 				<div class="dropdown icon right"></div>
 			</div>
-			<form class="form" onsubmit="function(event){event.preventDefault();if(addTask('add'))hideForm('add');}" action="">
-				<input type="text" class="add" id="addtrigger" style="display: none;">
+			<form class="form" id="add" onsubmit="function(event){event.preventDefault();if(addTask('add'))hideForm('add');}" action="">
+				<input type="text" id="addtrigger" style="display: none;">
 
-				<input class="add" name="title" placeholder="Nazwa zadania" required><br><br>
+				<input name="title" placeholder="Nazwa zadania" required><br><br>
 
-				<textarea class="add" name="description" placeholder="Opis zadania"></textarea>
+				<textarea name="description" placeholder="Opis zadania"></textarea>
 
 				<label>
 					Data:
-					<input class="add" name="date" type="date" required onchange="formClarify('add')"><br><br>
+					<input name="date" type="date" required onchange="formClarify('add')"><br><br>
 				</label>
 
 				<label>
 					Godzina:
-					<input class="add" name="time" type="time" required><br><br>
+					<input name="time" type="time" required><br><br>
 				</label>
 
 				<label>
 					Powtarzaj:
-					<input class="add" name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
+					<input name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
 				</label>
 				<div class="repeatbox">
 					co
-					<input class="add" name="repeatamount" type="number" min="1" value="1">
-					<select class="add" name="repeatunit" onchange="formClarify('add')">
+					<input name="repeatamount" type="number" min="1" value="1">
+					<select name="repeatunit" onchange="formClarify('add')">
 						<option value="days">dni</option>
 						<option value="weeks">tygodni</option>
 						<option value="months">miesięcy</option>
@@ -156,7 +156,7 @@
 					</select>
 
 					<div class="monthsrepeat clarifyrepeat" style="display:none;">
-						<select class="add" name="repeattype">
+						<select name="repeattype">
 							<option value="sameday">20. dzień każdego miesiąca</option>
 							<option value="sameweekday">3. piątek każdego miesiąca</option>
 						</select>
@@ -164,10 +164,10 @@
 
 					<label>
 						Koniec:
-						<input class="add" name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
+						<input name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
 					</label>
 					<div class="endrepeatbox">
-						<input class="add" name="repeatenddate" type="date">
+						<input name="repeatenddate" type="date">
 					</div>
 				</div>
 
@@ -189,30 +189,30 @@
 				</div>
 				<div class="dropdown icon right"></div>
 			</div>
-			<form class="form" onsubmit="function(event){event.preventDefault();if(editTask('edit'))hideForm('edit');}">
+			<form class="form" id="edit" onsubmit="function(event){event.preventDefault();if(editTask('edit'))hideForm('edit');}">
 				
-				<input class="edit" name="title" placeholder="Nazwa zadania" required><br><br>
+				<input name="title" placeholder="Nazwa zadania" required><br><br>
 
-				<textarea class="edit" name="description" placeholder="Opis zadania"></textarea>
+				<textarea name="description" placeholder="Opis zadania"></textarea>
 
 				<label>
 					Data:
-					<input class="edit" name="date" type="date" required onchange="formClarify('edit')"><br><br>
+					<input name="date" type="date" required onchange="formClarify('edit')"><br><br>
 				</label>
 
 				<label>
 					Godzina:
-					<input class="edit" name="time" type="time" required><br><br>
+					<input name="time" type="time" required><br><br>
 				</label>
 
 				<label>
 					Powtarzaj:
-					<input class="edit" name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
+					<input name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
 				</label>
 				<div class="repeatbox">
 					co
-					<input class="edit" name="repeatamount" type="number" min="1" value="1">
-					<select class="edit" name="repeatunit" onchange="formClarify('edit')">
+					<input name="repeatamount" type="number" min="1" value="1">
+					<select name="repeatunit" onchange="formClarify('edit')">
 						<option value="days">dni</option>
 						<option value="weeks">tygodni</option>
 						<option value="months">miesięcy</option>
@@ -220,7 +220,7 @@
 					</select>
 
 					<div class="monthsrepeat clarifyrepeat" style="display:none;">
-						<select class="edit" name="repeattype">
+						<select name="repeattype">
 							<option value="sameday">20. dzień każdego miesiąca</option>
 							<option value="sameweekday">3. piątek każdego miesiąca</option>
 						</select>
@@ -228,10 +228,10 @@
 
 					<label>
 						Koniec:
-						<input class="edit" name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
+						<input name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
 					</label>
 					<div class="endrepeatbox">
-						<input class="edit" name="repeatenddate" type="date">
+						<input name="repeatenddate" type="date">
 					</div>
 				</div><br>
 

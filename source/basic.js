@@ -60,7 +60,7 @@ function getWhichWeekDay(date) {
 function showForm(name, task, strdate) {
   document.getElementById(name+"-grayoverlay").style.display = "block";
   document.getElementById(name+"-grayoverlay").setAttribute("onclick", "hideForm('"+name+"')");
-  var elems = document.getElementsByClassName(name);
+  var elems = document.forms[name];
   var d;
   var title = "";
   var description = "";

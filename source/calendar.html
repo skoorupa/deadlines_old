@@ -47,29 +47,26 @@
 				</div>
 				<div class="dropdown icon right clickable underline" onclick="showForm('edit',editedtask);">📝</div>
 			</div>
-			<div class="form">
-				<form class="">
-					<h1 class="show" name="title"></h1>
+			<form class="form" id="show">
+				<h1 name="title"></h1>
+				<textarea name="description" placeholder="Opis zadania" readonly></textarea>
 
-					<textarea class="show" name="description" placeholder="Opis zadania" readonly></textarea>
+				<label>
+					📅:
+					<span name="date"></span><br>
+				</label>
 
-					<label>
-						📅:
-						<span class="show" name="date"></span><br>
-					</label>
+				<label>
+					🕓:
+					<span name="time"></span><br>
+				</label>
 
-					<label>
-						🕓:
-						<span class="show" name="time"></span><br>
-					</label>
-
-					<label class="repeatbox nomargin" style="margin-left: 0px;">
-						🔁:
-						<span class="show" name="repeatamount"></span>
-						<span class="show" name="clarifyrepeat" title="" style="display: none;">💭</span>
-					</label>
-				</form>
-			</div>
+				<label class="repeatbox nomargin" style="margin-left: 0px;">
+					🔁:
+					<span name="repeatamount"></span>
+					<span name="clarifyrepeat" title="" style="display: none;">💭</span>
+				</label>
+			</form>
 			<div class="formbackground"></div>
 		</div>
 		<div class="grayoverlay" id="add-grayoverlay"></div>
@@ -83,60 +80,58 @@
 				</div>
 				<div class="dropdown icon right"></div>
 			</div>
-			<div class="form">
-				<form onsubmit="function(event){event.preventDefault();if(addTask('add'))hideForm('add');}" action="">
-					<input type="text" class="add" id="addtrigger" style="display: none;">
+			<form class="form" id="add" onsubmit="function(event){event.preventDefault();if(addTask('add'))hideForm('add');}" action="">
+				<input type="text" id="addtrigger" style="display: none;">
 
-					<input class="add" name="title" placeholder="Nazwa zadania" required><br><br>
+				<input name="title" placeholder="Nazwa zadania" required><br><br>
 
-					<textarea class="add" name="description" placeholder="Opis zadania"></textarea>
+				<textarea name="description" placeholder="Opis zadania"></textarea>
 
-					<label>
-						Data:
-						<input class="add" name="date" type="date" required onchange="formClarify('add')"><br><br>
-					</label>
+				<label>
+					Data:
+					<input name="date" type="date" required onchange="formClarify('add')"><br><br>
+				</label>
 
-					<label>
-						Godzina:
-						<input class="add" name="time" type="time" required><br><br>
-					</label>
+				<label>
+					Godzina:
+					<input name="time" type="time" required><br><br>
+				</label>
 
-					<label>
-						Powtarzaj:
-						<input class="add" name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
-					</label>
-					<div class="repeatbox">
-						co
-						<input class="add" name="repeatamount" type="number" min="1" value="1">
-						<select class="add" name="repeatunit" onchange="formClarify('add')">
-							<option value="days">dni</option>
-							<option value="weeks">tygodni</option>
-							<option value="months">miesięcy</option>
-							<option value="years">lat</option>
+				<label>
+					Powtarzaj:
+					<input name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
+				</label>
+				<div class="repeatbox">
+					co
+					<input name="repeatamount" type="number" min="1" value="1">
+					<select name="repeatunit" onchange="formClarify('add')">
+						<option value="days">dni</option>
+						<option value="weeks">tygodni</option>
+						<option value="months">miesięcy</option>
+						<option value="years">lat</option>
+					</select>
+
+					<div class="monthsrepeat clarifyrepeat" style="display:none;">
+						<select name="repeattype">
+							<option value="sameday">20. dzień każdego miesiąca</option>
+							<option value="sameweekday">3. piątek każdego miesiąca</option>
 						</select>
+					</div><br>
 
-						<div class="monthsrepeat clarifyrepeat" style="display:none;">
-							<select class="add" name="repeattype">
-								<option value="sameday">20. dzień każdego miesiąca</option>
-								<option value="sameweekday">3. piątek każdego miesiąca</option>
-							</select>
-						</div><br>
-
-						<label>
-							Koniec:
-							<input class="add" name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
-						</label>
-						<div class="endrepeatbox">
-							<input class="add" name="repeatenddate" type="date">
-						</div>
+					<label>
+						Koniec:
+						<input name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
+					</label>
+					<div class="endrepeatbox">
+						<input name="repeatenddate" type="date">
 					</div>
+				</div>
 
-					<div class="button" onclick="if(addTask('add'))hideForm('add');">
-						<div class="buttonlabel">Dodaj</div>
-						<div class="buttonicon">&gt;</div>
-					</div>
-				</form>
-			</div>
+				<div class="button" onclick="if(addTask('add'))hideForm('add');">
+					<div class="buttonlabel">Dodaj</div>
+					<div class="buttonicon">&gt;</div>
+				</div>
+			</form>
 			<div class="formbackground"></div>
 		</div>
 		<div class="grayoverlay" id="edit-grayoverlay"></div>
@@ -150,59 +145,58 @@
 				</div>
 				<div class="dropdown icon right"></div>
 			</div>
-			<div class="form">
-				<form class="" onsubmit="function(event){event.preventDefault();if(addTask('edit'))hideForm('edit');}">
-					<input class="edit" name="title" placeholder="Nazwa zadania" required><br><br>
+			<form class="form" id="edit" onsubmit="function(event){event.preventDefault();if(editTask('edit'))hideForm('edit');}">
+				
+				<input name="title" placeholder="Nazwa zadania" required><br><br>
 
-					<textarea class="edit" name="description" placeholder="Opis zadania"></textarea>
+				<textarea name="description" placeholder="Opis zadania"></textarea>
 
-					<label>
-						Data:
-						<input class="edit" name="date" type="date" required onchange="formClarify('edit')"><br><br>
-					</label>
+				<label>
+					Data:
+					<input name="date" type="date" required onchange="formClarify('edit')"><br><br>
+				</label>
 
-					<label>
-						Godzina:
-						<input class="edit" name="time" type="time" required><br><br>
-					</label>
+				<label>
+					Godzina:
+					<input name="time" type="time" required><br><br>
+				</label>
 
-					<label>
-						Powtarzaj:
-						<input class="edit" name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
-					</label>
-					<div class="repeatbox">
-						co
-						<input class="edit" name="repeatamount" type="number" min="1" value="1">
-						<select class="edit" name="repeatunit" onchange="formClarify('edit')">
-							<option value="days">dni</option>
-							<option value="weeks">tygodni</option>
-							<option value="months">miesięcy</option>
-							<option value="years">lat</option>
+				<label>
+					Powtarzaj:
+					<input name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
+				</label>
+				<div class="repeatbox">
+					co
+					<input name="repeatamount" type="number" min="1" value="1">
+					<select name="repeatunit" onchange="formClarify('edit')">
+						<option value="days">dni</option>
+						<option value="weeks">tygodni</option>
+						<option value="months">miesięcy</option>
+						<option value="years">lat</option>
+					</select>
+
+					<div class="monthsrepeat clarifyrepeat" style="display:none;">
+						<select name="repeattype">
+							<option value="sameday">20. dzień każdego miesiąca</option>
+							<option value="sameweekday">3. piątek każdego miesiąca</option>
 						</select>
-
-						<div class="monthsrepeat clarifyrepeat" style="display:none;">
-							<select class="edit" name="repeattype">
-								<option value="sameday">20. dzień każdego miesiąca</option>
-								<option value="sameweekday">3. piątek każdego miesiąca</option>
-							</select>
-						</div><br>
-
-						<label>
-							Koniec:
-							<input class="edit" name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
-						</label>
-						<div class="endrepeatbox">
-							<input class="edit" name="repeatenddate" type="date">
-						</div>
 					</div><br>
 
-					<a href="#" class="deletebutton" onclick="deleteTask(editedtask);hideForm('edit');">Usuń to zadanie</a>
-					<div class="button" onclick="if(editTask('edit'))hideForm('edit');">
-						<div class="buttonlabel">Zapisz</div>
-						<div class="buttonicon">&gt;</div>
+					<label>
+						Koniec:
+						<input name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
+					</label>
+					<div class="endrepeatbox">
+						<input name="repeatenddate" type="date">
 					</div>
-				</form>
-			</div>
+				</div><br>
+
+				<a href="#" class="deletebutton" onclick="deleteTask(editedtask);hideForm('edit');">Usuń to zadanie</a>
+				<div class="button" onclick="if(editTask('edit'))hideForm('edit');">
+					<div class="buttonlabel">Zapisz</div>
+					<div class="buttonicon">&gt;</div>
+				</div>
+			</form>
 			<div class="formbackground"></div>
 		</div>
 	</div>
