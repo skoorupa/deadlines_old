@@ -1,0 +1,99 @@
+body {
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+	background-color: #0A1C45;
+	-webkit-user-select: none;
+	/*background-color: #e6e6e6;*/
+}
+
+.bigbox {
+	/*height: 100%;*/
+	position: absolute;
+}
+
+#menu {
+	width: 30%;
+	background-color: #0A1C45;
+}
+
+#context {
+	width: 60%;
+	padding-left: 5%;
+	padding-right: 5%;
+	height: 100%;
+	background-color: #0A1C45;
+	right:0;
+	overflow-y: scroll;
+}
+
+#context form {
+	display: none;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	padding:10px;
+	padding-left: 20px;
+}
+
+li:hover {
+	background-color: #020F2C;
+	color: white;
+}
+
+.selected {
+	background-color: #020F2C;
+	border-left: 5px solid #e6e6e6;
+}
+
+/*******settings***********/
+
+h1,h3 {
+	font-weight: 400;
+}
+
+h3 {
+	text-decoration: underline;
+}
+
+label {
+	display: block;
+	margin:10px;
+}
+
+label > select, input[type=text] {
+	width: 100%;
+	display: block;
+	margin:10px;
+	padding:10px;
+	border-radius: 100px;
+	outline: none;
+}
+
+/* *******scrollbar****** */
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(200, 200, 200); 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 90, 90, 0.5);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}

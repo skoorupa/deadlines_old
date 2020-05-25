@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Deadlines - tryb listy -->
+	<meta charset="UTF-8">
+
+	<script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+	<script type="text/javascript" src="lib/jquery.min.js"></script>
+	<script type="text/javascript" src="lib/mousetrap.min.js"></script>
+	<script>if (window.module) module = window.module;</script>
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<link rel="stylesheet" type="text/css" href="theme.css">
+</head>
+<body>
+	<div class="mini bar" id="greetingsbar">
+		0.7.3
+		<span class="right" id="date"><!-- wtorek, 17 listopada --></span>
+	</div>
+	<div id="overview">
+		<div id="deadline">
+			<div class="big clickable bar" id="deadlinesbar" onclick="toggleOverviewList(this)">
+				<div class="icon left">⏳</div>
+				<div class="context left">
+					<div class="clickable underline">
+						<span id="deadlinescounter"></span> do wykonania <span id="dayscounter"></span>
+					</div>
+					<div class="description wordwrap" id="deadlinesdescription"></div>
+				</div>
+				<div class="dropdown icon right">^</div>
+			</div>
+			<div class="list" id="deadlineslist">
+				<!-- <ul><li><input type="checkbox"><label>polski</label></li></ul> -->
+			</div>
+		</div>
+		<!-- <div class="big bar" id="remindersbar">
+			<div class="icon left">🕑</div>
+			<div class="context left">
+				<div class="clickable underline">
+					Przypomnienie o 17:00
+				</div>
+				<div class="description">
+					Zabij się
+				</div>
+			</div>
+			<div class="dropdown icon right">&gt;</div>
+		</div> -->
+
+		<div id="othertasks">
+
+ 			<!--  <div class="medium bar">
+					 		<div class="left">
+					 			<input type="checkbox">
+					 		</div>
+					 		<div class="context left">
+					 			Zadanie jakieś tam IKSDE
+					 		</div>
+					 		<div class="right">
+					 			18:00
+					 		</div>
+					  </div> -->
+
+		</div>
+		<div class="medium bar" style="height: 40px;"></div>
+
+		<div class="down">
+			<div class="medium bar clickable" id="addtaskbar">
+				<div class="icon left">📝</div>
+				<div class="context left">
+					<div class="underline" onclick="showForm('add')">
+						Dodaj nowe zadanie
+					</div>
+				</div>
+				<div class="dropdown icon right">+</div>
+			</div>
+			<div class="mini bar" id="settingsbar">
+				<div class="left clickable underline" onclick="showMode('calendar')">kalendarz</div>
+				<div class="right clickable underline" onclick="showWindow('settings')">ustawienia</div>
+			</div>
+		</div>
+	</div>
+	<div id="formboxes">
+		<div class="grayoverlay" id="show-grayoverlay"></div>
+		<div class="formbox" id="showbox">
+			<div class="medium bar" id="showbar">
+				<div class="icon left">&lt;</div>
+				<div class="context left">
+					<div class="clickable underline" id="showtitle" onclick="hideForm('show')">
+						Zadanie
+					</div>
+				</div>
+				<div class="dropdown icon right clickable underline" onclick="showForm('edit',editedtask);">📝</div>
+			</div>
+			<form class="form">
+				<h1 class="show" name="title"></h1>
+				<textarea class="show" name="description" placeholder="Opis zadania" readonly></textarea>
+
+				<label>
+					📅:
+					<span class="show" name="date"></span><br>
+				</label>
+
+				<label>
+					🕓:
+					<span class="show" name="time"></span><br>
+				</label>
+
+				<label class="repeatbox nomargin" style="margin-left: 0px;">
+					🔁:
+					<span class="show" name="repeatamount"></span>
+					<span class="show" name="clarifyrepeat" title="" style="display: none;">💭</span>
+				</label>
+			</form>
+			<div class="formbackground"></div>
+		</div>
+		<div class="grayoverlay" id="add-grayoverlay"></div>
+		<div class="formbox" id="addbox">
+			<div class="medium bar" id="addbar">
+				<div class="icon left">&lt;</div>
+				<div class="context left">
+					<div class="clickable underline" id="addtitle" onclick="hideForm('add')">
+						Dodaj
+					</div>
+				</div>
+				<div class="dropdown icon right"></div>
+			</div>
+			<form class="form" onsubmit="function(event){event.preventDefault();if(addTask('add'))hideForm('add');}" action="">
+				<input type="text" class="add" id="addtrigger" style="display: none;">
+
+				<input class="add" name="title" placeholder="Nazwa zadania" required><br><br>
+
+				<textarea class="add" name="description" placeholder="Opis zadania"></textarea>
+
+				<label>
+					Data:
+					<input class="add" name="date" type="date" required onchange="formClarify('add')"><br><br>
+				</label>
+
+				<label>
+					Godzina:
+					<input class="add" name="time" type="time" required><br><br>
+				</label>
+
+				<label>
+					Powtarzaj:
+					<input class="add" name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
+				</label>
+				<div class="repeatbox">
+					co
+					<input class="add" name="repeatamount" type="number" min="1" value="1">
+					<select class="add" name="repeatunit" onchange="formClarify('add')">
+						<option value="days">dni</option>
+						<option value="weeks">tygodni</option>
+						<option value="months">miesięcy</option>
+						<option value="years">lat</option>
+					</select>
+
+					<div class="monthsrepeat clarifyrepeat" style="display:none;">
+						<select class="add" name="repeattype">
+							<option value="sameday">20. dzień każdego miesiąca</option>
+							<option value="sameweekday">3. piątek każdego miesiąca</option>
+						</select>
+					</div><br>
+
+					<label>
+						Koniec:
+						<input class="add" name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
+					</label>
+					<div class="endrepeatbox">
+						<input class="add" name="repeatenddate" type="date">
+					</div>
+				</div>
+
+				<div class="button" onclick="if(addTask('add'))hideForm('add');">
+					<div class="buttonlabel">Dodaj</div>
+					<div class="buttonicon">&gt;</div>
+				</div>
+			</form>
+			<div class="formbackground"></div>
+		</div>
+		<div class="grayoverlay" id="edit-grayoverlay"></div>
+		<div class="formbox" id="editbox">
+			<div class="medium bar" id="editbar">
+				<div class="icon left">&lt;</div>
+				<div class="context left">
+					<div class="clickable underline" id="edittitle" onclick="hideForm('edit')">
+						Edycja
+					</div>
+				</div>
+				<div class="dropdown icon right"></div>
+			</div>
+			<form class="form" onsubmit="function(event){event.preventDefault();if(editTask('edit'))hideForm('edit');}">
+				
+				<input class="edit" name="title" placeholder="Nazwa zadania" required><br><br>
+
+				<textarea class="edit" name="description" placeholder="Opis zadania"></textarea>
+
+				<label>
+					Data:
+					<input class="edit" name="date" type="date" required onchange="formClarify('edit')"><br><br>
+				</label>
+
+				<label>
+					Godzina:
+					<input class="edit" name="time" type="time" required><br><br>
+				</label>
+
+				<label>
+					Powtarzaj:
+					<input class="edit" name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
+				</label>
+				<div class="repeatbox">
+					co
+					<input class="edit" name="repeatamount" type="number" min="1" value="1">
+					<select class="edit" name="repeatunit" onchange="formClarify('edit')">
+						<option value="days">dni</option>
+						<option value="weeks">tygodni</option>
+						<option value="months">miesięcy</option>
+						<option value="years">lat</option>
+					</select>
+
+					<div class="monthsrepeat clarifyrepeat" style="display:none;">
+						<select class="edit" name="repeattype">
+							<option value="sameday">20. dzień każdego miesiąca</option>
+							<option value="sameweekday">3. piątek każdego miesiąca</option>
+						</select>
+					</div><br>
+
+					<label>
+						Koniec:
+						<input class="edit" name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
+					</label>
+					<div class="endrepeatbox">
+						<input class="edit" name="repeatenddate" type="date">
+					</div>
+				</div><br>
+
+				<a href="#" class="deletebutton" onclick="deleteTask(editedtask);hideForm('edit');">Usuń to zadanie</a>
+				<div class="button" onclick="if(editTask('edit'))hideForm('edit');">
+					<div class="buttonlabel">Zapisz</div>
+					<div class="buttonicon">&gt;</div>
+				</div>
+			</form>
+			<div class="formbackground"></div>
+		</div>
+	</div>
+
+	<script type="text/javascript" src="basic.js"></script>
+	<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

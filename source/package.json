@@ -1,0 +1,23 @@
+{
+  "name": "deadlines",
+  "productName": "Deadlines",
+  "version": "0.7.3",
+  "description": "Aplikacja do zarządzania czasem i zadaniami",
+  "main": "main.js",
+  "dependencies": {
+    "electron": "^8.2.3"
+  },
+  "devDependencies": {
+    "electron-winstaller": "^4.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "package_win64": "electron-packager ./ --overwrite --asar=true --icon=tray.png --out=../build --platform=win32 --arch=x64 --win32metadata.CompanyName=\"Adam Skorupski\" --win32metadata.ProductName=\"Deadlines\"",
+    "setup_win64": "node ./setup_win64.js",
+    "package_win32": "electron-packager ./ --overwrite --asar=true --icon=tray.png --out=../build --platform=win32 --arch=ia32 --win32metadata.CompanyName=\"Adam Skorupski\" --win32metadata.ProductName=\"Deadlines\"",
+    "setup_win32": "node ./setup_win32.js"
+  },
+  "author": "Adam Skorupski",
+  "license": "ISC"
+}

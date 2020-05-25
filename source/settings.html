@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Ustawienia</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="settings.css">
+</head>
+<body>
+	<div id="menu" class="bigbox">
+		<ul>
+			<li class="selected" data-value="general">Ogólne</li>
+			<li data-value="list-mode">Tryb listy</li>
+			<li data-value="calendar-mode">Tryb kalendarza</li>
+			<li data-value="about">O programie</li>
+		</ul>
+	</div>
+	<div id="context" class="bigbox">
+		<form onchange="updateSettings(this.getAttribute('id'))" id="general" style="display: block;">
+			<h1>Ogólne</h1>
+			<h3>Ustawienia aplikacji</h3>
+			<label>
+				<input type="checkbox" name="show_app_on_autostart">
+				Pokaż okno aplikacji po uruchomieniu komputera.
+			</label>
+			<h3>Ustawienia okna</h3>
+			<label for="default_mode">
+				Domyślny tryb:
+				<select name="default_mode">
+					<option value="list">Lista</option>
+					<option value="calendar">Kalendarz</option>
+				</select>
+			</label>
+			<label>
+				<input type="checkbox" name="hide_app_on_blur">
+				Ukrywaj okno po naciśnięciu na jakikolwiek obszar poza oknem.
+				<label data-checked="false">
+					<input type="checkbox" name="always_on_top">
+					Pokazuj okno zawsze na wierzchu.
+				</label>
+			</label>
+			<label>
+				<input type="checkbox" name="movable">
+				Pozwól na przemieszczanie okna.
+			</label>
+<!-- 			<label>
+				<input type="checkbox" name="show_titlebar">
+				Pokaż pasek tytułu okna.
+			</label> -->
+			<label for="display_app_corner">
+				Wybierz róg ekranu, w którym będzie pojawiać się program:
+				<select name="display_app_corner">
+					<option value="auto">Wybierz automatycznie</option>
+					<option value="rightdown">Prawy dolny róg</option>
+					<option value="rightup">Prawy górny róg</option>
+					<option value="leftdown">Lewy dolny róg</option>
+					<option value="leftup">Lewy górny róg</option>
+				</select>
+			</label>
+		</form>
+		<form onchange="updateSettings(this.getAttribute('id'))" id="list-mode">
+			<h1>Tryb listy</h1>
+			<h3>Widok</h3>
+			<label>
+				<input type="checkbox" name="show_deadlines_with_other_tasks">
+				Pokaż najbardziej pilne zadania do zrobienia razem z innymi zadaniami.
+			</label>
+		</form>
+		<form onchange="updateSettings(this.getAttribute('id'))" id="calendar-mode">
+			<h1>Tryb kalendarza</h1>
+			<h3>Widok</h3>
+			<label>
+				Domyślnie pokazana data:
+				<select name="default_clickdate">
+					<option value="today">Dzisiaj</option>
+					<option value="thismonth">Obecny miesiąc</option>
+				</select>
+			</label>
+		</form>
+		<form id="about">
+			<h1>O programie</h1>
+			<h3>Deadlines v0.7.1</h3>
+			Autor: Adam Skorupski <br>
+			(tu kiedyś będą jakieś lasery itp.)
+		</form>
+	</div>
+
+	<script src="settings.js" type="text/javascript" charset="utf-8"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+html, body {
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+html, body,
+.formbox,
+#preview {
+	background-color: #E6E6E6;
+}
+
+#greetingsbar,
+.othertaskbar {
+	background-color: #68799F;
+}
+
+#addtaskbar, 
+#addreminderbar,
+#deadlinesbar,
+#addbar, 
+#editbar,
+.day:hover,
+.calendarbuttons > div:hover {
+	background-color: #020F2C;
+}
+
+#deadlineslist {
+	background-color: #2F4172;
+}
+
+
+#calendar,
+.button,
+#remindersbar {
+	background-color: #0A1C45;
+	color: white;
+}
+
+.today {
+	background-color: white;
+	color: #0A1C45;
+}
+.day {
+	color: #DDD;
+}
+.notthismonth {
+	color: #555;
+}
+
+.small {	
+	background-color: #68799F;
+}
+
+.mini,
+.small,
+.big,
+.medium,
+.button,
+.list {
+	color: white;
+}
+
+.form {
+	color: black;
+}
+
+#settingsbar {
+	background-color: black;
+}

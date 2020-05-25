@@ -1,0 +1,379 @@
+html, body {
+	font-family: Arial, Helvetica, sans-serif;
+	padding: 0;
+	margin:0;
+	-webkit-user-select: none;
+}
+
+body {
+	overflow-y: scroll;
+}
+
+body:after {
+    content: "."; 
+    display: block; 
+    height: 0; 
+    clear: both; 
+    visibility: hidden;
+}
+
+/* **********basic********** */
+
+.left {
+	float: left;
+}
+
+.right {
+	margin-right: 0;
+	margin-left: auto;
+	float: right;
+}
+
+.clickable {
+	cursor: pointer !important;
+}
+
+.underline:hover {
+	text-decoration: underline;
+}
+
+.strike {
+	text-decoration: line-through;
+}
+
+.down {
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+}
+
+.wordwrap {
+	word-wrap: break-word;
+}
+
+.grayoverlay {
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 5;
+	background-color: rgba(128,128,128,0.5);
+}
+
+/* *******scrollbar****** */
+
+/* width */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(200, 200, 200); 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(90, 90, 90, 0.5);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+
+/* **********bars********** */
+
+.mini {
+	font-size: 13px;
+	min-height: 16px;
+	display: flex;
+	padding: 3px 3px 0px;
+}
+
+.small {
+	font-size: 16px;
+	min-height: 20px;
+	display: flex;
+	padding: 10px 3px;
+}
+
+.big {
+	font-size: 20px;
+	min-height: 50px;
+	display: flex;
+	padding: 10px 3px;
+}
+
+.medium {
+	font-size: 20px;
+	min-height: 20px;
+	display: flex;
+	padding: 10px 3px;
+}
+
+#greetingsbar {
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	border-bottom: 1px solid black;
+	-webkit-app-region: drag;
+}
+
+#date {
+	-webkit-app-region: none;
+}
+
+#addtaskbar, #addreminderbar {
+	cursor: pointer;
+}
+
+.bar {
+	border-top: 1px solid black;
+}
+
+/* **********list********** */
+
+#deadlineslist {
+	display: none;
+}
+
+.list {
+	padding: 10px 3px;
+}
+
+.list > ul {
+	margin: 0;
+}
+
+li {
+	display: block;
+}
+
+input[type="checkbox"]:checked + label {
+	text-decoration: line-through;
+}
+
+/* **********bar design********** */
+
+.context {
+	/* margin: 0px 10px; */
+	/*width: 80%;*/
+}
+
+.description {
+	font-size: 14px;
+	padding: 7px 6px;
+}
+
+.icon {
+	width: 10%;
+	text-align: center;
+	font-size: 17px;
+	cursor: default;
+}
+
+/* **********forms********** */
+
+.formbox {
+	display: none;
+	width: 350px;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index:10;
+}
+
+.form {
+	padding: 5%;
+	margin: 0 10px;
+	z-index: 2;
+}
+
+label {
+	position: relative;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.form input:not([type=checkbox]),
+.form select,
+.form textarea {
+	/*padding: 5px 10px;*/
+	/*border-radius: 20px;*/
+	/*border: 1px solid #444;*/
+	outline: none;
+	background: none;
+	font-size:100%;
+	font-family: Arial, Helvetica, sans-serif;
+	border: none;
+	border-bottom: 1px solid black;
+}
+
+.form input[name=title] {
+	width: 100%;
+	font-size: 30px;
+	word-wrap: break-word;
+  word-break: break-all;
+}
+
+.form textarea {
+	display: block;
+	width: 100%;
+	margin-bottom: 10px;
+	height: auto;
+	resize: none;
+	overflow:hidden;
+}
+
+input[type=date]::-webkit-inner-spin-button, 
+input[type=date]::-webkit-outer-spin-button,
+input[type=time]::-webkit-inner-spin-button, 
+input[type=time]::-webkit-outer-spin-button,
+input::-webkit-clear-button,
+select::-webkit-clear-button {
+	display: none;
+}
+
+input[type=date]::-webkit-calendar-picker-indicator,
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {  
+   opacity: 1;
+}
+
+input[type=number] {
+	width: 40px;
+}
+
+.repeatbox, .endrepeatbox {
+	display: none;
+}
+
+.repeatbox:not(.nomargin), 
+.endrepeatbox:not(.nomargin) {
+	margin-left: 5%;
+}
+
+.formbackground {
+	z-index: -1;
+	height: 100%;
+	width: 100%;
+	left: 0%;
+	position: absolute;
+	top: 0;
+}
+
+.deletebutton {
+	color:red;
+}
+
+/* **********minibutton********** */
+
+.button {
+	position: absolute;
+	bottom: 2.5%;
+	right: 5%;
+	padding: 10px;
+	font-size: 20px;
+	min-height: 20px;
+	display: flex;
+}
+
+.button:hover {
+	cursor: pointer;
+}
+
+.buttonlabel {
+	cursor: default;
+	padding-right: 10px;
+}
+
+.buttonlabel:hover {
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+/* ********** calendar ***************** */
+
+#calendar {
+	position: fixed;
+	float: left;
+	width: 50%;
+	height: calc(100% - 32px);
+	text-align: center;
+}
+
+#preview {
+	position: relative;
+	float: right;
+	width: 50%;
+	/*height: calc(100% - 64px);*/
+	right:0;
+}
+
+.table {
+	display: table;
+	width: 100%;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	border-spacing: 10px;
+}
+.row {
+	display: table-row;
+	border-bottom: 1px solid black;
+}
+.cell {
+	display: table-cell;
+	border-radius: 100px;
+	text-align: center;
+	position: relative;
+	padding:10px;
+	cursor: default;
+}
+
+.cell.hastasks:not(.clickeddate):after {
+	background: orange;
+	position: absolute;
+	content: '';
+	height: 1px;
+	width: 20%;
+	left: 40%;
+	right: 0;
+	bottom: 5px;
+}
+
+.dayofweek {
+	text-decoration: underline;
+}
+
+.clickeddate {
+	border:2px solid white;
+	padding:7px;
+	cursor:pointer;
+}
+
+#jumpmonthheader.clickeddate  {
+	cursor:default;
+	padding: 8px;
+}
+
+.today {
+	border-radius:100px;
+	padding: 3px;
+	margin: -3px;
+}
+
+.calendarbuttons {
+}
+
+.calendarbuttons > div {
+	padding: 10px;
+	margin: 10px;
+	border-radius: 5px;
+	display: inline-block;
+}

@@ -1,0 +1,55 @@
+założenia wersji v0.7:
++ normalne debugi (folder logs -> pliki, które tworzą się tylko na wypadek błędu)
++ wszystkie poprawki dot. cyklicznych zadań
+	+ tryby przedłużania zadań
+		+ formularze w trybie listy
+		+ formularze w trybie kalendarza
+		+ implementacja w przedłużaniu zadań w main.js
+		+ implementacja w trybie kalendarza
+		+ endy w trybie listy
+		+ endy w trybie kalendarza
+	+ edycja cyklicznych zadań
+		+ popup po wyjsciu
+		+ tylko to zadanie
+			+ exceptions w zadaniach w main.js
+			+ implementacja w trybie kalendarza
+			+ implementacja w trybie listy
+			+ implementacja w deadlinesach
+		+ to i późniejsze zadania
+			+ exceptions w zadaniach w main.js
+			+ implementacja w trybie kalendarza
+			+ implementacja w trybie listy
+			+ implementacja w deadlinesach
++ początkowe ustawienia
++ program działa w wersji do dystrybucji 
+	+ program potrafi stworzyć folder schedules, tasks.json
++ program nie zagląda co chwilę do pliku z zadaniami
+
+założenia wersji v0.8:
++ usuwanie cyklicznych zadań
++/- nowy wygląd formularza i wgl
+- prawoklik początkowy
+- przypomnienia
+- kolory
++ opisy
++ settingswin może wyskoczyć kilka razy
+
+założenia wersji v0.9:
+- archiwum
+- backupy
+- wyszukiwarka
+- tryb cli
+- blokada na hasło/pin (prowizorka)
+- prawoklik
++ skróty klawiszowe
++ ustawienia które jakoś wyglądają
+
+INSTALATOR JEST
+AUTOSTART JEST
+
+ustawienia:
++ w którym rogu pojawia się apka
++ domyślny widok (kalendarz/lista)
++ wyłączanie chowania się aplikacji po utracie focusa
++ tryb listy: pokazywanie deadlineów razem z resztą zadań
++ odpinanie aplikacji
