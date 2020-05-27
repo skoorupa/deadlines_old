@@ -17,7 +17,7 @@ function getInstallerConfig () {
     appDirectory: path.join(rootPath, 'Deadlines-win32-x64/'),
     authors: 'Adam Skorupski',
     noMsi: true,
-    outputDirectory: path.join(outPath, 'windows-installer'),
+    outputDirectory: path.join(outPath, 'windows-installer','64bit'),
     exe: 'deadlines.exe',
     setupExe: 'DeadlinesSetup64-'+process.env.npm_package_version+'.exe',
     setupIcon: "./tray.ico"
