@@ -30,7 +30,7 @@ założenia wersji v0.8:
 +/- nowy wygląd formularza i wgl
 - prawoklik początkowy
 - przypomnienia
-- kolory
++ kolory
 + opisy
 + settingswin może wyskoczyć kilka razy
 
