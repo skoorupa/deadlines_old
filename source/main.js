@@ -369,6 +369,25 @@ function loadApp() {
     refreshUpdater();
   });
 
+  // if(settings.config.autostart)
+  //   app.setLoginItemSettings({
+  //     openAtLogin: true,
+  //     path: updateDotExe,
+  //     args: [
+  //       '--processStart', `"${exeName}"`,
+  //       '--process-start-args', `"--autostart"`
+  //     ]
+  //   });
+  // else
+  //   app.setLoginItemSettings({
+  //     openAtLogin: true,
+  //     path: updateDotExe,
+  //     args: [
+  //       '--processStart', `"${exeName}"`,
+  //       '--process-start-args', `"--autostart"`
+  //     ]
+  //   });
+
   ipc.on("addtask", (event, task) => {
     schedule.addTask(JSON.parse(task));
   });

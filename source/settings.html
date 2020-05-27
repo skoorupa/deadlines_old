@@ -19,8 +19,12 @@
 			<h1>Ogólne</h1>
 			<h3>Ustawienia aplikacji</h3>
 			<label>
-				<input type="checkbox" name="show_app_on_autostart">
-				Pokaż okno aplikacji po uruchomieniu komputera.
+				<input type="checkbox" name="autostart">
+				Uruchamiaj Deadlines automatycznie po uruchomieniu komputera.
+				<label data-checked="true">
+					<input type="checkbox" name="show_app_on_autostart">
+					Nie minimalizuj okna aplikacji.
+				</label>
 			</label>
 			<h3>Ustawienia okna</h3>
 			<label for="default_mode">
@@ -83,12 +87,13 @@
 		</form>
 		<form id="about">
 			<h1>O programie</h1>
-			<h3 id="version">Deadlines v0.7.1</h3>
+			<h3 id="version"></h3>
 			Autor: Adam Skorupski <br>
 			(tu kiedyś będą jakieś lasery itp.)
 		</form>
 	</div>
 
+	<script src="lib/mousetrap.min.js" type="text/javascript" charset="utf-8"></script>
 	<script src="settings.js" type="text/javascript" charset="utf-8"></script>
 </body>
 </html>
