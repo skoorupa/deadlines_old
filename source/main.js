@@ -6,7 +6,7 @@ if (setupEvents.handleSquirrelEvent()) {
 }
 
 const electron = require('electron');
-const {app, BrowserWindow, Menu, Tray, nativeImage, dialog, ipcMain:ipc, screen} = require('electron');
+const {app, BrowserWindow, Menu, Tray, nativeImage, dialog, ipcMain:ipc, screen, globalShortcut} = require('electron');
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
@@ -104,6 +104,7 @@ function settingsHandler() {
       "hide_app_on_blur": true,
       "always_on_top": false,
       "movable": false,
+      "add_task_shortcut":"CmdOrCtrl+Shift+Insert",
       "display_app_corner": "auto"
     },
     "list-mode": {
@@ -194,6 +195,10 @@ function run() {
   app.on('window-all-closed', function(){
     // żeby aplikacja się nie zamykała
   });
+  app.on('will-quit', () => {
+    // Unregister all shortcuts.
+    globalShortcut.unregisterAll()
+  })
 }
 
 function loginfo(text){
@@ -229,7 +234,6 @@ function createWindow (silent, startup) {
       alwaysOnTop: settings.config.general.always_on_top,
       title: "Deadlines"
     }});
-
   
   mainwin.loadURL(url.format({
     pathname: path.join(__dirname, settings.computed.default_mode),
@@ -290,7 +294,7 @@ function loadTray() {
 		}},
 		{label: '➕ Dodaj nowe zadanie', click() {
 			mainwin.show();
-			mainwin.send("showform", ["tasks", "add"]);
+			mainwin.send("showform", ["add"]);
 		}},
 		{label: 'Wyjdź', click() {
       app.exit(0);
@@ -345,8 +349,15 @@ function loadApp() {
   // });
 
   if (process.argv[2]=="--addtask") {
-    mainwin.send("showform", ["tasks", "add"]);
+    mainwin.send("showform", ["add"]);
   }
+
+  if (settings.config.general.add_task_shortcut)
+    if(!globalShortcut.register(settings.config.general.add_task_shortcut, function() {
+        mainwin.show();
+        mainwin.send("showform", ["add"]);
+      })) 
+      console.log('register shortcut addtask failed');
 
   ipc.on("updatetasks", (event, arg) => {
     schedule.updateTasks(JSON.parse(arg));
