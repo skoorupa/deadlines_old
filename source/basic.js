@@ -86,6 +86,7 @@ function showForm(name, task, strdate) {
     elems.getElementsByClassName("clarifyrepeat")[0].style.display = "none";
     title = task.title;
     description = task.description || "";
+    var weekdays = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
     if (task.repeat) {
       var amount = (task.repeat.amount==1)?"":task.repeat.amount+".";
       var units = {
@@ -94,7 +95,6 @@ function showForm(name, task, strdate) {
         months: "miesiąc",
         years: "rok"
       };
-      var weekdays = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
       elems.getElementsByClassName("repeatamount")[0].innerHTML = "co " + amount + " " + units[task.repeat.unit];
       if (task.repeat.unit == "months") {
         elems.getElementsByClassName("clarifyrepeat")[0].display = "inline";
@@ -142,7 +142,7 @@ function showForm(name, task, strdate) {
       elems["description"].style.cssText = 'height:' + elems["description"].scrollHeight + 'px';
     } else elems["description"].style.display = "none";
 
-    elems.getElementsByClassName("date")[0].innerHTML = dates.day + "/" + dates.month + "/" + dates.year;
+    elems.getElementsByClassName("date")[0].innerHTML = weekdays[d.getDay()] + ", " + dates.day + "/" + dates.month + "/" + dates.year;
     elems.getElementsByClassName("time")[0].innerHTML = dates.hours + ":" + dates.minutes;
 
     return task;
