@@ -18,6 +18,7 @@ html, body,
 #deadlinesbar,
 #addbar, 
 #editbar,
+#showbar,
 .day:hover,
 .calendarbuttons > div:hover {
 	background-color: #020F2C;
@@ -66,3 +67,12 @@ html, body,
 #settingsbar {
 	background-color: black;
 }
+
+.color-default {background-color: #68799F;color: white;}
+.color-red {background-color: #EF5350;color: white;}
+.color-orange {background-color: #FFA726;color: white;}
+.color-yellow {background-color: #FBC02D;color: white;}
+.color-green {background-color: #66BB6A;color: white;}
+.color-blue {background-color: #42A5F5;color: white;}
+.color-purple {background-color: #AB47BC;color: white;}
+.color-brown {background-color: #8D6E63;color: white;}
