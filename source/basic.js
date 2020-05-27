@@ -150,6 +150,7 @@ function showForm(name, task, strdate) {
   $('.endrepeatbox').hide();
   elems["repeat"].checked = false;
   elems["repeatend"].checked = false;
+  elems["color"][0].checked = true;
 
   if (task) {
     editedtask = task;
@@ -183,6 +184,8 @@ function showForm(name, task, strdate) {
       }
       formClarify(name, d);
     }
+    if (task.color)
+      elems["color"].value=task.color;
   } else if (strdate) {
     d = decodeDate(strdate);
     var now = new Date();
@@ -335,6 +338,7 @@ function getTaskFromForm(name,silent) {
     "time": String(elems["time"].value),
     "timeid": date.getTime(),
     "repeat": repeat,
+    "color": elems["color"].value,
     "priority": 1
   }
 }

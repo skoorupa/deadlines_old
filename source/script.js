@@ -144,6 +144,10 @@ function renderDeadlines(_deadlines, dc, days, _tasks, otherTasks) {
       var bar = document.createElement("div");
       bar.classList.add("medium");
       bar.classList.add("bar");
+      if (task.color)
+        bar.classList.add("color-"+task.color);
+      else
+        bar.classList.add("color-default");
       bar.classList.add("othertaskbar");
 
       var checkboxdiv = document.createElement("div");

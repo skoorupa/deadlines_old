@@ -81,8 +81,6 @@
 				<div class="dropdown icon right"></div>
 			</div>
 			<form class="form" id="add" onsubmit="function(event){event.preventDefault();if(addTask('add'))hideForm('add');}" action="">
-				<input type="text" id="addtrigger" style="display: none;">
-
 				<input name="title" placeholder="Nazwa zadania" required><br><br>
 
 				<textarea name="description" placeholder="Opis zadania"></textarea>
@@ -100,7 +98,7 @@
 				<label>
 					Powtarzaj:
 					<input name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
-				</label>
+				</label><br>
 				<div class="repeatbox">
 					co
 					<input name="repeatamount" type="number" min="1" value="1">
@@ -128,14 +126,14 @@
 				</div><br>
 
 				<div class="colors">
-					<input type="radio" name="color" class="color-default">
-					<input type="radio" name="color" class="color-red">
-					<input type="radio" name="color" class="color-orange">
-					<input type="radio" name="color" class="color-yellow">
-					<input type="radio" name="color" class="color-green">
-					<input type="radio" name="color" class="color-blue">
-					<input type="radio" name="color" class="color-violet">
-					<input type="radio" name="color" class="color-brown">
+					<input type="radio" value="default" name="color"><span class="radiocolor color-default"></span>
+					<input type="radio" value="red" name="color"><span class="radiocolor color-red"></span>
+					<input type="radio" value="orange" name="color"><span class="radiocolor color-orange"></span>
+					<input type="radio" value="yellow" name="color"><span class="radiocolor color-yellow"></span>
+					<input type="radio" value="green" name="color"><span class="radiocolor color-green"></span>
+					<input type="radio" value="blue" name="color"><span class="radiocolor color-blue"></span>
+					<input type="radio" value="purple" name="color"><span class="radiocolor color-purple"></span>
+					<input type="radio" value="brown" name="color"><span class="radiocolor color-brown"></span>
 				</div><br>
 
 				<div class="button" onclick="if(addTask('add'))hideForm('add');">
@@ -157,7 +155,6 @@
 				<div class="dropdown icon right"></div>
 			</div>
 			<form class="form" id="edit" onsubmit="function(event){event.preventDefault();if(editTask('edit'))hideForm('edit');}">
-				
 				<input name="title" placeholder="Nazwa zadania" required><br><br>
 
 				<textarea name="description" placeholder="Opis zadania"></textarea>
@@ -175,7 +172,7 @@
 				<label>
 					Powtarzaj:
 					<input name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
-				</label>
+				</label><br>
 				<div class="repeatbox">
 					co
 					<input name="repeatamount" type="number" min="1" value="1">
@@ -203,14 +200,14 @@
 				</div><br>
 
 				<div class="colors">
-					<input type="radio" name="color" class="color-default">
-					<input type="radio" name="color" class="color-red">
-					<input type="radio" name="color" class="color-orange">
-					<input type="radio" name="color" class="color-yellow">
-					<input type="radio" name="color" class="color-green">
-					<input type="radio" name="color" class="color-blue">
-					<input type="radio" name="color" class="color-violet">
-					<input type="radio" name="color" class="color-brown">
+					<input type="radio" value="default" name="color"><span class="radiocolor color-default"></span>
+					<input type="radio" value="red" name="color"><span class="radiocolor color-red"></span>
+					<input type="radio" value="orange" name="color"><span class="radiocolor color-orange"></span>
+					<input type="radio" value="yellow" name="color"><span class="radiocolor color-yellow"></span>
+					<input type="radio" value="green" name="color"><span class="radiocolor color-green"></span>
+					<input type="radio" value="blue" name="color"><span class="radiocolor color-blue"></span>
+					<input type="radio" value="purple" name="color"><span class="radiocolor color-purple"></span>
+					<input type="radio" value="brown" name="color"><span class="radiocolor color-brown"></span>
 				</div><br>
 
 				<a href="#" class="deletebutton" onclick="deleteTask(editedtask);hideForm('edit');">Usuń to zadanie</a>
