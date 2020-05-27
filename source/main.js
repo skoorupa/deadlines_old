@@ -105,6 +105,7 @@ function settingsHandler() {
       "always_on_top": false,
       "movable": false,
       "add_task_shortcut":"CmdOrCtrl+Shift+Insert",
+      "show_shortcut":"CmdOrCtrl+Shift+Home",
       "display_app_corner": "auto",
       "devtools": false
     },
@@ -361,6 +362,12 @@ function loadApp() {
     if(!globalShortcut.register(settings.config.general.add_task_shortcut, function() {
         mainwin.show();
         mainwin.send("showform", ["add"]);
+      })) 
+      console.log('register shortcut addtask failed');
+
+  if (settings.config.general.show_shortcut)
+    if(!globalShortcut.register(settings.config.general.show_shortcut, function() {
+        mainwin.show();
       })) 
       console.log('register shortcut addtask failed');
 
