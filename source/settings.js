@@ -16,6 +16,7 @@ const ipc = require("electron").ipcRenderer;
 	for (category in usersettings) {
 		for (setting in usersettings[category]) {
 			var input = document.getElementsByName(setting)[0];
+			if (!input) continue;
 			if (input.getAttribute("type")=="checkbox")
 				input.checked = usersettings[category][setting];
 			else

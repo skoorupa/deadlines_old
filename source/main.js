@@ -105,7 +105,8 @@ function settingsHandler() {
       "always_on_top": false,
       "movable": false,
       "add_task_shortcut":"CmdOrCtrl+Shift+Insert",
-      "display_app_corner": "auto"
+      "display_app_corner": "auto",
+      "devtools": false
     },
     "list-mode": {
       "show_deadlines_with_other_tasks": false
@@ -270,10 +271,10 @@ function loadTray() {
 	// 	tray = new Tray(path.join(__dirname,"tray.ico"));
 	// }
 	// tray = new Tray(nativeImage.createEmpty())
-	const contextMenu = Menu.buildFromTemplate([
-		{label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}},
-		{label: '🗄️ Archiwum'},
-		{label: '⚙️ Ustawienia', click () {
+  // {label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}}
+  var menu = [
+    // {label: '🗄️ Archiwum'},
+    {label: '⚙️ Ustawienia', click () {
       if (settingswin) 
         if (settingswin.isVisible()) return;
 
@@ -282,7 +283,7 @@ function loadTray() {
         parent: mainwin,
         modal: true,
         height: 500,
-	      width: 700,
+        width: 700,
         show: false,
         webPreferences: {
           nodeIntegration: true
@@ -291,17 +292,21 @@ function loadTray() {
       settingswin.once("closed", function(event) {
         settingswin = null
       });
-		}},
-		{label: '➕ Dodaj nowe zadanie', click() {
-			mainwin.show();
-			mainwin.send("showform", ["add"]);
-		}},
-		{label: 'Wyjdź', click() {
+    }},
+    {label: '➕ Dodaj nowe zadanie', click() {
+      mainwin.show();
+      mainwin.send("showform", ["add"]);
+    }},
+    {label: 'Wyjdź', click() {
       app.exit(0);
     }}
- 	]);
+  ];
 
+  if (settings.config.general.devtools) menu.unshift({label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}});
+
+	var contextMenu = Menu.buildFromTemplate(menu);
 	tray.setContextMenu(contextMenu);
+
   function trayclick() {
     if (!mainwin.isVisible())
       mainwin.show()
@@ -1093,6 +1098,7 @@ function showWindow(settings, filename) {
     win.once("close", function(event) {
       mainwin.close();
       settingsHandler();
+      loadTray();
       createWindow();
     });
   }
