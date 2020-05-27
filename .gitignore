@@ -2,3 +2,4 @@ build/
 deadlines_npm.sublime-project
 deadlines_npm.sublime-workspace
 source/node_modules
+# source/schedules

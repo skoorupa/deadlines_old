@@ -417,7 +417,7 @@ function loadApp() {
         }));
       
         mainwin.once('ready-to-show', () => {
-          sendStuff(mainwin,"schedule", schedule);
+          mainwin.send("schedule", JSON.stringify(schedule));
           mainwin.show();
           //debug
           //mainwin.openDevTools()
@@ -454,7 +454,7 @@ function loadApp() {
         }));
       
         mainwin.once('ready-to-show', () => {
-          sendStuff(mainwin,"schedule", schedule);
+          mainwin.send("schedule", JSON.stringify(schedule));
           mainwin.show();
           //debug
           //mainwin.openDevTools();
@@ -1054,11 +1054,11 @@ function refreshUpdater() {
     if (schedule.info.tasks.jsontxt != newschedule.info.tasks.jsontxt){
       console.log('new schedule');
       schedule = newschedule;
-      sendStuff(mainwin,"schedule", schedule);
+      mainwin.send("schedule", JSON.stringify(schedule));
     }
   }, updatetime);
   schedule = new Schedule(schedulelist[0], schedule.content);
-  sendStuff(mainwin,"schedule", schedule);
+  mainwin.send("schedule", JSON.stringify(schedule));
 }
 
 function showWindow(settings, filename) {
