@@ -1,4 +1,4 @@
-ipc = require("electron").ipcRenderer;
+const ipc = require("electron").ipcRenderer;
 
 (function(){
 	document.querySelectorAll("#menu li").forEach(function(obj) {
@@ -38,6 +38,9 @@ ipc = require("electron").ipcRenderer;
 		toggle(obj);
 		obj.addEventListener("change", (e)=>{toggle(e.target)});
 	});
+
+	const remote = require('electron').remote;
+	document.getElementById("version").innerHTML = "Deadlines v." + remote.app.getVersion();
 })();
 
 function updateSettings(settings_id) {

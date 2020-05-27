@@ -1,4 +1,4 @@
-ipc = require("electron").ipcRenderer;
+const ipc = require("electron").ipcRenderer;
 const {dialog} = require('electron').remote;
 
 var schedule = {tasks:{}};
@@ -8,6 +8,9 @@ var settings = ipc.sendSync("getsettings");
 
 todayBar();
 setInterval(todayBar, 1000);
+
+const remote = require('electron').remote;
+document.getElementById("version").innerHTML =  remote.app.getVersion();
 
 function todayBar() {
   var d = new Date();
