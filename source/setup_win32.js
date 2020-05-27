@@ -19,7 +19,7 @@ function getInstallerConfig () {
     noMsi: true,
     outputDirectory: path.join(outPath, 'windows-installer'),
     exe: 'deadlines.exe',
-    setupExe: 'DeadlinesSetup.exe',
+    setupExe: 'DeadlinesSetup32-'+process.env.npm_package_version+'.exe',
     setupIcon: "./tray.ico"
   })
 }
