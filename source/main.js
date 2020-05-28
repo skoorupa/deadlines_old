@@ -24,16 +24,17 @@ var updater;
 var schedule;
 
 //don't run multiple times
-const gotTheLock = app.requestSingleInstanceLock()
+// const gotTheLock = app.requestSingleInstanceLock();
 
-if (!gotTheLock) {
+// if (!gotTheLock) {
+if (!app.requestSingleInstanceLock()) {
   app.quit()
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
     // Someone tried to run a second instance, we should focus our window.
     if (mainwin) {
       if (mainwin.isMinimized()) mainwin.restore() 
-        mainwin.show()
+        mainwin.show();
     }
   })
 }
