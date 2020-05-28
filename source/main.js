@@ -246,9 +246,9 @@ function createWindow (silent, startup) {
 
   mainwin.once("ready-to-show", function() {
     refreshUpdater();
-    if (startup && process.argv[2]=="--autostart" && !settings.config.show_app_on_autostart) console.log('');
-    else if (!silent) mainwin.show();
     mainwin.on("blur", () => {hideWindowOnBlur(mainwin)});
+    if (startup && process.argv[2]=="--autostart" && !settings.config.show_app_on_autostart) return;
+    else if (!silent) mainwin.show();
   });
 
   // dla developerów
