@@ -1,7 +1,7 @@
 {
   "name": "deadlines",
   "productName": "Deadlines",
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "Aplikacja do zarządzania czasem i zadaniami",
   "main": "main.js",
   "dependencies": {

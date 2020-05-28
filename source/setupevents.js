@@ -15,7 +15,7 @@ module.exports = {
 		const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
 		const exeName = path.basename(process.execPath);
 		const spawn = function(command, args) {
-		let spawnedProcess, error;
+			let spawnedProcess, error;
 			try {
 				spawnedProcess = ChildProcess.spawn(command, args, {detached: true});
 			} catch (error) {}
@@ -29,8 +29,8 @@ module.exports = {
 
 		const squirrelEvent = process.argv[1];
 		switch (squirrelEvent) {
-			case '--squirrel-install':
 			case '--squirrel-updated':
+			case '--squirrel-install':
 				// Optionally do things such as:
 				// - Add your .exe to the PATH
 				// - Write to the registry for things like file associations and
