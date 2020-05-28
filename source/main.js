@@ -100,7 +100,7 @@ function patchHandler() {
 function settingsHandler() {
   var defaultsettings = {
     "general": {
-      "show_app_on_autostart": true,
+      "hide_app_on_autostart": false,
       "default_mode": "list",
       "hide_app_on_blur": true,
       "always_on_top": false,
@@ -224,7 +224,7 @@ function loginfo(text){
   );
 }
 
-function createWindow (silent, startup) {
+function createWindow (silent) {
   mainwin = new BrowserWindow({...settings.computed.display_app_corner[settings.config.general.default_mode], ...settings.computed.window_size, ...{
       webPreferences: {
         nodeIntegration: true
@@ -247,11 +247,8 @@ function createWindow (silent, startup) {
   mainwin.once("ready-to-show", function() {
     refreshUpdater();
     mainwin.on("blur", () => {hideWindowOnBlur(mainwin)});
-    loginfo(startup);
-    loginfo(process.argv[2]);
-    loginfo(String(settings.config.show_app_on_autostart));
-    if (startup && process.argv[2]=="--autostart" && !settings.config.show_app_on_autostart) return;
-    else if (!silent) mainwin.show();
+    // if (startup && process.argv[2]=="--autostart" && !settings.config.general.hide_app_on_autostart) return;
+    if (!silent) mainwin.show();
   });
 
   // dla developerów
@@ -351,7 +348,14 @@ function loadApp() {
   schedule = new Schedule(schedulelist[0]);
   schedule.updateTasks();
 
-  createWindow(false, true);
+  // loginfo(process.argv[2]);
+  // loginfo(String(settings.config.general.hide_app_on_autostart));
+
+  if (process.argv[2]=="--autostart" && !settings.config.general.hide_app_on_autostart)
+    createWindow(true);
+  else
+    createWindow();
+
   // mainwin.once('ready-to-show', () => {
   //   refreshUpdater();
   //   mainwin.show();
