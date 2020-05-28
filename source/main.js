@@ -281,19 +281,20 @@ function loadTray() {
         if (settingswin.isVisible()) return;
 
       // nie ma settingswin
-      settingswin = showWindow({
-        parent: mainwin,
-        modal: true,
-        height: 500,
-        width: 700,
-        show: false,
-        webPreferences: {
-          nodeIntegration: true
-        }
-      },'settings.html');
-      settingswin.once("closed", function(event) {
-        settingswin = null
-      });
+      // settingswin = showWindow({
+      //   parent: mainwin,
+      //   modal: true,
+      //   height: 600,
+      //   width: 700,
+      //   show: false,
+      //   webPreferences: {
+      //     nodeIntegration: true
+      //   }
+      // },'settings.html');
+      // settingswin.once("closed", function(event) {
+      //   settingswin = null
+      // });
+      ipc.emit("showwindow",null,"settings");
     }},
     {label: '➕ Dodaj nowe zadanie', click() {
       mainwin.show();
@@ -417,7 +418,7 @@ function loadApp() {
         settingswin = showWindow({
           parent: mainwin,
           modal: true,
-          height: 500,
+          height: 600,
           width: 700,
           show: false,
           webPreferences: {
