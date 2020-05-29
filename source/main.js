@@ -147,10 +147,10 @@ function settingsHandler() {
     console.log(size);
     var xy = {
       list: {
-      "rightdown": {x: size.x+size.width-400,y: size.y+size.height-600},
-      "rightup": {x: size.x+size.width-400,y: size.y},
-      "leftdown": {x: size.x,y: size.y+size.height-600},
-      "leftup": {x: size.x,y: size.y}
+        "rightdown": {x: size.x+size.width-400,y: size.y+size.height-600},
+        "rightup": {x: size.x+size.width-400,y: size.y},
+        "leftdown": {x: size.x,y: size.y+size.height-600},
+        "leftup": {x: size.x,y: size.y}
       },
       calendar: {
         "rightdown": {x: size.x+size.width-800,y: size.y+size.height-600},
