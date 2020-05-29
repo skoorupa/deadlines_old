@@ -18,7 +18,6 @@ var schedulesPath = path.join(userDataPath,"schedules");
 var settingsPath = path.join(userDataPath,"settings.json");
 console.log(schedulesPath);
 console.log(settingsPath);
-// var ipc = electron.ipcMain;
 
 var mainwin;
 var settingswin;
@@ -364,13 +363,6 @@ function loadApp() {
   else
     createWindow();
 
-  // mainwin.once('ready-to-show', () => {
-  //   refreshUpdater();
-  //   mainwin.show();
-  //   mainwin.on("blur", () => {hideWindowOnBlur(mainwin)});
-  //   // alertme(mainwin, JSON.stringify(schedule.getUpcomingDeadlines(7)));
-  // });
-
   if (process.argv[2]=="--addtask") {
     mainwin.send("showform", ["add"]);
   }
@@ -425,7 +417,6 @@ function loadApp() {
   });
 
   ipc.on("showwindow", (event, arg) => {
-    // mainwin.hide();
     switch (arg) {
       case "settings":
         if (settingswin)
@@ -479,8 +470,6 @@ function loadApp() {
         mainwin.once('ready-to-show', () => {
           mainwin.send("schedule", JSON.stringify(schedule));
           mainwin.show();
-          //debug
-          //mainwin.openDevTools()
           loadTray();
         });
         mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
@@ -516,8 +505,6 @@ function loadApp() {
         mainwin.once('ready-to-show', () => {
           mainwin.send("schedule", JSON.stringify(schedule));
           mainwin.show();
-          //debug
-          //mainwin.openDevTools();
           loadTray();
         });
         mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
@@ -1052,9 +1039,6 @@ function Schedule(dir, content) {
     refreshUpdater();
   }
 }
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
 
 //**************** INNE ***************
 
