@@ -143,28 +143,14 @@ function settingsHandler() {
   // set settings
   settings.current.mode = settings.config.general.default_mode;
   function updateWindowPos(silent) {
-    size = screen.getPrimaryDisplay().workArea;
+    var size = screen.getPrimaryDisplay().workArea;
     console.log(size);
     var xy = {
-      list: {
-        "rightdown": {x: size.x+size.width-400,y: size.y+size.height-600},
-        "rightup": {x: size.x+size.width-400,y: size.y},
-        "leftdown": {x: size.x,y: size.y+size.height-600},
-        "leftup": {x: size.x,y: size.y}
-      },
-      calendar: {
-        "rightdown": {x: size.x+size.width-800,y: size.y+size.height-600},
-        "rightup": {x: size.x+size.width-800,y: size.y},
-        "leftdown": {x: size.x,y: size.y+size.height-600},
-        "leftup": {x: size.x,y: size.y}
-      }
+      list: getXYCorner(600,400),
+      calendar: getXYCorner(600,800)
     };
     settings.computed.display_app_corner = {};
     if (settings.config.general.display_app_corner == "auto") {
-      // downbar  -> x:0 y:0 - "rightdown"
-      // rightbar -> x:0 y:0 - "rightdown"
-      // upbar    -> x:0 y:40 - "rightup"
-      // leftbar  -> x:74 y:0 - "leftdown"
       var corner;
       if (size.x == 0 && size.y == 0) corner = "rightdown";
       else if (size.y>0) corner = "rightup";
@@ -555,6 +541,16 @@ function decodeTime(s,date) {
   var strtime = s.split(":").map(Number);
   var time = date.setHours(strtime[0],strtime[1]);
   return time;
+}
+
+function getXYCorner(height,width) {
+  var size = screen.getPrimaryDisplay().workArea;
+  return {
+    "rightdown": {x: size.x+size.width-width,y: size.y+size.height-height},
+    "rightup": {x: size.x+size.width-width,y: size.y},
+    "leftdown": {x: size.x,y: size.y+size.height-height},
+    "leftup": {x: size.x,y: size.y}
+  }
 }
 
 function Schedule(dir, content) {
