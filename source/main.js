@@ -247,7 +247,7 @@ function createWindow (silent) {
   mainwin.once("ready-to-show", function() {
     refreshUpdater();
     mainwin.on("blur", () => {hideWindowOnBlur(mainwin)});
-    // if (startup && process.argv[2]=="--autostart" && !settings.config.general.hide_app_on_autostart) return;
+    // if (startup && process.argv[2]=="--autostart" && settings.config.general.hide_app_on_autostart) return;
     if (!silent) mainwin.show();
   });
 
@@ -351,7 +351,7 @@ function loadApp() {
   // loginfo(process.argv[2]);
   // loginfo(String(settings.config.general.hide_app_on_autostart));
 
-  if (process.argv[2]=="--autostart" && !settings.config.general.hide_app_on_autostart)
+  if (process.argv[2]=="--autostart" && settings.config.general.hide_app_on_autostart)
     createWindow(true);
   else
     createWindow();
