@@ -127,7 +127,7 @@ function settingsHandler() {
   };
   settings.config = JSON.parse(JSON.stringify(defaultsettings));
   try {
-    var jsonsettings = fs.readFileSync("settings.json").toString();
+    var jsonsettings = fs.readFileSync(settingsPath).toString();
     var usersettings = JSON.parse(jsonsettings);
     for (category in usersettings) {
       if (settings.config[category]) {
@@ -139,7 +139,7 @@ function settingsHandler() {
       } else delete usersettings[category];
     }
   } catch (e) {
-    fs.writeFileSync("settings.json", "{}");
+    fs.writeFileSync(settingsPath, "{}");
   }
   // set settings
   settings.current.mode = settings.config.general.default_mode;
@@ -538,10 +538,10 @@ function loadApp() {
     var usersettings = JSON.parse(strusersettings);
     settings.config[category] = usersettings;
 
-    var filesettings = JSON.parse(fs.readFileSync("settings.json").toString());
+    var filesettings = JSON.parse(fs.readFileSync(settingsPath).toString());
     if (!filesettings[category]) filesettings[category] = {};
     filesettings[category] = usersettings;
-    fs.writeFileSync("settings.json",JSON.stringify(filesettings));
+    fs.writeFileSync(settingsPath,JSON.stringify(filesettings));
   });
 }
 
