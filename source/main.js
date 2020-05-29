@@ -13,6 +13,7 @@ const fs = require('fs');
 // const displays = require('electron').screen
 var schedulelist = [];
 var settings = {config:{}, computed:{}, current:{}}; // don't touch config, it goes to settingswin
+var userDataPath = app.getPath("userData");
 // var ipc = electron.ipcMain;
 
 var mainwin;
