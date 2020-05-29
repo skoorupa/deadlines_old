@@ -48,25 +48,28 @@ if (!app.requestSingleInstanceLock()) {
 // if it doesn't create one
 // and run
 try {
-  schedulelist = fs.readdirSync(path.join("schedules"));
+  schedulelist = fs.readdirSync(schedulesPath);
   schedulelist = schedulelist.map(function(currentValue) {
-    return "schedules/"+currentValue.toString();
+    return path.join(schedulesPath,currentValue.toString());
   });
   if (schedulelist.length == 0) throw {code:'EMPTY'};
   run();
 } catch (e) {
   if (e.code !== 'ENOENT' && e.code !== 'EMPTY') throw e;
-  fs.mkdir("schedules", function(err) {
+  fs.mkdir(schedulesPath, function(err) {
     if (err)
       if (err.code !== 'EEXIST') throw err;
+    var tasksPath = path.normalize(path.join(schedulesPath,"tasks.json"));
+    console.log(String(tasksPath));
+
     var d = new Date();
     d.setDate(d.getDate()+1);
     d.setHours(19, 0, 0, 0);
-    fs.writeFile("schedules/tasks.json",'{"name":"Default","tasks":[{"id":0,"date":"'+encodeDate(d)+'","time":"19:00","timeid":'+d.getTime()+',"title":"Nauczyć się obsługi Deadlines","checked":false,"repeat":false,"priority":1}],"path":"schedules/tasks.json"}', function(error) {
+    fs.writeFile(tasksPath,'{"name":"Default","tasks":[{"id":0,"date":"'+encodeDate(d)+'","time":"19:00","timeid":'+d.getTime()+',"title":"Nauczyć się obsługi Deadlines","checked":false,"repeat":false,"priority":1}]}', function(error) {
         if (error) throw error;
-        schedulelist = fs.readdirSync("schedules");
+        schedulelist = fs.readdirSync(schedulesPath);
         schedulelist = schedulelist.map(function(currentValue) {
-          return "schedules/"+currentValue.toString();
+          return path.join(schedulesPath,currentValue.toString());
         });
         run();
     });
