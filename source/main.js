@@ -14,6 +14,10 @@ const fs = require('fs');
 var schedulelist = [];
 var settings = {config:{}, computed:{}, current:{}}; // don't touch config, it goes to settingswin
 var userDataPath = app.getPath("userData");
+var schedulesPath = path.join(userDataPath,"schedules");
+var settingsPath = path.join(userDataPath,"settings.json");
+console.log(schedulesPath);
+console.log(settingsPath);
 // var ipc = electron.ipcMain;
 
 var mainwin;
