@@ -69,6 +69,10 @@ function showForm(name, task, strdate) {
   var description = "";
   editedtask = task;
 
+  $('.repeatbox').hide();
+  $('.clarifyrepeat').hide();
+  $('.endrepeatbox').hide();
+
   function autosize(){
     var el = this;
     setTimeout(function(){
@@ -148,9 +152,6 @@ function showForm(name, task, strdate) {
     return task;
   }
   
-  $('.repeatbox').hide();
-  $('.clarifyrepeat').hide();
-  $('.endrepeatbox').hide();
   elems["repeat"].checked = false;
   elems["repeatend"].checked = false;
   elems["color"][0].checked = true;
