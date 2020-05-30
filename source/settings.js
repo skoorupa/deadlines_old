@@ -28,19 +28,26 @@ const ipc = require("electron").ipcRenderer;
 	}
 
 	document.querySelectorAll("label > input[type=checkbox]").forEach(function(obj) {
-		function toggle(checkbox) {
-			console.log(checkbox);
-			var labels = checkbox.parentNode.querySelectorAll("label");
-			labels.forEach( function(label) {
-				if (label.getAttribute("data-checked") == String(checkbox.checked))
-					label.style.display = "block";
-				else if (label.getAttribute("data-checked") != String(checkbox.checked))
-					label.style.display = "none";
-			});
-		}
+	  function toggle(checkbox) {
+	    console.log(checkbox);
+	    var labels = checkbox.parentNode.querySelectorAll("label");
+	    var directchildren = checkbox.parentNode.children;
+	    labels.forEach( function(label) {
+	      if (
+	        label.getAttribute("data-checked") == String(checkbox.checked) &&
+	        [...directchildren].indexOf(label) != -1
+	      )
+	        label.style.display = "block";
+	      else if (
+	        label.getAttribute("data-checked") != String(checkbox.checked) &&
+	        [...directchildren].indexOf(label) != -1
+	      )
+	        label.style.display = "none";
+	    });
+	  }
 
-		toggle(obj);
-		obj.addEventListener("change", (e)=>{toggle(e.target)});
+	  toggle(obj);
+	  obj.addEventListener("change", (e)=>{toggle(e.target)});
 	});
 })();
 
