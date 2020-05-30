@@ -1,4 +1,5 @@
 const ipc = require("electron").ipcRenderer;
+const remote = require('electron').remote;
 const {dialog} = require('electron').remote;
 
 var schedule = {tasks:{}};
@@ -9,8 +10,34 @@ var settings = ipc.sendSync("getsettings");
 todayBar();
 setInterval(todayBar, 1000);
 
-const remote = require('electron').remote;
 document.getElementById("version").innerHTML =  remote.app.getVersion();
+
+/* form stuff */
+
+document.querySelectorAll("label > input[type=checkbox]").forEach(function(obj) {
+  function toggle(checkbox) {
+    console.log(checkbox);
+    var divs = checkbox.parentNode.querySelectorAll("div");
+    var directchildren = checkbox.parentNode.children;
+    divs.forEach( function(div) {
+      if (
+        div.getAttribute("data-checked") == String(checkbox.checked) &&
+        [...directchildren].indexOf(div) != -1
+      )
+        div.style.display = "block";
+      else if (
+        div.getAttribute("data-checked") != String(checkbox.checked) &&
+        [...directchildren].indexOf(div) != -1
+      )
+        div.style.display = "none";
+    });
+  }
+
+  toggle(obj);
+  obj.addEventListener("change", (e)=>{toggle(e.target)});
+});
+
+/* *** */
 
 function todayBar() {
   var d = new Date();
@@ -69,9 +96,8 @@ function showForm(name, task, strdate) {
   var description = "";
   editedtask = task;
 
-  $('.repeatbox').hide();
-  $('.clarifyrepeat').hide();
-  $('.endrepeatbox').hide();
+  elems.getElementsByClassName("repeatbox")[0].style.display="none";
+  elems.getElementsByClassName("clarifyrepeat")[0].style.display="none";
 
   function autosize(){
     var el = this;
@@ -109,7 +135,7 @@ function showForm(name, task, strdate) {
           elems["clarifyrepeat"].title += nweekday+ ". "+weekdays[d.getDay()]+" każdego miesiąca\n";
         }
       } 
-      $('.repeatbox').show();
+      elems.getElementsByClassName("repeatbox")[0].style.display="inline";
       if (task.repeat.end) {
         elems.getElementsByClassName("clarifyrepeat")[0].style.display = "inline";
         enddate = decodeDate(task.repeat.end);
@@ -155,6 +181,7 @@ function showForm(name, task, strdate) {
   elems["repeat"].checked = false;
   elems["repeatend"].checked = false;
   elems["color"][0].checked = true;
+  elems.getElementsByClassName("endrepeatbox")[0].style.display="none";
 
   if (task) {
     editedtask = task;
@@ -168,12 +195,12 @@ function showForm(name, task, strdate) {
       elems["repeatunit"].value = task.repeat.unit;
       if (task.repeat.unit == "months") {
         elems["repeattype"].value = task.repeat.type;
-        $('.'+task.repeat.unit+'repeat').show();
+        elems.getElementsByClassName(task.repeat.unit+'repeat')[0].style.display="block";
       } 
-      $('.repeatbox').show();
+      elems.getElementsByClassName("repeatbox")[0].style.display="block";
       elems["repeat"].checked = true;
       if (task.repeat.end) {
-        $('.endrepeatbox').show();
+        elems.getElementsByClassName("endrepeatbox")[0].style.display="block";
         elems["repeatend"].checked = true;
         enddate = decodeDate(task.repeat.end);
         var dates = {
@@ -200,14 +227,14 @@ function showForm(name, task, strdate) {
     } else 
       d.setHours(now.getHours()+1);
     elems["repeat"].checked = false;
-    $('.repeatbox').hide();
+    elems.getElementsByClassName("repeatbox")[0].style.display="none";
   } else {
     d = new Date();
     d.setMinutes(0);
     d.setHours(d.getHours()+1);
     d.setDate(d.getDate()+7);
     elems["repeat"].checked = false;
-    $('.repeatbox').hide();
+    elems.getElementsByClassName("repeatbox")[0].style.display="none";
   }
 
   dates = {
@@ -265,8 +292,8 @@ function formClarify(name, date) {
   var weekdays = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
   switch (value) {
     case "months":
-      $('.clarifyrepeat').hide();
-      $('.'+value+'repeat').show();
+      elems.getElementsByClassName("clarifyrepeat")[0].style.display="none";
+      elems.getElementsByClassName(value+'repeat')[0].style.display="inline";
       elems["repeattype"].children[0].innerHTML = d.getDate()+ ". dzień każdego miesiąca";
       var nweekday = getWhichWeekDay(d);
       elems["repeattype"].children[1].innerHTML = nweekday+ ". "+weekdays[d.getDay()]+" każdego miesiąca";
