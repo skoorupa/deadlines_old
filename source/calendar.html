@@ -96,34 +96,34 @@
 				</label>
 
 				<label>
-					<input name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
+					<input name="repeat" type="checkbox">
 					Powtarzaj...
-				</label><br>
-				<div class="repeatbox indent">
-					co
-					<input name="repeatamount" type="number" min="1" value="1">
-					<select name="repeatunit" onchange="formClarify('add')">
-						<option value="days">dni</option>
-						<option value="weeks">tygodni</option>
-						<option value="months">miesięcy</option>
-						<option value="years">lat</option>
-					</select>
-
-					<div class="monthsrepeat clarifyrepeat" style="display:none;">
-						<select name="repeattype">
-							<option value="sameday">20. dzień każdego miesiąca</option>
-							<option value="sameweekday">3. piątek każdego miesiąca</option>
+					<div class="repeatbox indent" data-checked="true">
+						co
+						<input name="repeatamount" type="number" min="1" value="1">
+						<select name="repeatunit" onchange="formClarify('add')">
+							<option value="days">dni</option>
+							<option value="weeks">tygodni</option>
+							<option value="months">miesięcy</option>
+							<option value="years">lat</option>
 						</select>
-					</div><br>
 
-					<label>
-						<input name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
-						Koniec...
-					</label>
-					<div class="endrepeatbox indent">
-						<input name="repeatenddate" type="date">
+						<div class="monthsrepeat clarifyrepeat" style="display:none;">
+							<select name="repeattype">
+								<option value="sameday">20. dzień każdego miesiąca</option>
+								<option value="sameweekday">3. piątek każdego miesiąca</option>
+							</select>
+						</div><br>
+
+						<label>
+							<input name="repeatend" type="checkbox">
+							Koniec...
+							<div class="endrepeatbox indent" data-checked="true">
+								<input name="repeatenddate" type="date">
+							</div>
+						</label>
 					</div>
-				</div><br>
+				</label><br><br>
 
 				<div class="colors">
 					<input type="radio" value="default" name="color"><span class="radiocolor color-default"></span>
@@ -170,34 +170,34 @@
 				</label>
 
 				<label>
-					<input name="repeat" type="checkbox" onclick="$('.repeatbox').toggle()">
+					<input name="repeat" type="checkbox">
 					Powtarzaj...
-				</label><br>
-				<div class="repeatbox indent">
-					co
-					<input name="repeatamount" type="number" min="1" value="1">
-					<select name="repeatunit" onchange="formClarify('edit')">
-						<option value="days">dni</option>
-						<option value="weeks">tygodni</option>
-						<option value="months">miesięcy</option>
-						<option value="years">lat</option>
-					</select>
-
-					<div class="monthsrepeat clarifyrepeat" style="display:none;">
-						<select name="repeattype">
-							<option value="sameday">20. dzień każdego miesiąca</option>
-							<option value="sameweekday">3. piątek każdego miesiąca</option>
+					<div class="repeatbox indent" data-checked="true">
+						co
+						<input name="repeatamount" type="number" min="1" value="1">
+						<select name="repeatunit" onchange="formClarify('edit')">
+							<option value="days">dni</option>
+							<option value="weeks">tygodni</option>
+							<option value="months">miesięcy</option>
+							<option value="years">lat</option>
 						</select>
-					</div><br>
 
-					<label>
-						<input name="repeatend" type="checkbox" onclick="$('.endrepeatbox').toggle()">
-						Koniec...
-					</label>
-					<div class="endrepeatbox indent">
-						<input name="repeatenddate" type="date">
+						<div class="monthsrepeat clarifyrepeat" style="display:none;">
+							<select name="repeattype">
+								<option value="sameday">20. dzień każdego miesiąca</option>
+								<option value="sameweekday">3. piątek każdego miesiąca</option>
+							</select>
+						</div><br>
+
+						<label>
+							<input name="repeatend" type="checkbox">
+							Koniec...
+							<div class="endrepeatbox indent" data-checked="true">
+								<input name="repeatenddate" type="date">
+							</div>
+						</label>
 					</div>
-				</div><br>
+				</label><br><br>
 
 				<div class="colors">
 					<input type="radio" value="default" name="color"><span class="radiocolor color-default"></span>
