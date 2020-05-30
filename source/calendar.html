@@ -30,8 +30,8 @@
 		<div id="preview"></div>
 		<div class="down">
 			<div class="mini bar" id="settingsbar">
-				<div class="left clickable underline" onclick="showMode('list')">lista</div>
-				<div class="right clickable underline" onclick="showWindow('settings')">ustawienia</div>
+				<div class="left clickable underline" onclick="showMode('list')" title="Ctrl+Tab">lista</div>
+				<div class="right clickable underline" onclick="showWindow('settings')" title="Ctrl+P">ustawienia</div>
 			</div>
 		</div>
 	</div>
@@ -136,7 +136,7 @@
 					<input type="radio" value="brown" name="color"><span class="radiocolor color-brown"></span>
 				</div><br>
 
-				<div class="button" onclick="if(addTask('add'))hideForm('add');">
+				<div class="button" title="Ctrl+S" onclick="if(addTask('add'))hideForm('add');">
 					<div class="buttonlabel">Dodaj</div>
 					<div class="buttonicon">&gt;</div>
 				</div>
@@ -211,7 +211,7 @@
 				</div><br>
 
 				<a href="#" class="deletebutton" onclick="deleteTask(editedtask);hideForm('edit');">Usuń to zadanie</a>
-				<div class="button" onclick="if(editTask('edit'))hideForm('edit');">
+				<div class="button" title="Ctrl+S" onclick="if(editTask('edit'))hideForm('edit');">
 					<div class="buttonlabel">Zapisz</div>
 					<div class="buttonicon">&gt;</div>
 				</div>

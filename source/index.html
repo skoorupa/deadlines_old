@@ -64,18 +64,18 @@
 		<div class="medium bar" style="height: 40px;"></div>
 
 		<div class="down">
-			<div class="medium bar clickable" id="addtaskbar">
+			<div class="medium bar clickable" id="addtaskbar" title="Ctrl+N" onclick="showForm('add')">
 				<div class="icon left">📝</div>
 				<div class="context left">
-					<div class="underline" onclick="showForm('add')">
+					<div class="underline">
 						Dodaj nowe zadanie
 					</div>
 				</div>
 				<div class="dropdown icon right">+</div>
 			</div>
 			<div class="mini bar" id="settingsbar">
-				<div class="left clickable underline" onclick="showMode('calendar')">kalendarz</div>
-				<div class="right clickable underline" onclick="showWindow('settings')">ustawienia</div>
+				<div class="left clickable underline" onclick="showMode('calendar')" title="Ctrl+Tab">kalendarz</div>
+				<div class="right clickable underline" onclick="showWindow('settings')" title="Ctrl+P">ustawienia</div>
 			</div>
 		</div>
 	</div>
@@ -180,7 +180,7 @@
 					<input type="radio" value="brown" name="color"><span class="radiocolor color-brown"></span>
 				</div><br>
 
-				<div class="button" onclick="if(addTask('add'))hideForm('add');">
+				<div class="button" title="Ctrl+S" onclick="if(addTask('add'))hideForm('add');">
 					<div class="buttonlabel">Dodaj</div>
 					<div class="buttonicon">&gt;</div>
 				</div>
@@ -255,7 +255,7 @@
 				</div><br>
 
 				<a href="#" class="deletebutton" onclick="deleteTask(editedtask);hideForm('edit');">Usuń to zadanie</a>
-				<div class="button" onclick="if(editTask('edit'))hideForm('edit');">
+				<div class="button" title="Ctrl+S" onclick="if(editTask('edit'))hideForm('edit');">
 					<div class="buttonlabel">Zapisz</div>
 					<div class="buttonicon">&gt;</div>
 				</div>

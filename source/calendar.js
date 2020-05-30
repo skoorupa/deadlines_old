@@ -313,10 +313,10 @@ function previewSchedule(strdate, clear) {
 	// clear
 	if (!clear) 
 		document.getElementById("preview").innerHTML = "\
-		<div class=\"medium bar clickable\" id=\"addtaskbar\">\
+		<div class=\"medium bar clickable\" id=\"addtaskbar\" title=\"Ctrl+N\" onclick=\"showForm('add',undefined,'"+strdate+"')\">\
 				<div class=\"icon left\">📝</div>\
 				<div class=\"context left\">\
-					<div class=\"underline\" onclick=\"showForm('add',undefined,'"+strdate+"')\">\
+					<div class=\"underline\">\
 						Dodaj nowe zadanie\
 					</div>\
 				</div>\
