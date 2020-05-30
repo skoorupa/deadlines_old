@@ -5,17 +5,17 @@ var deadlineslist = document.getElementById("deadlineslist");
 var othertaskslist = document.getElementById("othertasks");
 
 deadlinesbar.getElementsByClassName("description")[0].style.display = "block";
-deadlinesbar.getElementsByClassName("dropdown")[0].innerHTML = "^";
+deadlinesbar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
 deadlinesbar.parentNode.getElementsByClassName("list")[0].style.display = "none";
 
 function toggleOverviewList(bar) {
   if (bar.getElementsByClassName("description")[0].style.display=="block"){
     bar.getElementsByClassName("description")[0].style.display = "none";
-    bar.getElementsByClassName("dropdown")[0].innerHTML = "v";
+    bar.getElementsByClassName("dropdown")[0].innerHTML = "∨";
     bar.parentNode.getElementsByClassName("list")[0].style.display = "block";
   } else {
     bar.getElementsByClassName("description")[0].style.display = "block";
-    bar.getElementsByClassName("dropdown")[0].innerHTML = "^";
+    bar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
     bar.parentNode.getElementsByClassName("list")[0].style.display = "none";
   }
 }
