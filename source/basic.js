@@ -92,6 +92,10 @@ function encodeDate(date) {
   return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(); 
 }
 
+function encodeTime(date) {
+  return date.getHours()+":"+date.getMinutes(); 
+}
+
 function decodeDate(s) {
   var strdate = s.split("-");
   if (strdate[1]) strdate[1]--;
