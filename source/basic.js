@@ -413,6 +413,7 @@ function getTaskFromForm(name,silent) {
         var time = date.getTime();
         var d;
         time -= 30*60*1000;
+        d = new Date(time);
 
         remind.reminddate = encodeDate(d);
         remind.remindtime = encodeTime(d);
@@ -422,6 +423,7 @@ function getTaskFromForm(name,silent) {
         var time = date.getTime();
         var d;
         time -= 3600*1000;
+        d = new Date(time);
 
         remind.reminddate = encodeDate(d);
         remind.remindtime = encodeTime(d);
@@ -431,6 +433,7 @@ function getTaskFromForm(name,silent) {
         var time = date.getTime();
         var d;
         time -= 24*3600*1000;
+        d = new Date(time);
 
         remind.reminddate = encodeDate(d);
         remind.remindtime = encodeTime(d);
@@ -440,6 +443,7 @@ function getTaskFromForm(name,silent) {
         var time = date.getTime();
         var d;
         time -= 7*24*3600*1000;
+        d = new Date(time);
 
         remind.reminddate = encodeDate(d);
         remind.remindtime = encodeTime(d);
