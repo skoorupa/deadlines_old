@@ -37,6 +37,29 @@ document.querySelectorAll("label > input[type=checkbox]").forEach(function(obj) 
   obj.addEventListener("change", (e)=>{toggle(e.target)});
 });
 
+document.querySelectorAll("select.toggler").forEach(function(input) {
+  function toggle(select) {
+    console.log(select);
+    var divs = select.parentNode.querySelectorAll("div");
+    var directchildren = select.parentNode.children;
+    divs.forEach( function(div) {
+      if (
+        div.getAttribute("data-option") == String(select.value) &&
+        [...directchildren].indexOf(div) != -1
+      )
+        div.style.display = "block";
+      else if (
+        div.getAttribute("data-option") != String(select.value) &&
+        [...directchildren].indexOf(div) != -1
+      )
+        div.style.display = "none";
+    });
+  }
+
+  toggle(input);
+  input.addEventListener("change", (e)=>{toggle(e.target)});
+});
+
 /* *** */
 
 function todayBar() {
@@ -292,8 +315,8 @@ function formClarify(name, date) {
   var weekdays = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
   switch (value) {
     case "months":
-      elems.getElementsByClassName("clarifyrepeat")[0].style.display="none";
-      elems.getElementsByClassName(value+'repeat')[0].style.display="inline";
+      // elems.getElementsByClassName("clarifyrepeat")[0].style.display="none";
+      // elems.getElementsByClassName(value+'repeat')[0].style.display="inline";
       elems["repeattype"].children[0].innerHTML = d.getDate()+ ". dzień każdego miesiąca";
       var nweekday = getWhichWeekDay(d);
       elems["repeattype"].children[1].innerHTML = nweekday+ ". "+weekdays[d.getDay()]+" każdego miesiąca";
