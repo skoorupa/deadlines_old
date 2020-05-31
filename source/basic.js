@@ -461,7 +461,7 @@ function getTaskFromForm(name,silent) {
     "timeid": date.getTime(),
     "repeat": repeat,
     "color": elems["color"].value,
-    "remind": remind;
+    "remind": remind,
     "priority": 1
   }
 }
