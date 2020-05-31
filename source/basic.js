@@ -334,14 +334,15 @@ function formClarify(name, date) {
 function getTaskFromForm(name,silent) {
   var today = new Date();
   var elems = document.forms[name];
+  var date = new Date(elems["date"].value);
+  var repeat = false;
+  var remind = false;
 
   if((!elems["title"].value || !elems["date"].value || !elems["time"].value)&&!silent){
     dialog.showMessageBoxSync(require("electron").remote.getCurrentWindow(),{type:"error", title:"Błąd", message:"Conajmniej jedno z pól nie jest uzupełnione."});
     require("electron").remote.getCurrentWindow().show();
     return;
   }
-
-  var date = new Date(elems["date"].value);
 
   date.setHours(elems["time"].value.substr(0,2));
   date.setMinutes(elems["time"].value.substr(3,5));
@@ -359,7 +360,6 @@ function getTaskFromForm(name,silent) {
     } else require("electron").remote.getCurrentWindow().show();
   }
 
-  var repeat = false;
   if (elems["repeat"].checked) {
     var type = "";
     var types = {
@@ -388,6 +388,70 @@ function getTaskFromForm(name,silent) {
     };
   }
 
+  if (elems["remind"].checked) {
+    remind = {
+      whenremind: elems["whenremind"].value 
+    }
+    switch (elems["whenremind"].value) {
+      default:
+      case "whendeadlineends":
+        remind.reminddate = encodeDate(date);
+        remind.remindtime = String(elems["time"].value);
+        remind.timeid = date.getTime();
+        break;
+      case "5minsbefore":
+        var time = date.getTime();
+        var d;
+        time -= 5*60*1000;
+        d = new Date(time);
+
+        remind.reminddate = encodeDate(d);
+        remind.remindtime = encodeTime(d);
+        remind.timeid = time;
+        break;
+      case "30minsbefore":
+        var time = date.getTime();
+        var d;
+        time -= 30*60*1000;
+
+        remind.reminddate = encodeDate(d);
+        remind.remindtime = encodeTime(d);
+        remind.timeid = time;
+        break;
+      case "1hourbefore":
+        var time = date.getTime();
+        var d;
+        time -= 3600*1000;
+
+        remind.reminddate = encodeDate(d);
+        remind.remindtime = encodeTime(d);
+        remind.timeid = time;
+        break;
+      case "1daybefore":
+        var time = date.getTime();
+        var d;
+        time -= 24*3600*1000;
+
+        remind.reminddate = encodeDate(d);
+        remind.remindtime = encodeTime(d);
+        remind.timeid = time;
+        break;
+      case "1weekbefore":
+        var time = date.getTime();
+        var d;
+        time -= 7*24*3600*1000;
+
+        remind.reminddate = encodeDate(d);
+        remind.remindtime = encodeTime(d);
+        remind.timeid = time;
+        break;
+      case "custom":
+        remind.reminddate = elems["reminddate"];
+        remind.remindtime = String(elems["remindtime"]);
+        break;
+    }
+  }
+
   return {
     "id": Number(elems["title"].getAttribute("data-id")),
     "title": elems["title"].value,
@@ -397,6 +461,7 @@ function getTaskFromForm(name,silent) {
     "timeid": date.getTime(),
     "repeat": repeat,
     "color": elems["color"].value,
+    "remind": remind;
     "priority": 1
   }
 }
