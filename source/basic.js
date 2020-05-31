@@ -93,7 +93,11 @@ function encodeDate(date) {
 }
 
 function encodeTime(date) {
-  return date.getHours()+":"+date.getMinutes(); 
+  var hour = date.getHours();
+  var minutes = date.getMinutes(); 
+  if (hour < 10) hour = "0"+hour;
+  if (minutes < 10)minutes = "0"+minutes;
+  return hour+":"+minutes;
 }
 
 function decodeDate(s) {
