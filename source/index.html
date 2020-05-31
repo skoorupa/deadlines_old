@@ -145,19 +145,18 @@
 					<div class="repeatbox indent" data-checked="true">
 						co
 						<input name="repeatamount" type="number" min="1" value="1">
-						<select name="repeatunit" onchange="formClarify('add')">
+						<select name="repeatunit" onchange="formClarify('add')" class="toggler">
 							<option value="days">dni</option>
 							<option value="weeks">tygodni</option>
 							<option value="months">miesięcy</option>
 							<option value="years">lat</option>
 						</select>
-
-						<div class="monthsrepeat clarifyrepeat" style="display:none;">
+						<div class="monthsrepeat clarifyrepeat" data-option="months" style="display:none;">
 							<select name="repeattype">
 								<option value="sameday">20. dzień każdego miesiąca</option>
 								<option value="sameweekday">3. piątek każdego miesiąca</option>
 							</select>
-						</div><br>
+						</div>
 
 						<label>
 							<input name="repeatend" type="checkbox">
@@ -179,6 +178,26 @@
 					<input type="radio" value="purple" name="color"><span class="radiocolor color-purple"></span>
 					<input type="radio" value="brown" name="color"><span class="radiocolor color-brown"></span>
 				</div><br>
+				
+				<label>
+					<input type="checkbox" name="remind">
+					Przypomnij mi...
+					<div class="remindbox indent" data-checked="true">
+						<select name="whenremind" class="toggler">
+							<option value="whendeadlineends">gdy wybije termin zadania</option>
+							<option value="5minsbefore">5 minut przed</option>
+							<option value="30minsbefore">pół godziny przed</option>
+							<option value="1hourbefore">1 godzinę przed</option>
+							<option value="1daybefore">dzień wcześniej</option>
+							<option value="1weekbefore">tydzień wcześniej</option>
+							<option value="custom">niestandardowo...</option>
+						</select>
+						<div class="indent" data-option="custom" style="display:none;">
+							<input type="date" name="reminddate"> o 
+							<input type="time" name="remindtime">
+						</div>
+					</div>	
+				</label><br>
 
 				<div class="button" title="Ctrl+S" onclick="if(addTask('add'))hideForm('add');">
 					<div class="buttonlabel">Dodaj</div>
@@ -219,19 +238,18 @@
 					<div class="repeatbox indent" data-checked="true">
 						co
 						<input name="repeatamount" type="number" min="1" value="1">
-						<select name="repeatunit" onchange="formClarify('edit')">
+						<select name="repeatunit" onchange="formClarify('edit')" class="toggler">
 							<option value="days">dni</option>
 							<option value="weeks">tygodni</option>
 							<option value="months">miesięcy</option>
 							<option value="years">lat</option>
 						</select>
-
-						<div class="monthsrepeat clarifyrepeat" style="display:none;">
+						<div class="monthsrepeat clarifyrepeat" data-option="months" style="display:none;">
 							<select name="repeattype">
 								<option value="sameday">20. dzień każdego miesiąca</option>
 								<option value="sameweekday">3. piątek każdego miesiąca</option>
 							</select>
-						</div><br>
+						</div>
 
 						<label>
 							<input name="repeatend" type="checkbox">
@@ -253,6 +271,26 @@
 					<input type="radio" value="purple" name="color"><span class="radiocolor color-purple"></span>
 					<input type="radio" value="brown" name="color"><span class="radiocolor color-brown"></span>
 				</div><br>
+				
+				<label>
+					<input type="checkbox" name="remind">
+					Przypomnij mi...
+					<div class="remindbox indent" data-checked="true">
+						<select name="whenremind" class="toggler">
+							<option value="whendeadlineends">gdy wybije termin zadania</option>
+							<option value="5minsbefore">5 minut przed</option>
+							<option value="30minsbefore">pół godziny przed</option>
+							<option value="1hourbefore">1 godzinę przed</option>
+							<option value="1daybefore">dzień wcześniej</option>
+							<option value="1weekbefore">tydzień wcześniej</option>
+							<option value="custom">niestandardowo...</option>
+						</select>
+						<div class="indent" data-option="custom" style="display:none;">
+							<input type="date" name="reminddate"> o 
+							<input type="time" name="remindtime">
+						</div>
+					</div>	
+				</label><br>
 
 				<a href="#" class="deletebutton" onclick="deleteTask(editedtask);hideForm('edit');">Usuń to zadanie</a>
 				<div class="button" title="Ctrl+S" onclick="if(editTask('edit'))hideForm('edit');">
