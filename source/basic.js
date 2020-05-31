@@ -129,6 +129,7 @@ function showForm(name, task, strdate) {
 
   elems.getElementsByClassName("repeatbox")[0].style.display="none";
   elems.getElementsByClassName("clarifyrepeat")[0].style.display="none";
+  elems.getElementsByClassName("remindbox")[0].style.display = "none";
 
   function autosize(){
     var el = this;
@@ -142,9 +143,8 @@ function showForm(name, task, strdate) {
 
   if (name=="show") {
     elems.getElementsByClassName("title")[0].setAttribute("data-id",task.id);
-    d = new Date(Number(task.timeid));
     elems.getElementsByClassName("clarifyrepeat")[0].title = "";
-    elems.getElementsByClassName("clarifyrepeat")[0].style.display = "none";
+    d = new Date(Number(task.timeid));
     title = task.title;
     description = task.description || "";
     var weekdays = ["niedziela","poniedziałek","wtorek","środa","czwartek","piątek","sobota"];
@@ -182,6 +182,17 @@ function showForm(name, task, strdate) {
       }
     }
 
+    if (task.remind) {
+      var txt = "";
+      var date = task.remind.reminddate.split("-");
+      var time = task.remind.remindtime.split(":");
+      txt += date[2]+"/"+date[1]+"/"+date[0]+" o ";
+      txt += time[0]+":"+time[1];
+
+      elems.getElementsByClassName("remindbox")[0].style.display = "inline";
+      elems.getElementsByClassName("remind")[0].innerHTML = txt;
+    }
+
     dates = {
       year:""+d.getFullYear(),
       hours:""+d.getHours(),
@@ -212,6 +223,10 @@ function showForm(name, task, strdate) {
   elems["repeat"].checked = false;
   elems["repeatend"].checked = false;
   elems["color"][0].checked = true;
+  elems["remind"].checked = false;
+  elems["whenremind"].value = "whendeadlineends";
+  elems["reminddate"].value = "";
+  elems["remindtime"].value = "";
   elems.getElementsByClassName("endrepeatbox")[0].style.display="none";
 
   if (task) {
@@ -222,14 +237,14 @@ function showForm(name, task, strdate) {
     description = task.description || "";
     if (task.repeat) {
       console.log(task.repeat);
+      elems["repeat"].checked = true;
+      elems.getElementsByClassName("repeatbox")[0].style.display="block";
       elems["repeatamount"].value = task.repeat.amount;
       elems["repeatunit"].value = task.repeat.unit;
       if (task.repeat.unit == "months") {
         elems["repeattype"].value = task.repeat.type;
         elems.getElementsByClassName(task.repeat.unit+'repeat')[0].style.display="block";
       } 
-      elems.getElementsByClassName("repeatbox")[0].style.display="block";
-      elems["repeat"].checked = true;
       if (task.repeat.end) {
         elems.getElementsByClassName("endrepeatbox")[0].style.display="block";
         elems["repeatend"].checked = true;
@@ -248,6 +263,15 @@ function showForm(name, task, strdate) {
     }
     if (task.color)
       elems["color"].value=task.color;
+    if (task.remind) {
+      elems["remind"].checked = true;
+      elems.getElementsByClassName("remindbox")[0].style.display = "block";
+      elems["whenremind"].value = task.remind.whenremind;
+      if (task.remind.whenremind == "custom") {
+        elems["reminddate"].value = task.remind.reminddate;
+        elems["remindtime"].value = task.remind.remindtime;
+      }
+    }
   } else if (strdate) {
     d = decodeDate(strdate);
     var now = new Date();
@@ -454,8 +478,8 @@ function getTaskFromForm(name,silent) {
         remind.timeid = time;
         break;
       case "custom":
-        remind.reminddate = elems["reminddate"];
-        remind.remindtime = String(elems["remindtime"]);
+        remind.reminddate = elems["reminddate"].value;
+        remind.remindtime = String(elems["remindtime"].value);
         break;
     }
   }
