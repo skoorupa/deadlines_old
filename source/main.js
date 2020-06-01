@@ -575,6 +575,10 @@ function Schedule(dir, content) {
     return task.repeat;
   });
 
+  this.remindTasks = this.content.tasks.filter(task => {
+    return task.remind;
+  });
+
   this.getDaySchedule = function (strdate) {
     // repetitiveTasks
     var date = decodeDate(strdate);
