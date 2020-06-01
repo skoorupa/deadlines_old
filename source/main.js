@@ -579,6 +579,10 @@ function Schedule(dir, content) {
     return task.remind;
   });
 
+  this.checkForReminders = function() {
+    var now = new Date();
+  }
+
   this.getDaySchedule = function (strdate) {
     // repetitiveTasks
     var date = decodeDate(strdate);
@@ -1099,10 +1103,12 @@ function refreshUpdater() {
       console.log('new schedule');
       schedule = newschedule;
       mainwin.send("schedule", JSON.stringify(schedule));
+      schedule.checkForReminders();
     }
   }, updatetime);
   schedule = new Schedule(schedulelist[0], schedule.content);
   mainwin.send("schedule", JSON.stringify(schedule));
+  schedule.checkForReminders();
 }
 
 function showWindow(settings, filename) {
