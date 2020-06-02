@@ -579,8 +579,23 @@ function Schedule(dir, content) {
     return task.remind;
   });
 
+  this.upcomingReminders = this.remindTasks.filter(task => {
+    return !task.remind.checked && !task.remind.opened;
+  });
+
   this.checkForReminders = function() {
     var now = new Date();
+    var reminders = this.upcomingReminders.filter(task => {
+      var d = decodeDate(task.remind.reminddate);
+      d = new Date(decodeTime(task.remind.remindtime, d));
+      if (d.getTime() < now.getTime()) {
+        task.remind.opened = true;
+        return true;
+      }
+      else return false;
+    }) || [];
+
+    return reminders;
   }
 
   this.getDaySchedule = function (strdate) {
@@ -1096,19 +1111,29 @@ function renderTray(a) {
 
 function refreshUpdater() {
   if (updater) clearInterval(updater);
+  function checkReminders () {
+    var reminders = schedule.checkForReminders();
+    if(reminders) {
+      // ... display popups
+      reminders.forEach(console.log);
+    }
+  }
+
+  function sendSchedule(){
+    mainwin.send("schedule", JSON.stringify(schedule));
+  }
 
   updater = setInterval(function() {
     var newschedule = new Schedule(schedulelist[0], schedule.content);
     if (schedule.info.tasks.jsontxt != newschedule.info.tasks.jsontxt){
       console.log('new schedule');
       schedule = newschedule;
-      mainwin.send("schedule", JSON.stringify(schedule));
-      schedule.checkForReminders();
+      sendSchedule();
     }
+    checkReminders();
   }, updatetime);
   schedule = new Schedule(schedulelist[0], schedule.content);
-  mainwin.send("schedule", JSON.stringify(schedule));
-  schedule.checkForReminders();
+  sendSchedule();
 }
 
 function showWindow(settings, filename) {
