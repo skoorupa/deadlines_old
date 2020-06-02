@@ -268,6 +268,7 @@ function showForm(name, task, strdate) {
       elems.getElementsByClassName("remindbox")[0].style.display = "block";
       elems["whenremind"].value = task.remind.whenremind;
       if (task.remind.whenremind == "custom") {
+        elems.getElementsByClassName("remindcustom")[0].style.display = "block";
         elems["reminddate"].value = task.remind.reminddate;
         elems["remindtime"].value = task.remind.remindtime;
       }
