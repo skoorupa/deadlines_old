@@ -218,40 +218,6 @@ function loginfo(text){
   );
 }
 
-function createWindow (silent) {
-  mainwin = new BrowserWindow({...settings.computed.display_app_corner[settings.config.general.default_mode], ...settings.computed.window_size, ...{
-      webPreferences: {
-        nodeIntegration: true
-      },
-      resizable: false,
-      show: false,
-      movable: settings.config.general.movable,
-      frame: false,
-      skipTaskbar: true,
-      alwaysOnTop: settings.config.general.always_on_top,
-      title: "Deadlines"
-    }});
-  
-  mainwin.loadURL(url.format({
-    pathname: path.join(__dirname, settings.computed.default_mode),
-    protocol: 'file:',
-    slashes: true
-  }));
-
-  mainwin.once("ready-to-show", function() {
-    refreshUpdater();
-    if (!silent) mainwin.show();
-  });
-
-  mainwin.on("blur", () => {hideWindowOnBlur(mainwin)});
-
-  // Emitted when the window is closed.
-  mainwin.on('close', (event) => {
-    event.preventDefault();
-    mainwin.hide();
-  });
-}
-
 function hideWindowOnBlur(){
   if (!mainwin.getChildWindows().length && settings.config.general.hide_app_on_blur) mainwin.hide();
 }
@@ -287,9 +253,9 @@ function loadApp() {
   // loginfo(String(settings.config.general.hide_app_on_autostart));
 
   if (process.argv[2]=="--autostart" && settings.config.general.hide_app_on_autostart)
-    createWindow(true);
+    showMode(settings.config.general.default_mode,true);
   else
-    createWindow();
+    showMode(settings.config.general.default_mode);
 
   if (process.argv[2]=="--addtask") {
     mainwin.send("showform", ["add"]);
@@ -1001,7 +967,7 @@ function renderTray(a) {
 
 // modes
 
-function showWindow(settings, filename) {
+function showWindow(settings, filename, silent) {
 	var win = new BrowserWindow(settings);
 	
 	win.loadURL(url.format({
@@ -1013,7 +979,7 @@ function showWindow(settings, filename) {
 
 
 	win.once('ready-to-show', () => {
-  	win.show();
+  	if (!silent) win.show();
     sendSchedule(win);
   	//debug
   	// win.openDevTools()
@@ -1022,7 +988,7 @@ function showWindow(settings, filename) {
   return win;
 }
 
-function showMode(mode){
+function showMode(mode, silent){
   switch (mode) {
     case "settings":
       if (settingswin)
@@ -1044,43 +1010,14 @@ function showMode(mode){
         mainwin.close();
         settingsHandler();
         loadTray();
-        createWindow();
-      });
-      break;
-    case "calendar":
-      mainwin.removeAllListeners();
-      mainwin.close();
-      settings.current.mode = "calendar";
-
-      mainwin = showWindow({...settings.computed.display_app_corner.calendar, ...{
-        height: 600,
-        width: 800,
-        webPreferences: {
-          nodeIntegration: true
-        },
-        resizable: false,
-        show: false,
-        movable: settings.config.general.movable,
-        alwaysOnTop:settings.config.general.always_on_top,
-        frame: false,
-        skipTaskbar: true,
-        title: "Deadlines"
-      }},"calendar.html");
-    
-      mainwin.once('ready-to-show', () => {
-        refreshUpdater();
-        loadTray();
-      });
-      mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
-
-      mainwin.on('close', (event) => {
-        event.preventDefault();
-        mainwin.hide();
+        showMode(settings.config.general.default_mode);
       });
       break;
     case "list":
-      mainwin.removeAllListeners();
-      mainwin.close();
+      if (mainwin) {
+        mainwin.removeAllListeners();
+        mainwin.close();
+      }
       settings.current.mode = "list";
 
       mainwin = showWindow({...settings.computed.display_app_corner.list, ...{
@@ -1096,7 +1033,40 @@ function showMode(mode){
         frame: false,
         skipTaskbar: true,
         title: "Deadlines"
-      }},"index.html");
+      }},"index.html",silent);
+    
+      mainwin.once('ready-to-show', () => {
+        refreshUpdater();
+        loadTray();
+      });
+      mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
+
+      mainwin.on('close', (event) => {
+        event.preventDefault();
+        mainwin.hide();
+      });
+      break;
+    case "calendar":
+      if (mainwin) {
+        mainwin.removeAllListeners();
+        mainwin.close();
+      }
+      settings.current.mode = "calendar";
+
+      mainwin = showWindow({...settings.computed.display_app_corner.calendar, ...{
+        height: 600,
+        width: 800,
+        webPreferences: {
+          nodeIntegration: true
+        },
+        resizable: false,
+        show: false,
+        movable: settings.config.general.movable,
+        alwaysOnTop:settings.config.general.always_on_top,
+        frame: false,
+        skipTaskbar: true,
+        title: "Deadlines"
+      }},"calendar.html",silent);
     
       mainwin.once('ready-to-show', () => {
         refreshUpdater();
