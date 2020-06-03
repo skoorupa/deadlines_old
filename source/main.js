@@ -21,6 +21,7 @@ console.log(settingsPath);
 
 var mainwin;
 var settingswin;
+var reminderswin;
 let tray = null;
 let updatetime = 1000;
 
@@ -258,62 +259,6 @@ function hideWindowOnBlur(){
   if (!mainwin.getChildWindows().length && settings.config.general.hide_app_on_blur) mainwin.hide();
 }
 
-function loadTray() {
-	if (!tray)
-		tray = new Tray(path.join(__dirname,"tray.ico"));
-	// else {
-	// 	tray.destroy();
-	// 	tray = new Tray(path.join(__dirname,"tray.ico"));
-	// }
-	// tray = new Tray(nativeImage.createEmpty())
-  // {label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}}
-  var menu = [
-    // {label: '🗄️ Archiwum'},
-    {label: '⚙️ Ustawienia', click () {
-      if (settingswin) 
-        if (settingswin.isVisible()) return;
-
-      // nie ma settingswin
-      // settingswin = showWindow({
-      //   parent: mainwin,
-      //   modal: true,
-      //   height: 600,
-      //   width: 700,
-      //   show: false,
-      //   webPreferences: {
-      //     nodeIntegration: true
-      //   }
-      // },'settings.html');
-      // settingswin.once("closed", function(event) {
-      //   settingswin = null
-      // });
-      ipc.emit("showwindow",null,"settings");
-    }},
-    {label: '➕ Dodaj nowe zadanie', click() {
-      mainwin.show();
-      mainwin.send("showform", ["add"]);
-    }},
-    {label: 'Wyjdź', click() {
-      app.exit(0);
-    }}
-  ];
-
-  if (settings.config.general.devtools) menu.unshift({label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}});
-
-	var contextMenu = Menu.buildFromTemplate(menu);
-	tray.setContextMenu(contextMenu);
-
-  function trayclick() {
-    if (!mainwin.isVisible())
-      mainwin.show()
-    else 
-      mainwin.hide();
-  }
-
-	tray.removeAllListeners();
-  tray.on('click', trayclick);
-}
-
 function loadApp() {
   console.log('loadapp');
   settingsHandler();
@@ -454,7 +399,7 @@ function loadApp() {
         }));
       
         mainwin.once('ready-to-show', () => {
-          mainwin.send("schedule", JSON.stringify(schedule));
+          sendSchedule(mainwin);
           mainwin.show();
           loadTray();
         });
@@ -489,7 +434,7 @@ function loadApp() {
         }));
       
         mainwin.once('ready-to-show', () => {
-          mainwin.send("schedule", JSON.stringify(schedule));
+          sendSchedule(mainwin);
           mainwin.show();
           loadTray();
         });
@@ -520,7 +465,7 @@ function loadApp() {
 
 function sendStuff(a,x,d) {
   try {
-    a.webContents.send(x, JSON.stringify(d));
+    a.send(x, JSON.stringify(d));
   } catch (e) {
       loginfo(e+"\n");
   }
@@ -1061,6 +1006,64 @@ function Schedule(dir, content) {
 
 //**************** INNE ***************
 
+// tray
+
+function loadTray() {
+  if (!tray)
+    tray = new Tray(path.join(__dirname,"tray.ico"));
+  // else {
+  //  tray.destroy();
+  //  tray = new Tray(path.join(__dirname,"tray.ico"));
+  // }
+  // tray = new Tray(nativeImage.createEmpty())
+  // {label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}}
+  var menu = [
+    // {label: '🗄️ Archiwum'},
+    {label: '⚙️ Ustawienia', click () {
+      if (settingswin) 
+        if (settingswin.isVisible()) return;
+
+      // nie ma settingswin
+      // settingswin = showWindow({
+      //   parent: mainwin,
+      //   modal: true,
+      //   height: 600,
+      //   width: 700,
+      //   show: false,
+      //   webPreferences: {
+      //     nodeIntegration: true
+      //   }
+      // },'settings.html');
+      // settingswin.once("closed", function(event) {
+      //   settingswin = null
+      // });
+      ipc.emit("showwindow",null,"settings");
+    }},
+    {label: '➕ Dodaj nowe zadanie', click() {
+      mainwin.show();
+      mainwin.send("showform", ["add"]);
+    }},
+    {label: 'Wyjdź', click() {
+      app.exit(0);
+    }}
+  ];
+
+  if (settings.config.general.devtools) menu.unshift({label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}});
+
+  var contextMenu = Menu.buildFromTemplate(menu);
+  tray.setContextMenu(contextMenu);
+
+  function trayclick() {
+    if (!mainwin.isVisible())
+      mainwin.show()
+    else 
+      mainwin.hide();
+  }
+
+  tray.removeAllListeners();
+  tray.on('click', trayclick);
+}
+
 function renderTray(a) {
   var quantitytext = "";
   var daystext = "";
@@ -1109,32 +1112,7 @@ function renderTray(a) {
   );
 }
 
-function refreshUpdater() {
-  if (updater) clearInterval(updater);
-  function checkReminders () {
-    var reminders = schedule.checkForReminders();
-    if(reminders) {
-      // ... display popups
-      reminders.forEach(console.log);
-    }
-  }
-
-  function sendSchedule(){
-    mainwin.send("schedule", JSON.stringify(schedule));
-  }
-
-  updater = setInterval(function() {
-    var newschedule = new Schedule(schedulelist[0], schedule.content);
-    if (schedule.info.tasks.jsontxt != newschedule.info.tasks.jsontxt){
-      console.log('new schedule');
-      schedule = newschedule;
-      sendSchedule();
-    }
-    checkReminders();
-  }, updatetime);
-  schedule = new Schedule(schedulelist[0], schedule.content);
-  sendSchedule();
-}
+// modes
 
 function showWindow(settings, filename) {
 	var win = new BrowserWindow(settings);
@@ -1149,6 +1127,7 @@ function showWindow(settings, filename) {
 
 	win.once('ready-to-show', () => {
   	win.show();
+    win.send("schedule", JSON.stringify(schedule));
   	//debug
   	// win.openDevTools()
 	})
@@ -1165,8 +1144,46 @@ function showWindow(settings, filename) {
   return win;
 }
 
+function showMode(mode){
+  switch (mode) {
+    case "settings":
+      
+      break;
+    default:
+      console.log("there is no mode like "+mode);
+      break;
+  }
+}
+
+function refreshUpdater() {
+  if (updater) clearInterval(updater);
+  function checkReminders () {
+    var reminders = schedule.checkForReminders();
+    if(reminders) {
+      // ... display popups
+      reminders.forEach(console.log);
+    }
+  }
+
+  function sendSchedule(win){
+    win.send("schedule", JSON.stringify(schedule));
+  }
+
+  updater = setInterval(function() {
+    var newschedule = new Schedule(schedulelist[0], schedule.content);
+    if (schedule.info.tasks.jsontxt != newschedule.info.tasks.jsontxt){
+      console.log('new schedule');
+      schedule = newschedule;
+      sendSchedule(mainwin);
+    }
+    checkReminders();
+  }, updatetime);
+  schedule = new Schedule(schedulelist[0], schedule.content);
+  sendSchedule(mainwin);
+}
+
 function alertme(win, context) {
-  if (context)
+  if (win)
     dialog.showMessageBox(win, {type:"info", message:context});
   else
     dialog.showMessageBox({type:"info", message:context});
