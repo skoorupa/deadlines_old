@@ -240,13 +240,10 @@ function createWindow (silent) {
 
   mainwin.once("ready-to-show", function() {
     refreshUpdater();
-    mainwin.on("blur", () => {hideWindowOnBlur(mainwin)});
-    // if (startup && process.argv[2]=="--autostart" && settings.config.general.hide_app_on_autostart) return;
     if (!silent) mainwin.show();
   });
 
-  // dla developerów
-  // mainwin.webContents.openDevTools()
+  mainwin.on("blur", () => {hideWindowOnBlur(mainwin)});
 
   // Emitted when the window is closed.
   mainwin.on('close', (event) => {
@@ -348,104 +345,11 @@ function loadApp() {
   });
 
   ipc.on("showwindow", (event, arg) => {
-    switch (arg) {
-      case "settings":
-        if (settingswin)
-          if (settingswin.isVisible()) return;
-        settingswin = showWindow({
-          parent: mainwin,
-          modal: true,
-          height: 600,
-          width: 700,
-          show: false,
-          webPreferences: {
-            nodeIntegration: true
-          }
-        },'settings.html');
-        settingswin.once("closed", function(event) {
-          settingswin = null
-        });
-        break;
-      default:
-        alertme(mainwin, "showwindow error: "+arg+" not found");
-    }
+    showMode("settings");
   });
 
   ipc.on("showmode", (event, arg) => {
-    mainwin.removeAllListeners();
-    mainwin.close();
-    switch (arg) {
-      case "calendar":
-        settings.current.mode = "calendar";
-        mainwin = new BrowserWindow({...settings.computed.display_app_corner.calendar, ...{
-          height: 600,
-          width: 800,
-          webPreferences: {
-            nodeIntegration: true
-          },
-          resizable: false,
-          show: false,
-          movable: settings.config.general.movable,
-          alwaysOnTop:settings.config.general.always_on_top,
-          frame: false,
-          skipTaskbar: true,
-          title: "Deadlines"
-        }});
-        
-        mainwin.loadURL(url.format({
-          pathname: path.join(__dirname, 'calendar.html'),
-          protocol: 'file:',
-          slashes: true
-        }));
-      
-        mainwin.once('ready-to-show', () => {
-          sendSchedule(mainwin);
-          mainwin.show();
-          loadTray();
-        });
-        mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
-
-        mainwin.on('close', (event) => {
-          event.preventDefault();
-          mainwin.hide();
-        });
-        break;
-      case "list":
-        settings.current.mode = "list";
-        mainwin = new BrowserWindow({...settings.computed.display_app_corner.list, ...{
-          height: 600,
-          width: 400,
-          webPreferences: {
-            nodeIntegration: true
-          },
-          resizable: false,
-          show: false,
-          movable: settings.config.general.movable,
-          alwaysOnTop:settings.config.general.always_on_top,
-          frame: false,
-          skipTaskbar: true,
-          title: "Deadlines"
-        }});
-      
-        mainwin.loadURL(url.format({
-          pathname: path.join(__dirname, 'index.html'),
-          protocol: 'file:',
-          slashes: true
-        }));
-      
-        mainwin.once('ready-to-show', () => {
-          sendSchedule(mainwin);
-          mainwin.show();
-          loadTray();
-        });
-        mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
-
-        mainwin.on('close', (event) => {
-          event.preventDefault();
-          mainwin.hide();
-        });
-        break;
-    }
+    showMode(arg);
   });
 
   ipc.on("getsettings", (event) => {
@@ -1020,24 +924,7 @@ function loadTray() {
   var menu = [
     // {label: '🗄️ Archiwum'},
     {label: '⚙️ Ustawienia', click () {
-      if (settingswin) 
-        if (settingswin.isVisible()) return;
-
-      // nie ma settingswin
-      // settingswin = showWindow({
-      //   parent: mainwin,
-      //   modal: true,
-      //   height: 600,
-      //   width: 700,
-      //   show: false,
-      //   webPreferences: {
-      //     nodeIntegration: true
-      //   }
-      // },'settings.html');
-      // settingswin.once("closed", function(event) {
-      //   settingswin = null
-      // });
-      ipc.emit("showwindow",null,"settings");
+      showMode("settings");
     }},
     {label: '➕ Dodaj nowe zadanie', click() {
       mainwin.show();
@@ -1127,19 +1014,10 @@ function showWindow(settings, filename) {
 
 	win.once('ready-to-show', () => {
   	win.show();
-    win.send("schedule", JSON.stringify(schedule));
+    sendSchedule(win);
   	//debug
   	// win.openDevTools()
-	})
-
-  if (filename == "settings.html") {
-    win.once("close", function(event) {
-      mainwin.close();
-      settingsHandler();
-      loadTray();
-      createWindow();
-    });
-  }
+	});
 
   return win;
 }
@@ -1147,12 +1025,98 @@ function showWindow(settings, filename) {
 function showMode(mode){
   switch (mode) {
     case "settings":
-      
+      if (settingswin)
+        if (settingswin.isVisible()) return;
+      settingswin = showWindow({
+        parent: mainwin,
+        modal: true,
+        height: 600,
+        width: 700,
+        show: false,
+        webPreferences: {
+          nodeIntegration: true
+        }
+      },'settings.html');
+      settingswin.once("closed", function(event) {
+        settingswin = null
+      });
+      settingswin.once("close", function(event) {
+        mainwin.close();
+        settingsHandler();
+        loadTray();
+        createWindow();
+      });
+      break;
+    case "calendar":
+      mainwin.removeAllListeners();
+      mainwin.close();
+      settings.current.mode = "calendar";
+
+      mainwin = showWindow({...settings.computed.display_app_corner.calendar, ...{
+        height: 600,
+        width: 800,
+        webPreferences: {
+          nodeIntegration: true
+        },
+        resizable: false,
+        show: false,
+        movable: settings.config.general.movable,
+        alwaysOnTop:settings.config.general.always_on_top,
+        frame: false,
+        skipTaskbar: true,
+        title: "Deadlines"
+      }},"calendar.html");
+    
+      mainwin.once('ready-to-show', () => {
+        refreshUpdater();
+        loadTray();
+      });
+      mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
+
+      mainwin.on('close', (event) => {
+        event.preventDefault();
+        mainwin.hide();
+      });
+      break;
+    case "list":
+      mainwin.removeAllListeners();
+      mainwin.close();
+      settings.current.mode = "list";
+
+      mainwin = showWindow({...settings.computed.display_app_corner.list, ...{
+        height: 600,
+        width: 400,
+        webPreferences: {
+          nodeIntegration: true
+        },
+        resizable: false,
+        show: false,
+        movable: settings.config.general.movable,
+        alwaysOnTop:settings.config.general.always_on_top,
+        frame: false,
+        skipTaskbar: true,
+        title: "Deadlines"
+      }},"index.html");
+    
+      mainwin.once('ready-to-show', () => {
+        refreshUpdater();
+        loadTray();
+      });
+      mainwin.on("blur", function() {hideWindowOnBlur(mainwin)});
+
+      mainwin.on('close', (event) => {
+        event.preventDefault();
+        mainwin.hide();
+      });
       break;
     default:
       console.log("there is no mode like "+mode);
       break;
   }
+}
+
+function sendSchedule(win){
+  win.send("schedule", JSON.stringify(schedule));
 }
 
 function refreshUpdater() {
@@ -1163,10 +1127,6 @@ function refreshUpdater() {
       // ... display popups
       reminders.forEach(console.log);
     }
-  }
-
-  function sendSchedule(win){
-    win.send("schedule", JSON.stringify(schedule));
   }
 
   updater = setInterval(function() {
