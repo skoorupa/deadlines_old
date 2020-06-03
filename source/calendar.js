@@ -8,6 +8,9 @@ var todayviewswitch = {
 var hoverdate;
 var clickdate;
 var monthnames = ["styczeń","luty","marzec","kwiecień","maj","czerwiec","lipiec","sierpień","wrzesień","październik","listopad","grudzień"];
+var calendar = document.getElementById('calendar');
+
+document.getElementById("version").innerHTML =  remote.app.getVersion();
 
 if (settings["calendar-mode"].default_clickdate == "thismonth") {
 	var today = new Date();
@@ -46,11 +49,9 @@ ipc.on("schedule", function (event, arg) {
 	// days = JSON.parse(arg).upcomingDeadlines.days;
 	// schedule.orderedList = JSON.parse(arg).orderedList;
 
-	console.log(JSON.parse(arg));
+	console.log(schedule);
 	update();
 });
-
-var calendar = document.getElementById('calendar');
 
 function generateCalendar(tasks,month) {
 	// calendar.removeChild(calendar.getElementsByClassName("table")[0]);

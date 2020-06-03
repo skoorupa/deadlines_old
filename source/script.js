@@ -8,6 +8,8 @@ deadlinesbar.getElementsByClassName("description")[0].style.display = "block";
 deadlinesbar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
 deadlinesbar.parentNode.getElementsByClassName("list")[0].style.display = "none";
 
+document.getElementById("version").innerHTML =  remote.app.getVersion();
+
 function toggleOverviewList(bar) {
   if (bar.getElementsByClassName("description")[0].style.display=="block"){
     bar.getElementsByClassName("description")[0].style.display = "none";

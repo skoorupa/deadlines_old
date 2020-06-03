@@ -10,8 +10,6 @@ var settings = ipc.sendSync("getsettings");
 todayBar();
 setInterval(todayBar, 1000);
 
-document.getElementById("version").innerHTML =  remote.app.getVersion();
-
 /* form stuff */
 
 document.querySelectorAll("label > input[type=checkbox]").forEach(function(obj) {
