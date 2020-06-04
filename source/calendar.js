@@ -12,6 +12,9 @@ var calendar = document.getElementById('calendar');
 
 document.getElementById("version").innerHTML =  remote.app.getVersion();
 
+todayBar();
+setInterval(todayBar, 1000);
+
 if (settings["calendar-mode"].default_clickdate == "thismonth") {
 	var today = new Date();
 	hoverdate = today.getFullYear()+"-"+(today.getMonth()+1);

@@ -7,9 +7,6 @@ var debugging = false;
 var editedtask = {};
 var settings = ipc.sendSync("getsettings");
 
-todayBar();
-setInterval(todayBar, 1000);
-
 /* form stuff */
 
 document.querySelectorAll("label > input[type=checkbox]").forEach(function(obj) {
