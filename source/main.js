@@ -253,7 +253,7 @@ function loadApp() {
   // loginfo(process.argv[2]);
   // loginfo(String(settings.config.general.hide_app_on_autostart));
 
-  if (process.argv[2]=="--autostart" && settings.config.general.hide_app_on_autostart)
+  if (process.argv.indexOf("--autostart") > -1 && settings.config.general.hide_app_on_autostart)
     showMode(settings.config.general.default_mode,true);
   else
     showMode(settings.config.general.default_mode);
