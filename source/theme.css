@@ -14,17 +14,18 @@ html, body,
 }
 
 #addtaskbar, 
-#addreminderbar,
 #deadlinesbar,
 #addbar, 
 #editbar,
 #showbar,
 .day:hover,
-.calendarbuttons > div:hover {
+.calendarbuttons > div:hover,
+.reminderbar {
 	background-color: #212121;
 }
 
-#deadlineslist {
+#deadlineslist,
+.reminderlist {
 	background-color: #616161;
 }
 
