@@ -14,7 +14,43 @@
 </head>
 <body>
 	<div id="overview">
-		
+		<div>
+			<div class="big clickable bar reminderbar" onclick="toggleOverviewList(this)">
+				<div class="icon left">🔔</div>
+				<div class="context left">
+					<div class="clickable underline">
+						Tekst jakiegoś zadania
+					</div>
+					<div class="description wordwrap right">tu jakieś guziczki</div>
+				</div>
+				<div class="dropdown icon right">^</div>
+			</div>
+			<div class="list reminderlist">
+				<h1 class="title">Test</h1>
+				<textarea name="description" placeholder="Opis zadania" readonly></textarea>
+
+				<label>
+					📅:
+					<span class="date"></span><br>
+				</label>
+
+				<label>
+					🕓:
+					<span class="time"></span><br>
+				</label>
+
+				<label class="repeatbox nomargin">
+					🔁:
+					<span class="repeatamount"></span>
+					<span class="clarifyrepeat" title="" style="display: none;">💭</span>
+				</label>
+
+				<label class="remindbox nomargin">
+					🔔:
+					<span class="remind"></span>
+				</label>
+			</div>
+		</div>
 	</div>
 
 	<script src="basic.js" type="text/javascript"></script>

@@ -1078,6 +1078,23 @@ function showMode(mode, silent){
         mainwin.hide();
       });
       break;
+    case "reminders":
+      if (reminderswin)
+        if (reminderswin.isVisible()) return;
+      reminderswin = showWindow({
+        parent: mainwin,
+        modal: true,
+        height: 600,
+        width: 700,
+        show: false,
+        webPreferences: {
+          nodeIntegration: true
+        }
+      },'reminders.html');
+      reminderswin.once("closed", function(event) {
+        reminderswin = null
+      });
+      break;
     default:
       console.log("there is no mode like "+mode);
       break;
@@ -1102,10 +1119,28 @@ function refreshUpdater() {
   if (updater) clearInterval(updater);
   function checkReminders () {
     var reminders = schedule.checkForReminders();
-    if(reminders) {
-      // ... display popups
-      reminders.forEach(console.log);
-    }
+    if(!reminders.length) return false;
+    // ... display popups
+    console.log('show reminders');
+    showMode("reminders");
+    reminders.forEach(function(reminder, index) {
+      var index = schedule.content.tasks.findIndex(function(item) {
+        return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index])
+      });
+      console.log(index);
+      if (index == -1) return;
+      schedule.content.tasks[index].remind.opened = true;
+
+      index = schedule.remindTasks.findIndex(function(item) {
+        return item.id == reminder.id && item.exceptions == reminder.exceptions;
+      });
+      console.log(index);
+      schedule.remindTasks[index].remind.opened = true;
+    });
+    reminderswin.on("ready-to-show",function() {
+      reminderswin.send("reminders", JSON.stringify(reminders));
+    });
+    // schedule.updateTasks();
   }
 
   updater = setInterval(function() {
