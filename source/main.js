@@ -38,8 +38,9 @@ if (!app.requestSingleInstanceLock()) {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
     // Someone tried to run a second instance, we should focus our window.
     if (mainwin) {
-      if (mainwin.isMinimized()) mainwin.restore() 
-        mainwin.show();
+      if (mainwin.isMinimized()) 
+        mainwin.restore(); 
+      mainwin.show();
     }
   })
 }
@@ -358,16 +359,6 @@ function decodeTime(s,date) {
   return time;
 }
 
-function getXYCorner(height,width) {
-  var size = screen.getPrimaryDisplay().workArea;
-  return {
-    "rightdown": {x: size.x+size.width-width,y: size.y+size.height-height},
-    "rightup": {x: size.x+size.width-width,y: size.y},
-    "leftdown": {x: size.x,y: size.y+size.height-height},
-    "leftup": {x: size.x,y: size.y}
-  }
-}
-
 function Schedule(dir, content) {
   this.date = new Date();
   this.info = {};
@@ -389,29 +380,6 @@ function Schedule(dir, content) {
   this.repetitiveTasks = this.content.tasks.filter(task => {
     return task.repeat;
   });
-
-  this.remindTasks = this.content.tasks.filter(task => {
-    return task.remind;
-  });
-
-  this.upcomingReminders = this.remindTasks.filter(task => {
-    return !task.remind.checked && !task.remind.opened;
-  });
-
-  this.checkForReminders = function() {
-    var now = new Date();
-    var reminders = this.upcomingReminders.filter(task => {
-      var d = decodeDate(task.remind.reminddate);
-      d = new Date(decodeTime(task.remind.remindtime, d));
-      if (d.getTime() < now.getTime()) {
-        task.remind.opened = true;
-        return true;
-      }
-      else return false;
-    }) || [];
-
-    return reminders;
-  }
 
   this.getDaySchedule = function (strdate) {
     // repetitiveTasks
@@ -648,10 +616,10 @@ function Schedule(dir, content) {
     });
   })(this);
 
-  this.tasksByDate = (function(that) {
+  this.tasksByDate = (function(schedule) {
     var dates = {};
-    for (var i=0;i<that.orderedList.length;i++) {
-      var item = that.orderedList[i];
+    for (var i=0;i<schedule.orderedList.length;i++) {
+      var item = schedule.orderedList[i];
       if (item.repeat) continue;
       
       if (dates[item.date]) 
@@ -719,6 +687,39 @@ function Schedule(dir, content) {
   this.otherTasks = this.orderedList.filter(obj => {
     return this.upcomingDeadlines.tasks.indexOf(obj) == -1
   });
+
+  // this.remindTasks = this.content.tasks.filter(task => {
+  //   return task.remind;
+  // });
+
+  this.remindTasks = (function(schedule){
+    var remindTasks = [];
+    var tasks = JSON.parse(JSON.stringify(schedule.content.tasks));
+    for (task of tasks) 
+      if (task.exceptions) 
+        for (exception in task.exceptions) 
+          tasks.push(task.exceptions[exception]);
+        
+    remindTasks = tasks.filter(function(obj) {return obj.remind});
+    return remindTasks;
+  })(this);
+
+  this.upcomingReminders = function() {
+    return this.remindTasks.filter(task => {
+      return !task.remind.opened; 
+    });
+  }
+
+  this.checkForReminders = function() {
+    var now = new Date();
+    var reminders = this.upcomingReminders().filter(task => {
+      var d = decodeDate(task.remind.reminddate);
+      d = new Date(decodeTime(task.remind.remindtime, d));
+      return d.getTime() < now.getTime();
+    }) || [];
+
+    return reminders;
+  }
 
   this.updateTasks = function (newtasks) {
     if (newtasks) this.content.tasks = newtasks;
@@ -873,8 +874,6 @@ function Schedule(dir, content) {
     refreshUpdater();
   }
 }
-
-//**************** INNE ***************
 
 // tray
 
@@ -1085,7 +1084,17 @@ function showMode(mode, silent){
   }
 }
 
-function sendSchedule(win){
+function getXYCorner(height,width) {
+  var size = screen.getPrimaryDisplay().workArea;
+  return {
+    "rightdown": {x: size.x+size.width-width,y: size.y+size.height-height},
+    "rightup": {x: size.x+size.width-width,y: size.y},
+    "leftdown": {x: size.x,y: size.y+size.height-height},
+    "leftup": {x: size.x,y: size.y}
+  }
+}
+
+function sendSchedule(win) {
   win.send("schedule", JSON.stringify(schedule));
 }
 
