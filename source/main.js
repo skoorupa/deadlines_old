@@ -307,8 +307,8 @@ function loadApp() {
     schedule.deleteTask(taskid);
   });
 
-  ipc.on("edittask", (event, task) => {
-    schedule.editTask(JSON.parse(task));
+  ipc.on("edittask", (event, task, repeatchoice) => {
+    schedule.editTask(JSON.parse(task), repeatchoice);
   });
 
   ipc.on("showwindow", (event, arg) => {
@@ -690,9 +690,21 @@ function Schedule(dir, content) {
 
   this.upcomingDeadlines = this.updateDeadlines();
 
-  this.otherTasks = this.orderedList.filter(obj => {
-    return this.upcomingDeadlines.tasks.indexOf(obj) == -1
-  });
+  // this.otherTasks = this.orderedList.filter(obj => {
+  //   return this.upcomingDeadlines.tasks.indexOf(obj) == -1
+  // });
+
+  this.otherTasks = (function(schedule){
+    var deadlinesids = [];
+    var otherTasks = JSON.parse(JSON.stringify(schedule.orderedList));
+    schedule.upcomingDeadlines.tasks.map((task)=>deadlinesids.push(task.id));
+
+    for (id of deadlinesids) {
+      var index = otherTasks.findIndex( (task) => {return task.id == id});
+      if (index>=0) otherTasks.splice(index,1);
+    }
+    return otherTasks;
+  })(this);
 
   // this.remindTasks = this.content.tasks.filter(task => {
   //   return task.remind;
@@ -835,15 +847,17 @@ function Schedule(dir, content) {
     refreshUpdater();
   }
   
-  this.editTask = function(task) {
+  this.editTask = function(task, repeatchoice) {
     console.log(task);
     var taskindex = this.content.tasks.findIndex(obj => {
       return obj.id == task.id
     });
     if (task.repeat || task.isException) {
+      var answer;
       if (this.content.tasks[taskindex].repeat.began)
         task.repeat.began = this.content.tasks[taskindex].repeat.began;
-      var answer = dialog.showMessageBoxSync(mainwin, {
+      if (repeatchoice != undefined) answer = repeatchoice;
+      else answer = dialog.showMessageBoxSync(mainwin, {
         type:"question", 
         title:"Zadanie cykliczne",
         message: "Wybierz, które zadania chcesz edytować",
@@ -1094,7 +1108,7 @@ function showMode(mode, silent){
         frame: false,
         skipTaskbar: true,
         title: "Deadlines"
-      }},"calendar.html",silent);
+      }}, "calendar.html", silent);
     
       mainwin.once('ready-to-show', () => {
         refreshUpdater();
@@ -1113,9 +1127,11 @@ function showMode(mode, silent){
       reminderswin = showWindow({
         parent: mainwin,
         modal: true,
-        height: 600,
-        width: 700,
+        height: 400,
+        useContentSize: true,
+        width: 500,
         show: false,
+        resize: false,
         webPreferences: {
           nodeIntegration: true
         }
@@ -1153,12 +1169,25 @@ function refreshUpdater() {
     console.log('show reminders');
     showMode("reminders");
     reminders.forEach(function(reminder, index) {
-      var index = schedule.content.tasks.findIndex(function(item) {
-        return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index])
-      });
-      console.log(index);
-      if (index == -1) return;
-      schedule.content.tasks[index].remind.opened = true;
+      if (reminder.path == 0) {
+        var index = schedule.content.tasks.findIndex(function(item) {
+          return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index])
+        });
+        console.log(index);
+        if (index != -1) schedule.content.tasks[index].remind.opened = true;
+        else return;
+      } else {
+        var index = schedule.content.tasks.findIndex(function(item) {
+          return item.id === reminder.id;
+        });
+        var task = schedule.content.tasks[index];
+        if (index == -1) return;
+        for (step of reminder.path)
+          task = task.exceptions[step];
+
+        task.remind.opened = true;
+      }
+      if (index == -1) console.log('reminder error: cant find reminder in schedule content tasks');
 
       index = schedule.remindTasks.findIndex(function(item) {
         return item.id == reminder.id && item.exceptions == reminder.exceptions;
