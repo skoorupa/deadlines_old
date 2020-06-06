@@ -280,21 +280,27 @@ function getDaySchedule(strdate) {
 	if (dayschedule[0] == undefined || !dayschedule) return [];
 
 	//delete olddates
-	for (task of dayschedule) {
-		if (task.exceptions) {
-			for (exception in task.exceptions) {
-				if (task.exceptions[exception].olddate == task.date) {
-					var index;
-					do {
-						index = dayschedule.findIndex(function(obj) {
-							return obj.id == task.id
-						});
-						dayschedule.splice(index,1);
-					} while (index>=0);
-				}
-			}
-		}
-	}
+	var a = 0;
+  var b = 0;
+  do {
+    a = Number(b);
+    for (task of dayschedule) {
+      if (task.exceptions) {
+        for (exception in task.exceptions) {
+          if (task.exceptions[exception].olddate == task.date) {
+            var index;
+            b++;
+            // do {
+              index = dayschedule.findIndex(function(obj) {
+                return obj.id == task.id
+              });
+              dayschedule.splice(index,1);
+            // } while (index>=0);
+          }
+        }
+      }
+    }
+  } while (a != b);
 	// deleting all misleading tasks
 	for (var i = 0; i < dayschedule.length; i++) {
 		if (dayschedule[i].date != strdate || dayschedule[i].hide) {
