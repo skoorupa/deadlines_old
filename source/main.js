@@ -697,10 +697,10 @@ function Schedule(dir, content) {
   this.otherTasks = (function(schedule){
     var deadlinesids = [];
     var otherTasks = JSON.parse(JSON.stringify(schedule.orderedList));
-    schedule.upcomingDeadlines.tasks.map((task)=>deadlinesids.push(task.id));
+    schedule.upcomingDeadlines.tasks.map((task) => deadlinesids.push(task.id));
 
     for (id of deadlinesids) {
-      var index = otherTasks.findIndex( (task) => {return task.id == id});
+      var index = otherTasks.findIndex((task) => {return task.id == id});
       if (index>=0) otherTasks.splice(index,1);
     }
     return otherTasks;
