@@ -263,8 +263,12 @@ function showForm(name, task, strdate) {
       elems.getElementsByClassName("remindbox")[0].style.display = "block";
       elems["whenremind"].value = task.remind.whenremind;
       if (task.remind.whenremind == "custom") {
+        var reminddate = task.remind.reminddate.split("-");
         elems.getElementsByClassName("remindcustom")[0].style.display = "block";
-        elems["reminddate"].value = task.remind.reminddate;
+        if (reminddate[1].length==1) reminddate[1] = "0"+reminddate[1];
+        if (reminddate[2].length==1) reminddate[2] = "0"+reminddate[2];
+
+        elems["reminddate"].value = reminddate.join("-");
         elems["remindtime"].value = task.remind.remindtime;
       }
     }
