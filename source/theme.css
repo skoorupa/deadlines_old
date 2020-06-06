@@ -27,8 +27,8 @@ html, body,
 #deadlineslist,
 .reminderlist {
 	background-color: #616161;
+	color:white;
 }
-
 
 #calendar,
 .button,

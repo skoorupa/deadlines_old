@@ -140,6 +140,15 @@ body:after {
 	display: none;
 }
 
+.reminderlist {
+	display: none;
+	padding:5px 15% !important;
+}
+
+.reminderlist > h1 {
+	margin: 0;
+}
+
 .list {
 	padding: 10px 3px;
 }
@@ -205,7 +214,10 @@ label {
 
 form input:not([type=checkbox]):not([type=radio]),
 form select,
-form textarea {
+form textarea,
+.reminderlist input:not([type=checkbox]):not([type=radio]),
+.reminderlist select,
+.reminderlist textarea {
 	outline: none;
 	background: none;
 	font-size:100%;
@@ -214,14 +226,16 @@ form textarea {
 	border-bottom: 1px solid black;
 }
 
-form input[name=title] {
+form input[name=title],
+.reminderlist input[name=title] {
 	width: 100%;
 	font-size: 30px !important;
 	word-wrap: break-word;
   word-break: break-all;
 }
 
-form textarea {
+form textarea,
+.reminderlist textarea {
 	display: block;
 	width: 100%;
 	margin-bottom: 10px;
