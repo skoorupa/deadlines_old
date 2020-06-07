@@ -184,26 +184,29 @@ function renderDeadlines(_deadlines, dc, days, _tasks, otherTasks) {
       });
       context.innerHTML = task.title;
 
-      var date = document.createElement("div");
-      date.classList.add("right");
-      var d = new Date(task.timeid);
-      if (d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear()){
-        date.innerHTML +=
-          (d.getHours() < 10 ? "0"+d.getHours() : d.getHours())
-            +":"+
-          (d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes())
-      } else {
-        date.innerHTML = d.getDate()+"."+(
-          (d.getMonth()+1) < 10 ? "0"+(d.getMonth()+1) : (d.getMonth()+1)
-        );
-        if (today.getFullYear() != d.getFullYear()) {
-          date.innerHTML += "<br>."+d.getFullYear();
+      var date;
+      if (task.date) {
+        date = document.createElement("div");
+        date.classList.add("right");
+        var d = new Date(task.timeid);
+        if (d.getDate() == today.getDate() && d.getMonth() == today.getMonth() && d.getFullYear() == today.getFullYear()){
+          date.innerHTML +=
+            (d.getHours() < 10 ? "0"+d.getHours() : d.getHours())
+              +":"+
+            (d.getMinutes() < 10 ? "0"+d.getMinutes() : d.getMinutes())
+        } else {
+          date.innerHTML = d.getDate()+"."+(
+            (d.getMonth()+1) < 10 ? "0"+(d.getMonth()+1) : (d.getMonth()+1)
+          );
+          if (today.getFullYear() != d.getFullYear()) {
+            date.innerHTML += "<br>."+d.getFullYear();
+          }
         }
       }
 
       bar.appendChild(checkboxdiv);
       bar.appendChild(context);
-      bar.appendChild(date);
+      if (task.date) bar.appendChild(date);
       othertaskslist.appendChild(bar);
     })(i);
   }

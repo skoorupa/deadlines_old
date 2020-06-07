@@ -360,14 +360,15 @@ function formClarify(name, date) {
 }
 
 function getTaskFromForm(name,silent) {
+  var task = {};
   var today = new Date();
   var elems = document.forms[name];
   var date = new Date(elems["date"].value);
   var repeat = false;
   var remind = false;
 
-  if((!elems["title"].value || !elems["date"].value || !elems["time"].value)&&!silent){
-    dialog.showMessageBoxSync(require("electron").remote.getCurrentWindow(),{type:"error", title:"Błąd", message:"Conajmniej jedno z pól nie jest uzupełnione."});
+  if(!elems["title"].value && !silent){
+    dialog.showMessageBoxSync(require("electron").remote.getCurrentWindow(),{type:"error", title:"Błąd", message:"Nie podałeś nazwy zadania."});
     require("electron").remote.getCurrentWindow().show();
     return;
   }
@@ -484,18 +485,32 @@ function getTaskFromForm(name,silent) {
     }
   }
 
-  return {
+  task = {
     "id": Number(elems["title"].getAttribute("data-id")),
     "title": elems["title"].value,
     "description": elems["description"].value,
-    "date": encodeDate(date),
-    "time": String(elems["time"].value),
-    "timeid": date.getTime(),
-    "repeat": repeat,
     "color": elems["color"].value,
     "remind": remind,
     "priority": 1
   }
+  if (elems["date"].value && elems["time"].value) 
+    task = {
+      ...task, 
+      "date": encodeDate(date),
+      "time": String(elems["time"].value),
+      "timeid": date.getTime(),
+      "repeat": repeat,
+    }
+  else if (elems["date"].value) 
+    task = {
+      ...task, 
+      "date": encodeDate(date),
+      "time": "23:59",
+      "timeid": date.getTime()+86399999,
+      "repeat": repeat,
+    }
+  
+  return task;
 }
 
 function addTask(name) {
