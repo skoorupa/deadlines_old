@@ -29,7 +29,7 @@ założenia wersji v0.8:
 + usuwanie cyklicznych zadań
 +/- nowy wygląd formularza i wgl
 - prawoklik początkowy
-- przypomnienia
++ przypomnienia
 + kolory
 + opisy
 + settingswin może wyskoczyć kilka razy
