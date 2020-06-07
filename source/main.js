@@ -867,6 +867,7 @@ function Schedule(dir, content) {
       switch (answer) {
         case 0:
           // Wszystkie zadania
+          task.path = [];
           this.content.tasks[taskindex] = task;
           break;
         case 1:
