@@ -2,7 +2,7 @@ var reminders = [];
 var win = remote.getCurrentWindow();
 var overview = document.getElementById("overview");
 
-function updateSize() {
+function resizeWindow() {
 	win.setSize(500, overview.offsetHeight+50);
 }
 
@@ -202,7 +202,7 @@ ipc.on("reminders", function(event, content) {
 		overview.appendChild(box);
 	}
 
-	updateSize();
+	resizeWindow();
 });
 
 function toggleOverviewList(bar) {
@@ -215,5 +215,5 @@ function toggleOverviewList(bar) {
     bar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
     bar.parentNode.getElementsByClassName("list")[0].style.display = "none";
   }
-  updateSize();
+  resizeWindow();
 }
