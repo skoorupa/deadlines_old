@@ -1,4 +1,5 @@
 var reminders = [];
+var win = remote.getCurrentWindow();
 
 ipc.on("reminders", function(event, content) {
 	reminders = JSON.parse(content);
@@ -45,6 +46,13 @@ ipc.on("reminders", function(event, content) {
 						reminder.remind = undefined;
 						ipc.send("edittask", JSON.stringify(reminder), 1);
 						event.target.parentNode.parentNode.parentNode.parentNode.remove();
+						
+						var index = reminders.findIndex(function(item) {
+          		return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index]);
+       			});
+       			reminders.splice(index,1);
+
+       			if (!reminders.length) win.close();
 					});
 					button1.textContent = "Zrobione";
 					subtitle.appendChild(button1);
@@ -78,6 +86,13 @@ ipc.on("reminders", function(event, content) {
 
 						ipc.send("edittask", JSON.stringify(reminder), 1);
 						event.target.parentNode.parentNode.parentNode.parentNode.remove();
+
+						var index = reminders.findIndex(function(item) {
+          		return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index]);
+       			});
+       			reminders.splice(index,1);
+
+       			if (!reminders.length) win.close();
 					});
 
 					button2.addEventListener("click", function(event) {event.preventDefault()});
