@@ -588,5 +588,5 @@ addbox_shortcuts.bind("escape",function(e) {
 });
 
 Mousetrap.bind(['command+p', 'ctrl+p'],function(e) {
-  showWindow('settings')
+  showWindow('settings');
 });
