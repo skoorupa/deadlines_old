@@ -1200,7 +1200,7 @@ function refreshUpdater() {
     reminderswin.on("ready-to-show",function() {
       reminderswin.send("reminders", JSON.stringify(reminders));
     });
-    // schedule.updateTasks();
+    schedule.updateTasks();
   }
 
   updater = setInterval(function() {
