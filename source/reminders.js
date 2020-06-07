@@ -1,5 +1,10 @@
 var reminders = [];
 var win = remote.getCurrentWindow();
+var overview = document.getElementById("overview");
+
+function updateSize() {
+	win.setSize(500, overview.offsetHeight+50);
+}
 
 ipc.on("reminders", function(event, content) {
 	reminders = JSON.parse(content);
@@ -20,8 +25,8 @@ ipc.on("reminders", function(event, content) {
 		var box = document.createElement("div");
 
 		var bar = document.createElement("div");
-		bar.classList.add("big","clickable","bar","reminderbar");
-		bar.setAttribute("onclick","toggleOverviewList(this)");
+		bar.classList.add("big","bar","reminderbar");
+		// bar.setAttribute("onclick","toggleOverviewList(this)");
 
 			var icon = document.createElement("div");
 			icon.classList.add("icon","left");
@@ -33,6 +38,10 @@ ipc.on("reminders", function(event, content) {
 	
 				var header = document.createElement("div");
 				header.textContent = reminder.title;
+				header.classList.add("clickable");
+				header.addEventListener("click", function(event) {
+						toggleOverviewList(bar);
+				});
 				context.appendChild(header);
 
 				var subtitle = document.createElement("div");
@@ -46,7 +55,7 @@ ipc.on("reminders", function(event, content) {
 						reminder.remind = undefined;
 						ipc.send("edittask", JSON.stringify(reminder), 1);
 						event.target.parentNode.parentNode.parentNode.parentNode.remove();
-						
+
 						var index = reminders.findIndex(function(item) {
           		return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index]);
        			});
@@ -190,8 +199,10 @@ ipc.on("reminders", function(event, content) {
 				list.appendChild(repeatbox);
 			}
 		box.appendChild(list);
-		document.getElementById("overview").appendChild(box);
+		overview.appendChild(box);
 	}
+
+	updateSize();
 });
 
 function toggleOverviewList(bar) {
@@ -204,4 +215,5 @@ function toggleOverviewList(bar) {
     bar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
     bar.parentNode.getElementsByClassName("list")[0].style.display = "none";
   }
+  updateSize();
 }

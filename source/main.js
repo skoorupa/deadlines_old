@@ -1130,10 +1130,10 @@ function showMode(mode, silent){
         parent: mainwin,
         modal: true,
         height: 400,
-        useContentSize: true,
         width: 500,
+        "min-width": 500,
         show: false,
-        resize: false,
+        resizable: false,
         webPreferences: {
           nodeIntegration: true
         }
