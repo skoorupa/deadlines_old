@@ -215,6 +215,8 @@ function showForm(name, task, strdate) {
     return task;
   }
   
+  elems["date"].checked = true;
+  elems["time"].checked = true;
   elems["repeat"].checked = false;
   elems["repeatend"].checked = false;
   elems["color"][0].checked = true;
@@ -222,6 +224,9 @@ function showForm(name, task, strdate) {
   elems["whenremind"].value = "whendeadlineends";
   elems["reminddate"].value = "";
   elems["remindtime"].value = "";
+  elems.getElementsByClassName("datebox")[0].style.display="block";
+  elems.getElementsByClassName("timebox")[0].style.display="block";
+  elems.getElementsByClassName("repeatbox")[0].style.display="none";
   elems.getElementsByClassName("endrepeatbox")[0].style.display="none";
 
   if (task) {
@@ -230,6 +235,8 @@ function showForm(name, task, strdate) {
     d = new Date(Number(task.timeid));
     title = task.title;
     description = task.description || "";
+    if (!task.date) elems.getElementsByClassName("datebox")[0].style.display="none";
+    if (!task.time) elems.getElementsByClassName("timebox")[0].style.display="none";
     if (task.repeat) {
       console.log(task.repeat);
       elems["repeat"].checked = true;
@@ -281,15 +288,11 @@ function showForm(name, task, strdate) {
       d.setMinutes(59);
     } else 
       d.setHours(now.getHours()+1);
-    elems["repeat"].checked = false;
-    elems.getElementsByClassName("repeatbox")[0].style.display="none";
   } else {
     d = new Date();
     d.setMinutes(0);
     d.setHours(d.getHours()+1);
     d.setDate(d.getDate()+7);
-    elems["repeat"].checked = false;
-    elems.getElementsByClassName("repeatbox")[0].style.display="none";
   }
 
   dates = {
@@ -312,11 +315,11 @@ function showForm(name, task, strdate) {
   elems["description"].style.cssText = 'height:' + elems["description"].scrollHeight + 'px';
   elems["description"].addEventListener("keydown", autosize);
 
-  elems["date"].value = dates.year + "-" + dates.month + "-" + dates.day;
-  elems["time"].value = dates.hours + ":" + dates.minutes;
+  elems["datevalue"].value = dates.year + "-" + dates.month + "-" + dates.day;
+  elems["timevalue"].value = dates.hours + ":" + dates.minutes;
 
   // var today = new Date();
-  // elems["date"].min =
+  // elems["datevalue"].min =
   //   today.getFullYear() + "-" +
   //   (today.getMonth()<9 ? "0"+(today.getMonth()+1) : (today.getMonth()+1)) + "-" +
   //   (today.getDate()<10 ? "0"+today.getDate() : today.getDate());
@@ -363,7 +366,7 @@ function getTaskFromForm(name,silent) {
   var task = {};
   var today = new Date();
   var elems = document.forms[name];
-  var date = new Date(elems["date"].value);
+  var date = new Date(elems["datevalue"].value);
   var repeat = false;
   var remind = false;
 
@@ -373,8 +376,8 @@ function getTaskFromForm(name,silent) {
     return;
   }
 
-  date.setHours(elems["time"].value.substr(0,2));
-  date.setMinutes(elems["time"].value.substr(3,5));
+  date.setHours(elems["timevalue"].value.substr(0,2));
+  date.setMinutes(elems["timevalue"].value.substr(3,5));
 
   if (date.getTime() < today.getTime() && !silent) {
     if (dialog.showMessageBoxSync(require("electron").remote.getCurrentWindow(), {
@@ -425,7 +428,7 @@ function getTaskFromForm(name,silent) {
       default:
       case "whendeadlineends":
         remind.reminddate = encodeDate(date);
-        remind.remindtime = String(elems["time"].value);
+        remind.remindtime = String(elems["timevalue"].value);
         remind.timeid = date.getTime();
         break;
       case "5minsbefore":
@@ -493,15 +496,15 @@ function getTaskFromForm(name,silent) {
     "remind": remind,
     "priority": 1
   }
-  if (elems["date"].value && elems["time"].value) 
+  if (elems["datevalue"].value && elems["timevalue"].value) 
     task = {
       ...task, 
       "date": encodeDate(date),
-      "time": String(elems["time"].value),
+      "time": String(elems["timevalue"].value),
       "timeid": date.getTime(),
       "repeat": repeat,
     }
-  else if (elems["date"].value) 
+  else if (elems["datevalue"].value) 
     task = {
       ...task, 
       "date": encodeDate(date),
