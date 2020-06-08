@@ -382,7 +382,7 @@ function getTaskFromForm(name,silent) {
   var remind = false;
 
   if(!elems["title"].value && !silent){
-    dialog.showMessageBoxSync(require("electron").remote.getCurrentWindow(),{type:"error", title:"Błąd", message:"Nie podałeś nazwy zadania."});
+    dialog.showMessageBoxSync(require("electron").remote.getCurrentWindow(),{type:"error", title:"Błąd", message:"Nie podano nazwy zadania."});
     require("electron").remote.getCurrentWindow().show();
     return;
   }
