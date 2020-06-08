@@ -135,14 +135,19 @@
 				<textarea name="description" placeholder="Opis zadania"></textarea>
 
 				<label>
+					<input type="checkbox" name="date">
 					Data:
-					<input name="date" type="date" required onchange="formClarify('add')"><br><br>
-				</label>
-
-				<label>
-					Godzina:
-					<input name="time" type="time" required><br><br>
-				</label>
+					<div class="datebox indent" data-checked="true">
+						<input name="datevalue" type="date" required onchange="formClarify('add')"><br>
+						<label>
+							<input type="checkbox" name="time">
+							Godzina:
+							<div class="timebox indent" data-checked="true">
+								<input name="timevalue" type="time" required>
+							</div>
+						</label>
+					</div>
+				</label><br><br>
 
 				<label>
 					<input name="repeat" type="checkbox">
@@ -230,14 +235,19 @@
 				<textarea name="description" placeholder="Opis zadania"></textarea>
 
 				<label>
+					<input type="checkbox" name="date">
 					Data:
-					<input name="date" type="date" required onchange="formClarify('edit')"><br><br>
-				</label>
-
-				<label>
-					Godzina:
-					<input name="time" type="time" required><br><br>
-				</label>
+					<div class="datebox indent" data-checked="true">
+						<input name="datevalue" type="date" required onchange="formClarify('edit')"><br>
+						<label>
+							<input type="checkbox" name="time">
+							Godzina:
+							<div class="timebox indent" data-checked="true">
+								<input name="timevalue" type="time" required>
+							</div>
+						</label>
+					</div>
+				</label><br><br>
 
 				<label>
 					<input name="repeat" type="checkbox">
