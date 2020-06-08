@@ -122,6 +122,8 @@ function showForm(name, task, strdate) {
   var description = "";
   editedtask = task;
 
+  elems.getElementsByClassName("datebox")[0].style.display="block";
+  elems.getElementsByClassName("timebox")[0].style.display="block";
   elems.getElementsByClassName("repeatbox")[0].style.display="none";
   elems.getElementsByClassName("clarifyrepeat")[0].style.display="none";
   elems.getElementsByClassName("remindbox")[0].style.display = "none";
@@ -209,8 +211,16 @@ function showForm(name, task, strdate) {
       elems["description"].style.cssText = 'height:' + elems["description"].scrollHeight + 'px';
     } else elems["description"].style.display = "none";
 
-    elems.getElementsByClassName("date")[0].innerHTML = weekdays[d.getDay()] + ", " + dates.day + "/" + dates.month + "/" + dates.year;
-    elems.getElementsByClassName("time")[0].innerHTML = dates.hours + ":" + dates.minutes;
+    if (task.date) {
+      elems.getElementsByClassName("date")[0].innerHTML = weekdays[d.getDay()] + ", " + dates.day + "/" + dates.month + "/" + dates.year;
+    } else {
+      elems.getElementsByClassName("datebox")[0].style.display="none";
+    }
+    if (task.time) {
+      elems.getElementsByClassName("time")[0].innerHTML = dates.hours + ":" + dates.minutes;
+    } else {
+      elems.getElementsByClassName("timebox")[0].style.display="none";
+    }
 
     return task;
   }
@@ -224,9 +234,6 @@ function showForm(name, task, strdate) {
   elems["whenremind"].value = "whendeadlineends";
   elems["reminddate"].value = "";
   elems["remindtime"].value = "";
-  elems.getElementsByClassName("datebox")[0].style.display="block";
-  elems.getElementsByClassName("timebox")[0].style.display="block";
-  elems.getElementsByClassName("repeatbox")[0].style.display="none";
   elems.getElementsByClassName("endrepeatbox")[0].style.display="none";
 
   if (task) {
@@ -235,10 +242,15 @@ function showForm(name, task, strdate) {
     d = new Date(Number(task.timeid));
     title = task.title;
     description = task.description || "";
-    if (!task.date) elems.getElementsByClassName("datebox")[0].style.display="none";
-    if (!task.time) elems.getElementsByClassName("timebox")[0].style.display="none";
+    if (!task.date) {
+      elems["date"].checked = false;
+      elems.getElementsByClassName("datebox")[0].style.display="none";
+    }
+    if (!task.time) {
+      elems["time"].checked = false;
+      elems.getElementsByClassName("timebox")[0].style.display="none";
+    }
     if (task.repeat) {
-      console.log(task.repeat);
       elems["repeat"].checked = true;
       elems.getElementsByClassName("repeatbox")[0].style.display="block";
       elems["repeatamount"].value = task.repeat.amount;
@@ -496,7 +508,7 @@ function getTaskFromForm(name,silent) {
     "remind": remind,
     "priority": 1
   }
-  if (elems["datevalue"].value && elems["timevalue"].value) 
+  if (elems["date"].checked && elems["time"].checked) 
     task = {
       ...task, 
       "date": encodeDate(date),
@@ -504,7 +516,7 @@ function getTaskFromForm(name,silent) {
       "timeid": date.getTime(),
       "repeat": repeat,
     }
-  else if (elems["datevalue"].value) 
+  else if (elems["date"].checked) 
     task = {
       ...task, 
       "date": encodeDate(date),

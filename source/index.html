@@ -95,12 +95,12 @@
 				<h1 class="title"></h1>
 				<textarea name="description" placeholder="Opis zadania" readonly></textarea>
 
-				<label>
+				<label class="datebox">
 					📅:
 					<span class="date"></span><br>
 				</label>
 
-				<label>
+				<label class="timebox">
 					🕓:
 					<span class="time"></span><br>
 				</label>
@@ -136,12 +136,12 @@
 
 				<label>
 					<input type="checkbox" name="date">
-					Data:
+					Data...
 					<div class="datebox indent" data-checked="true">
 						<input name="datevalue" type="date" required onchange="formClarify('add')"><br>
 						<label>
 							<input type="checkbox" name="time">
-							Godzina:
+							Godzina...
 							<div class="timebox indent" data-checked="true">
 								<input name="timevalue" type="time" required>
 							</div>
@@ -236,12 +236,12 @@
 
 				<label>
 					<input type="checkbox" name="date">
-					Data:
+					Data...
 					<div class="datebox indent" data-checked="true">
 						<input name="datevalue" type="date" required onchange="formClarify('edit')"><br>
 						<label>
 							<input type="checkbox" name="time">
-							Godzina:
+							Godzina...
 							<div class="timebox indent" data-checked="true">
 								<input name="timevalue" type="time" required>
 							</div>
