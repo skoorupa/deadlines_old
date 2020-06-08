@@ -704,7 +704,11 @@ function Schedule(dir, content) {
       var index = otherTasks.findIndex((task) => {return task.id == id});
       if (index>=0) otherTasks.splice(index,1);
     }
-    return otherTasks;
+    return otherTasks.sort(function(a,b) {
+      if (a.timeid > b.timeid) return 1
+      else if (a.timeid < b.timeid) return -1
+      else return 0
+    });
   })(this);
 
   // this.remindTasks = this.content.tasks.filter(task => {
