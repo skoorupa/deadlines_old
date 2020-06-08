@@ -295,10 +295,9 @@ function showForm(name, task, strdate) {
     d = decodeDate(strdate);
     var now = new Date();
     d.setMinutes(0);
-    if(now.getHours()==23) {
-      d.setHours(now.getHours());
-      d.setMinutes(59);
-    } else 
+    if(now.getHours()==23)
+      d.setHours(now.getHours(), 59, 0, 0);
+    else 
       d.setHours(now.getHours()+1);
   } else {
     d = new Date();
@@ -388,8 +387,10 @@ function getTaskFromForm(name,silent) {
     return;
   }
 
-  date.setHours(elems["timevalue"].value.substr(0,2));
-  date.setMinutes(elems["timevalue"].value.substr(3,5));
+  if (elems["time"].checked) {
+    date.setHours(elems["timevalue"].value.substr(0,2));
+    date.setMinutes(elems["timevalue"].value.substr(3,5));
+  } else date.setHours(23, 59, 0, 0);
 
   if (date.getTime() < today.getTime() && !silent) {
     if (dialog.showMessageBoxSync(require("electron").remote.getCurrentWindow(), {
@@ -521,7 +522,7 @@ function getTaskFromForm(name,silent) {
       ...task, 
       "date": encodeDate(date),
       "time": "23:59",
-      "timeid": date.getTime()+86399999,
+      "timeid": date.getTime(),
       "repeat": repeat,
     }
   
