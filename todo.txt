@@ -32,7 +32,7 @@ założenia wersji v0.8:
 + przypomnienia
 + kolory
 + opisy
-+ settingswin może wyskoczyć kilka razy
++ settingswin nie może wyskoczyć kilka razy
 
 założenia wersji v0.9:
 - archiwum
