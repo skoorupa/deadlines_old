@@ -299,6 +299,8 @@ function showForm(name, task, strdate) {
       d.setHours(now.getHours(), 59, 0, 0);
     else 
       d.setHours(now.getHours()+1);
+    elems["time"].checked = false;
+    elems.getElementsByClassName("timebox")[0].style.display="none";
   } else {
     d = new Date();
     d.setMinutes(0);
