@@ -6,7 +6,6 @@
   "main": "main.js",
   "dependencies": {
     "@mturco/context-menu": "^1.0.1",
-    "context-menu": "^2.0.0",
     "electron": "^8.2.3"
   },
   "devDependencies": {
