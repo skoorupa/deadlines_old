@@ -2,7 +2,7 @@
   "name": "deadlines",
   "productName": "Deadlines",
   "version": "0.7.8",
-  "description": "Aplikacja do zarządzania czasem i zadaniami",
+  "description": "To-do and time management app.",
   "main": "main.js",
   "dependencies": {
     "@mturco/context-menu": "^1.0.1",
