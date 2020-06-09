@@ -684,8 +684,6 @@ function Schedule(dir, content) {
       days: days
     };
 
-    renderTray(this.upcomingDeadlines);
-
     return this.upcomingDeadlines;
   }
 
@@ -969,9 +967,10 @@ function loadTray() {
   tray.on('click', trayclick);
 }
 
-function renderTray(a) {
+function renderTray(a, b) {
   var quantitytext = "";
   var daystext = "";
+  var remindertext = "";
   switch (a.dc) {
     case 0:
       quantitytext = "Brak zadań";
@@ -1010,10 +1009,25 @@ function renderTray(a) {
       daystext = "w przeciągu " + (a.days) + " dni"
   }
 
+  // reminders
+  if (b.length) {
+    var reminder = b[0];
+    var now = new Date();
+    var d = new Date(reminder.remind.timeid);
+    var dc = Math.floor((d.getTime()-now.getTime())/(24*60*60*1000));
+
+    if (dc==0) remindertext = `Przypomnienie o ${reminder.remind.remindtime}`;
+    else if (dc==1) remindertext = `Przypomnienie jutro o ${reminder.remind.remindtime}`;
+    else if (dc==2) remindertext = `Przypomnienie pojutrze o ${reminder.remind.remindtime}`;
+    else if (dc<=7) remindertext = `Przypomnienie w tym tygodniu o ${reminder.remind.remindtime}`;
+    else if (dc<=14) remindertext = `Przypomnienie w ciągu 2 tygodni o ${reminder.remind.remindtime}`;
+    else remindertext = `Przypomnienie ${reminder.remind.reminddate} o ${reminder.remind.remindtime}`;
+  }
+
   tray.setToolTip(
-    'Deadlines\n\
-    '+quantitytext+' do wykonania '+daystext
-    // +'\nPrzypomnienie o 17:00'
+    'Deadlines'
+    +'\n    '+quantitytext+' do wykonania '+daystext
+    +'\n    '+remindertext
   );
 }
 
@@ -1217,11 +1231,13 @@ function refreshUpdater() {
       console.log('new schedule');
       schedule = newschedule;
       sendSchedule(mainwin);
+      renderTray(schedule.upcomingDeadlines, schedule.remindTasks);
     }
     checkReminders();
   }, updatetime);
   schedule = new Schedule(schedulelist[0], schedule.content);
   sendSchedule(mainwin);
+  renderTray(schedule.upcomingDeadlines, schedule.remindTasks);
 }
 
 function alertme(win, context) {
