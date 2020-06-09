@@ -619,15 +619,15 @@ addbox_shortcuts.bind(['command+s', 'ctrl+s'],function(e) {
   if(addTask('add'))hideForm('add');
 });
 
-showbox_shortcuts.bind("escape",function(e) {
+showbox_shortcuts.bind("esc",function(e) {
   hideForm('show');
 });
 
-addbox_shortcuts.bind("escape",function(e) {
+addbox_shortcuts.bind("esc",function(e) {
   hideForm('add');
 });
 
-editbox_shortcuts.bind("escape",function(e) {
+editbox_shortcuts.bind("esc",function(e) {
   hideForm('edit');
 });
 
