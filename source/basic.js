@@ -6,6 +6,7 @@ var schedule = {tasks:{}};
 var debugging = false;
 var editedtask = {};
 var settings = ipc.sendSync("getsettings");
+var contextmenu;
 
 /* form stuff */
 
@@ -299,6 +300,7 @@ function showForm(name, task, strdate) {
       d.setHours(now.getHours(), 59, 0, 0);
     else 
       d.setHours(now.getHours()+1);
+
     elems["time"].checked = false;
     elems.getElementsByClassName("timebox")[0].style.display="none";
   } else {
@@ -575,8 +577,9 @@ function deleteTask(task) {
     title:"Usuwanie zadań",
     message: "Czy na pewno chcesz usunąć to zadanie?",
     detail:"Tej czynności nie można cofnąć!",
-    buttons: ["Tak","Nie"]
-  }) == 0) ipc.send("deletetask", task);
+    buttons: ["Tak","Nie"],
+    cancelId: 1
+  }) === 0) ipc.send("deletetask", task);
   require("electron").remote.getCurrentWindow().show();
   hideForm("show");
 }

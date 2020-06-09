@@ -207,6 +207,33 @@ function renderDeadlines(_deadlines, dc, days, _tasks, otherTasks) {
       bar.appendChild(checkboxdiv);
       bar.appendChild(context);
       if (task.date) bar.appendChild(date);
+
+      bar.addEventListener("contextmenu", function(event) {
+        event.preventDefault();
+        // if (contextmenu) contextmenu.hide();
+        contextmenu = new ContextMenu([
+          {
+            text:"Edytuj",
+            icon:"📝",
+            events: {
+              click: function (e){
+                showForm("edit",task);
+              }
+            }
+          },
+          {
+            text:"Usuń",
+            icon:"❌",
+            events: {
+              click: function (e){
+                deleteTask(task);
+              }
+            }
+          }
+        ], {"close_on_click":true});
+        contextmenu.display(event);
+      });
+
       othertaskslist.appendChild(bar);
     })(i);
   }
@@ -215,3 +242,7 @@ function renderDeadlines(_deadlines, dc, days, _tasks, otherTasks) {
 Mousetrap.bind(["command+tab","ctrl+tab"], function(e) {
   showMode('calendar');
 });
+
+document.addEventListener("contextmenu", function() {
+  if (contextmenu) contextmenu.hide();
+}, true);
