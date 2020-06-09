@@ -634,3 +634,7 @@ editbox_shortcuts.bind("esc",function(e) {
 Mousetrap.bind(['command+p', 'ctrl+p'],function(e) {
   showWindow('settings');
 });
+
+document.addEventListener("contextmenu", function() {
+  if (contextmenu) contextmenu.hide();
+}, true);

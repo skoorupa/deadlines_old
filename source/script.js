@@ -1,4 +1,3 @@
-var schedule;
 var deadlinesbar = document.getElementById("deadlinesbar");
 var deadlinescounter = document.getElementById("deadlinescounter");
 var deadlinesdescription = document.getElementById("deadlinesdescription");
@@ -292,13 +291,35 @@ function update(_deadlines, dc, days, _tasks, otherTasks, remindTasks) {
     remindersbar.addEventListener("click", function(e) {
       showForm("show", reminder);
     });
+
+    remindersbar.addEventListener("contextmenu", function(event) {
+        event.preventDefault();
+        // if (contextmenu) contextmenu.hide();
+        contextmenu = new ContextMenu([
+          {
+            text:"Edytuj",
+            icon:"📝",
+            events: {
+              click: function (e){
+                showForm("edit",reminder);
+              }
+            }
+          },
+          {
+            text:"Usuń",
+            icon:"❌",
+            events: {
+              click: function (e){
+                deleteTask(reminder);
+              }
+            }
+          }
+        ], {"close_on_click":true});
+        contextmenu.display(event);
+      });
   } else remindersbar.style.display = 'none';
 }
 
 Mousetrap.bind(["command+tab","ctrl+tab"], function(e) {
   showMode('calendar');
 });
-
-document.addEventListener("contextmenu", function() {
-  if (contextmenu) contextmenu.hide();
-}, true);

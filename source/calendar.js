@@ -406,6 +406,31 @@ function previewSchedule(strdate, clear) {
 			bar.appendChild(checkboxdiv);
 			bar.appendChild(context);
 			bar.appendChild(datetext);
+			bar.addEventListener("contextmenu", function(event) {
+        event.preventDefault();
+        // if (contextmenu) contextmenu.hide();
+        contextmenu = new ContextMenu([
+          {
+            text:"Edytuj",
+            icon:"📝",
+            events: {
+              click: function (e){
+                showForm("edit",task);
+              }
+            }
+          },
+          {
+            text:"Usuń",
+            icon:"❌",
+            events: {
+              click: function (e){
+                deleteTask(task);
+              }
+            }
+          }
+        ], {"close_on_click":true});
+        contextmenu.display(event);
+      });
 			document.getElementById("preview").appendChild(bar);
 		})(i);
 	}
