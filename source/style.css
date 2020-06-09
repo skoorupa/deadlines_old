@@ -126,7 +126,7 @@ body:after {
 	-webkit-app-region: none;
 }
 
-#addtaskbar, #addreminderbar {
+#addtaskbar {
 	cursor: pointer;
 }
 

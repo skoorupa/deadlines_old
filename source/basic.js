@@ -96,11 +96,18 @@ function encodeTime(date) {
   return hour+":"+minutes;
 }
 
-function decodeDate(s) {
+function decodeDate(s,strtime) {
   var strdate = s.split("-");
   if (strdate[1]) strdate[1]--;
   var date = new Date(Date.UTC(...strdate));
-  return date;
+  if (strtime) return decodeTime(strtime, date)
+  else return date;
+}
+
+function decodeTime(s,date) {
+  var strtime = s.split(":").map(Number);
+  var time = date.setHours(strtime[0],strtime[1]);
+  return time;
 }
 
 function getWhichWeekDay(date) {
@@ -164,7 +171,7 @@ function showForm(name, task, strdate) {
           elems["clarifyrepeat"].title += nweekday+ ". "+weekdays[d.getDay()]+" każdego miesiąca\n";
         }
       } 
-      elems.getElementsByClassName("repeatbox")[0].style.display="inline";
+      elems.getElementsByClassName("repeatbox")[0].style.display="block";
       if (task.repeat.end) {
         elems.getElementsByClassName("clarifyrepeat")[0].style.display = "inline";
         enddate = decodeDate(task.repeat.end);
@@ -187,7 +194,7 @@ function showForm(name, task, strdate) {
       txt += date[2]+"/"+date[1]+"/"+date[0]+" o ";
       txt += time[0]+":"+time[1];
 
-      elems.getElementsByClassName("remindbox")[0].style.display = "inline";
+      elems.getElementsByClassName("remindbox")[0].style.display = "block";
       elems.getElementsByClassName("remind")[0].innerHTML = txt;
     }
 
@@ -501,6 +508,7 @@ function getTaskFromForm(name,silent) {
       case "custom":
         remind.reminddate = elems["reminddate"].value;
         remind.remindtime = String(elems["remindtime"].value);
+        remind.timeid = decodeDate(elems["reminddate"].value, String(elems["remindtime"].value));
         break;
     }
   }
@@ -599,9 +607,9 @@ Mousetrap.bind(['command+n', 'ctrl+n'], function(e) {
     return false;
 });
 
-var editbox_shortcuts = new Mousetrap(document.getElementById("editbox"));
-var addbox_shortcuts = new Mousetrap(document.getElementById("addbox"));
 var showbox_shortcuts = new Mousetrap(document.getElementById("showbox"));
+var addbox_shortcuts = new Mousetrap(document.getElementById("addbox"));
+var editbox_shortcuts = new Mousetrap(document.getElementById("editbox"));
 
 editbox_shortcuts.bind(['command+s', 'ctrl+s'],function(e) {
   if(editTask('edit'))hideForm('edit');
@@ -611,16 +619,16 @@ addbox_shortcuts.bind(['command+s', 'ctrl+s'],function(e) {
   if(addTask('add'))hideForm('add');
 });
 
-editbox_shortcuts.bind("escape",function(e) {
-  hideForm('edit');
-});
-
 showbox_shortcuts.bind("escape",function(e) {
   hideForm('show');
 });
 
 addbox_shortcuts.bind("escape",function(e) {
   hideForm('add');
+});
+
+editbox_shortcuts.bind("escape",function(e) {
+  hideForm('edit');
 });
 
 Mousetrap.bind(['command+p', 'ctrl+p'],function(e) {

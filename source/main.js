@@ -747,7 +747,11 @@ function Schedule(dir, content) {
         }
       }
     } while (a != b);
-    return remindTasks;
+    return remindTasks.sort(function(a,b) {
+      if (a.remind.timeid > b.remind.timeid) return 1
+      else if (a.remind.timeid < b.remind.timeid) return -1
+      else return 0
+    });
   })(this);
 
   this.upcomingReminders = function() {
