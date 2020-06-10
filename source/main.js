@@ -1203,7 +1203,7 @@ function refreshUpdater() {
     console.log('show reminders');
     showMode("reminders");
     reminders.forEach(function(reminder, index) {
-      if (reminder.path == 0) {
+      if (reminder.path.length == 0) {
         var index = schedule.content.tasks.findIndex(function(item) {
           return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index])
         });
