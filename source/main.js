@@ -803,7 +803,11 @@ function Schedule(dir, content) {
         type:"question", 
         title:"Zadanie cykliczne",
         message: "Wybierz, które zadania chcesz usunąć",
-        buttons: ["Wszystkie zadania","Tylko to zadanie","To zadanie i wszystkie późniejsze"]
+        buttons: [
+          "Wszystkie zadania",
+          "Tylko to zadanie",
+          "To zadanie i wszystkie późniejsze"
+        ]
       });
       switch (answer) {
         case 0:
@@ -868,7 +872,11 @@ function Schedule(dir, content) {
         type:"question", 
         title:"Zadanie cykliczne",
         message: "Wybierz, które zadania chcesz edytować",
-        buttons: ["Wszystkie zadania","Tylko to zadanie","To zadanie i wszystkie późniejsze"]
+        buttons: [
+          "Wszystkie zadania",
+          "Tylko to zadanie",
+          "To zadanie i wszystkie późniejsze"
+        ]
       });
       switch (answer) {
         case 0:
@@ -951,7 +959,8 @@ function loadTray() {
     }}
   ];
 
-  if (settings.config.general.devtools) menu.unshift({label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}});
+  if (settings.config.general.devtools) 
+    menu.unshift({label: 'Otwórz DevTools', click () {mainwin.webContents.openDevTools()}});
 
   var contextMenu = Menu.buildFromTemplate(menu);
   tray.setContextMenu(contextMenu);
@@ -1006,7 +1015,7 @@ function renderTray(a, b) {
       daystext = "w przeciągu 3 tygodni";
       break;
     default:
-      daystext = "w przeciągu " + (a.days) + " dni"
+      daystext = "w przeciągu " + a.days + " dni"
   }
 
   // reminders
