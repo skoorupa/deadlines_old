@@ -491,11 +491,9 @@ document.getElementById("jumpmonthheader").addEventListener("dblclick", function
    todayviewswitch.prevent = true;
 	if (todayviewswitch.unit=="year") {
 		todayviewswitch.unit = "month";
-		var d = new Date();
 		update();
 	} else {
 		todayviewswitch.unit = "year";
-		var d = new Date();
 		update();
 	}
 });

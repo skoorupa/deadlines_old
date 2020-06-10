@@ -38,7 +38,7 @@ document.querySelectorAll("select.toggler").forEach(function(input) {
     console.log(select);
     var divs = select.parentNode.querySelectorAll("div");
     var directchildren = select.parentNode.children;
-    divs.forEach( function(div) {
+    divs.forEach(function(div) {
       if (
         div.getAttribute("data-option") == String(select.value) &&
         [...directchildren].indexOf(div) != -1
@@ -634,6 +634,8 @@ editbox_shortcuts.bind("esc",function(e) {
 Mousetrap.bind(['command+p', 'ctrl+p'],function(e) {
   showWindow('settings');
 });
+
+// prevent from multi-contextmenus
 
 document.addEventListener("contextmenu", function() {
   if (contextmenu) contextmenu.hide();
