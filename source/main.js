@@ -1025,18 +1025,19 @@ function renderTray(a, b) {
     var d = new Date(reminder.remind.timeid);
     var dc = Math.floor((d.getTime()-now.getTime())/(24*60*60*1000));
 
+    remindertext += "\n    ";
     if (dc==0) remindertext = `Przypomnienie o ${reminder.remind.remindtime}`;
-    else if (dc==1) remindertext = `Przypomnienie jutro o ${reminder.remind.remindtime}`;
-    else if (dc==2) remindertext = `Przypomnienie pojutrze o ${reminder.remind.remindtime}`;
-    else if (dc<=7) remindertext = `Przypomnienie w tym tygodniu o ${reminder.remind.remindtime}`;
-    else if (dc<=14) remindertext = `Przypomnienie w ciągu 2 tygodni o ${reminder.remind.remindtime}`;
-    else remindertext = `Przypomnienie ${reminder.remind.reminddate} o ${reminder.remind.remindtime}`;
+    else if (dc==1) remindertext += `Przypomnienie jutro o ${reminder.remind.remindtime}`;
+    else if (dc==2) remindertext += `Przypomnienie pojutrze o ${reminder.remind.remindtime}`;
+    else if (dc<=7) remindertext += `Przypomnienie w tym tygodniu o ${reminder.remind.remindtime}`;
+    else if (dc<=14) remindertext += `Przypomnienie w ciągu 2 tygodni o ${reminder.remind.remindtime}`;
+    else remindertext += `Przypomnienie ${reminder.remind.reminddate} o ${reminder.remind.remindtime}`;
   }
 
   tray.setToolTip(
     'Deadlines'
     +'\n    '+quantitytext+' do wykonania '+daystext
-    +'\n    '+remindertext
+    +remindertext
   );
 }
 
