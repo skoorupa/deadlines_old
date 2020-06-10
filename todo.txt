@@ -28,7 +28,7 @@ założenia wersji v0.7:
 założenia wersji v0.8:
 + usuwanie cyklicznych zadań
 +/- nowy wygląd formularza i wgl
-- prawoklik początkowy
++ prawoklik początkowy
 + przypomnienia
 + kolory
 + opisy
