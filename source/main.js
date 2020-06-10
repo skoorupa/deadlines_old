@@ -1203,23 +1203,25 @@ function refreshUpdater() {
     console.log('show reminders');
     showMode("reminders");
     reminders.forEach(function(reminder, index) {
-      if (reminder.path.length == 0) {
-        var index = schedule.content.tasks.findIndex(function(item) {
-          return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index])
-        });
-        console.log(index);
-        if (index != -1) schedule.content.tasks[index].remind.opened = true;
-        else return;
-      } else {
-        var index = schedule.content.tasks.findIndex(function(item) {
-          return item.id === reminder.id;
-        });
-        var task = schedule.content.tasks[index];
-        if (index == -1) return;
-        for (step of reminder.path)
-          task = task.exceptions[step];
+      if (reminder.path) {
+        if (reminder.path.length == 0) {
+          var index = schedule.content.tasks.findIndex(function(item) {
+            return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index])
+          });
+          console.log(index);
+          if (index != -1) schedule.content.tasks[index].remind.opened = true;
+          else return;
+        } else {
+          var index = schedule.content.tasks.findIndex(function(item) {
+            return item.id === reminder.id;
+          });
+          var task = schedule.content.tasks[index];
+          if (index == -1) return;
+          for (step of reminder.path)
+            task = task.exceptions[step];
 
-        task.remind.opened = true;
+          task.remind.opened = true;
+        }
       }
       if (index == -1) console.log('reminder error: cant find reminder in schedule content tasks');
 

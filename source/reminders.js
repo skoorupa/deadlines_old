@@ -51,14 +51,19 @@ ipc.on("reminders", function(event, content) {
 					var button1 = document.createElement("button");
 					button1.classList.add("clickable");
 					button1.addEventListener("click", function(event) {
+						var index;
+						index = reminders.findIndex(function(item) {
+          		return JSON.stringify(item) == JSON.stringify(reminder)
+       			});
+
 						reminder.checked = true;
 						reminder.remind = undefined;
+						var now = new Date();
+						reminder.olddate = encodeDate(now);
+						reminder.previousdate = encodeDate(now);
 						ipc.send("edittask", JSON.stringify(reminder), 1);
 						event.target.parentNode.parentNode.parentNode.parentNode.remove();
 
-						var index = reminders.findIndex(function(item) {
-          		return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index]);
-       			});
        			reminders.splice(index,1);
 
        			if (!reminders.length) win.close();
@@ -76,6 +81,10 @@ ipc.on("reminders", function(event, content) {
 					button2.appendChild(createOption("jutro","3600"));
 					
 					button2.addEventListener("change", function(event) {
+						var index;
+						index = reminders.findIndex(function(item) {
+          		return JSON.stringify(item) == JSON.stringify(reminder)
+       			});
 						var now = new Date();
 						reminder.remind.opened = false;
 						reminder.remind.whenremind = "custom";
@@ -93,12 +102,11 @@ ipc.on("reminders", function(event, content) {
 							console.log(reminder);
 						}
 
+						reminder.olddate = encodeDate(now);
+						reminder.previousdate = encodeDate(now);
 						ipc.send("edittask", JSON.stringify(reminder), 1);
 						event.target.parentNode.parentNode.parentNode.parentNode.remove();
 
-						var index = reminders.findIndex(function(item) {
-          		return item.path.length === reminder.path.length && item.path.every((value, index) => value === reminder.path[index]);
-       			});
        			reminders.splice(index,1);
 
        			if (!reminders.length) win.close();
