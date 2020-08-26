@@ -494,6 +494,66 @@ function Schedule(dir, content) {
         task.timeid != _task.timeid &&
         task.date == strdate
       ) {
+        if (task.remind) {
+          switch (task.remind.whenremind) {
+            case "whendeadlineends":
+              task.remind.reminddate = task.date;
+              task.remind.remindtime = task.time;
+              task.remind.timeid = task.timeid;
+              break;
+            case "5minsbefore":
+              var time = task.timeid;
+              var d;
+              time -= 5*60*1000;
+              d = new Date(time);
+
+              task.remind.reminddate = encodeDate(d);
+              task.remind.remindtime = encodeTime(d);
+              task.remind.timeid = time;
+              break;
+            case "30minsbefore":
+              var time = task.timeid;
+              var d;
+              time -= 30*60*1000;
+              d = new Date(time);
+
+              task.remind.reminddate = encodeDate(d);
+              task.remind.remindtime = encodeTime(d);
+              task.remind.timeid = time;
+              break;
+            case "1hourbefore":
+              var time = task.timeid;
+              var d;
+              time -= 3600*1000;
+              d = new Date(time);
+
+              task.remind.reminddate = encodeDate(d);
+              task.remind.remindtime = encodeTime(d);
+              task.remind.timeid = time;
+              break;
+            case "1daybefore":
+              var time = task.timeid;
+              var d;
+              time -= 24*3600*1000;
+              d = new Date(time);
+
+              task.remind.reminddate = encodeDate(d);
+              task.remind.remindtime = encodeTime(d);
+              task.remind.timeid = time;
+              break;
+            case "1weekbefore":
+              var time = task.timeid;
+              var d;
+              time -= 7*24*3600*1000;
+              d = new Date(time);
+
+              task.remind.reminddate = encodeDate(d);
+              task.remind.remindtime = encodeTime(d);
+              task.remind.timeid = time;
+              break;
+          }
+        }
+
         dayschedule.push(task);
       }
     }
@@ -502,27 +562,15 @@ function Schedule(dir, content) {
     if (dayschedule[0] == undefined || !dayschedule) return [];
 
     //delete olddates
-    var a = 0;
-    var b = 0;
-    do {
-      a = Number(b);
-      for (task of dayschedule) {
-        if (task.exceptions) {
-          for (exception in task.exceptions) {
-            if (task.exceptions[exception].olddate == task.date) {
-              var index;
-              b++;
-              // do {
-                index = dayschedule.findIndex(function(obj) {
-                  return obj.id == task.id
-                });
-                dayschedule.splice(index,1);
-              // } while (index>=0);
-            }
-          }
+    dayschedule = dayschedule.filter(function(task,index) {
+      if (task.exceptions) {
+        var response = true;
+        for (exception in task.exceptions) {
+          if (task.exceptions[exception].date == task.date) response =  false;
         }
-      }
-    } while (a != b);
+        return response;
+      } else return true
+    });
     // deleting all misleading tasks
     for (var i = 0; i < dayschedule.length; i++) {
       if (dayschedule[i].date != strdate || dayschedule[i].hide) {
@@ -724,27 +772,106 @@ function Schedule(dir, content) {
     remindTasks = tasks.filter(function(obj) {return obj.remind && !obj.checked});
 
     //delete olddates
-    var a = 0;
-    var b = 0;
-    do {
-      a = Number(b);
-      for (task of remindTasks) {
-        if (task.exceptions) {
-          for (exception in task.exceptions) {
-            if (task.exceptions[exception].olddate == task.date) {
-              var index;
-              b++;
-              // do {
-                index = remindTasks.findIndex(function(obj) {
-                  return obj.id == task.id
-                });
-                remindTasks.splice(index,1);
-              // } while (index>=0);
-            }
+    remindTasks = remindTasks.filter(function(task,index) {
+      if (task.exceptions) {
+        var response = true;
+        for (exception in task.exceptions) {
+          if (task.exceptions[exception].date == task.date) response = false;
+        }
+        return response;
+      } else return true
+    });
+
+    for (var i = 0; i < remindTasks.length; i++) {
+      if (/*remindTasks[i].date != strdate || */remindTasks[i].hide) {
+        remindTasks.splice(i,1);
+        i--;
+      } else if (remindTasks[i].repeat) {
+        if (remindTasks[i].repeat.end)
+          if (decodeDate(remindTasks[i].repeat.end).getTime()<decodeDate(strdate)) {
+            remindTasks.splice(i,1);
+            i--;
+          }
+        else {
+          switch (remindTasks[i].remind.whenremind) {
+            case "whendeadlineends":
+              remindTasks[i].remind.reminddate = remindTasks[i].date;
+              remindTasks[i].remind.remindtime = remindTasks[i].time;
+              remindTasks[i].remind.timeid = remindTasks[i].timeid;
+              break;
+            case "5minsbefore":
+              var time = remindTasks[i].timeid;
+              var d;
+              time -= 5*60*1000;
+              d = new Date(time);
+
+              remindTasks[i].remind.reminddate = encodeDate(d);
+              remindTasks[i].remind.remindtime = encodeTime(d);
+              remindTasks[i].remind.timeid = time;
+              break;
+            case "30minsbefore":
+              var time = remindTasks[i].timeid;
+              var d;
+              time -= 30*60*1000;
+              d = new Date(time);
+
+              remindTasks[i].remind.reminddate = encodeDate(d);
+              remindTasks[i].remind.remindtime = encodeTime(d);
+              remindTasks[i].remind.timeid = time;
+              break;
+            case "1hourbefore":
+              var time = remindTasks[i].timeid;
+              var d;
+              time -= 3600*1000;
+              d = new Date(time);
+
+              remindTasks[i].remind.reminddate = encodeDate(d);
+              remindTasks[i].remind.remindtime = encodeTime(d);
+              remindTasks[i].remind.timeid = time;
+              break;
+            case "1daybefore":
+              var time = remindTasks[i].timeid;
+              var d;
+              time -= 24*3600*1000;
+              d = new Date(time);
+
+              remindTasks[i].remind.reminddate = encodeDate(d);
+              remindTasks[i].remind.remindtime = encodeTime(d);
+              remindTasks[i].remind.timeid = time;
+              break;
+            case "1weekbefore":
+              var time = remindTasks[i].timeid;
+              var d;
+              time -= 7*24*3600*1000;
+              d = new Date(time);
+
+              remindTasks[i].remind.reminddate = encodeDate(d);
+              remindTasks[i].remind.remindtime = encodeTime(d);
+              remindTasks[i].remind.timeid = time;
+              break;
+          }
+
+          // get to original task
+          var index = schedule.content.tasks.findIndex(function(item) {
+            return item.id == remindTasks[i].id
+          });
+          var ogtask = schedule.content.tasks[index];
+          var task = schedule.content.tasks[index];
+
+          if (ogtask.path) 
+            if (ogtask.path.length) 
+              for (var step of ogtask.path)
+                task = task.exceptions[step];
+            
+          if (task.remind.timeid != remindTasks[i].remind.timeid) {
+            task.remind.reminddate = remindTasks[i].remind.reminddate;
+            task.remind.remindtime = remindTasks[i].remind.remindtime;
+            task.remind.timeid = remindTasks[i].remind.timeid;
           }
         }
       }
-    } while (a != b);
+    }
+
     return remindTasks.sort(function(a,b) {
       if (a.remind.timeid > b.remind.timeid) return 1
       else if (a.remind.timeid < b.remind.timeid) return -1
@@ -770,9 +897,16 @@ function Schedule(dir, content) {
   }
 
   this.updateTasks = function (newtasks) {
+    var now = new Date();
+    var nowtext = `${now.getDate()}.${now.getMonth()+1}.${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
     if (newtasks) this.content.tasks = newtasks;
     fs.writeFileSync(this.info.tasks.path, JSON.stringify(this.content));
-    console.log('saving new stuff');
+    console.log('saving new stuff: '+nowtext);
+    console.log('vvvvvvvvvvvvvvvvvv');
+    for (var task of this.content.tasks) 
+      console.log(task);
+    console.log('^^^^^^^^^^^^^^^^^^');
+    console.log(this.remindTasks);
 
     this.updateDeadlines();
   }
@@ -1026,7 +1160,7 @@ function renderTray(a, b) {
     var dc = Math.floor((d.getTime()-now.getTime())/(24*60*60*1000));
 
     remindertext += "\n    ";
-    if (dc==0) remindertext = `Przypomnienie o ${reminder.remind.remindtime}`;
+    if (dc==0) remindertext += `Przypomnienie o ${reminder.remind.remindtime}`;
     else if (dc==1) remindertext += `Przypomnienie jutro o ${reminder.remind.remindtime}`;
     else if (dc==2) remindertext += `Przypomnienie pojutrze o ${reminder.remind.remindtime}`;
     else if (dc<=7) remindertext += `Przypomnienie w tym tygodniu o ${reminder.remind.remindtime}`;

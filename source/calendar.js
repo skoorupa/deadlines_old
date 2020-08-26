@@ -269,38 +269,86 @@ function getDaySchedule(strdate) {
 				break;
 		}
 		if (
-			task.timeid != _task.timeid &&
-			task.date == strdate
-		) {
-			dayschedule.push(task);
-		}
+      task.timeid != _task.timeid &&
+      task.date == strdate
+    ) {
+      if (task.remind) {
+        switch (task.remind.whenremind) {
+          case "whendeadlineends":
+            task.remind.reminddate = task.date;
+            task.remind.remindtime = task.time;
+            task.remind.timeid = task.timeid;
+            break;
+          case "5minsbefore":
+            var time = task.timeid;
+            var d;
+            time -= 5*60*1000;
+            d = new Date(time);
+
+            task.remind.reminddate = encodeDate(d);
+            task.remind.remindtime = encodeTime(d);
+            task.remind.timeid = time;
+            break;
+          case "30minsbefore":
+            var time = task.timeid;
+            var d;
+            time -= 30*60*1000;
+            d = new Date(time);
+
+            task.remind.reminddate = encodeDate(d);
+            task.remind.remindtime = encodeTime(d);
+            task.remind.timeid = time;
+            break;
+          case "1hourbefore":
+            var time = task.timeid;
+            var d;
+            time -= 3600*1000;
+            d = new Date(time);
+
+            task.remind.reminddate = encodeDate(d);
+            task.remind.remindtime = encodeTime(d);
+            task.remind.timeid = time;
+            break;
+          case "1daybefore":
+            var time = task.timeid;
+            var d;
+            time -= 24*3600*1000;
+            d = new Date(time);
+
+            task.remind.reminddate = encodeDate(d);
+            task.remind.remindtime = encodeTime(d);
+            task.remind.timeid = time;
+            break;
+          case "1weekbefore":
+            var time = task.timeid;
+            var d;
+            time -= 7*24*3600*1000;
+            d = new Date(time);
+
+            task.remind.reminddate = encodeDate(d);
+            task.remind.remindtime = encodeTime(d);
+            task.remind.timeid = time;
+            break;
+        }
+      }
+
+      dayschedule.push(task);
+    }
 	}
 	// orderedList
 	dayschedule = dayschedule.concat(schedule.tasksByDate[strdate] || []);
 	if (dayschedule[0] == undefined || !dayschedule) return [];
 
 	//delete olddates
-	var a = 0;
-  var b = 0;
-  do {
-    a = Number(b);
-    for (task of dayschedule) {
+	dayschedule = dayschedule.filter(function(task,index) {
       if (task.exceptions) {
+        var response = true;
         for (exception in task.exceptions) {
-          if (task.exceptions[exception].olddate == task.date) {
-            var index;
-            b++;
-            // do {
-              index = dayschedule.findIndex(function(obj) {
-                return obj.id == task.id
-              });
-              dayschedule.splice(index,1);
-            // } while (index>=0);
-          }
+          if (task.exceptions[exception].date == task.date) response = false;
         }
-      }
-    }
-  } while (a != b);
+        return response;
+      } else return true
+    });
 	// deleting all misleading tasks
 	for (var i = 0; i < dayschedule.length; i++) {
 		if (dayschedule[i].date != strdate || dayschedule[i].hide) {
