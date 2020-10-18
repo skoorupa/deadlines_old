@@ -63,3 +63,13 @@ function updateSettings(settings_id) {
 	
 	ipc.send("updatesettings",settings_id, JSON.stringify(settings));
 }
+
+ipc.on("schedule", function (event, arg) {
+  schedule = JSON.parse(arg);
+  // upcomingdeadlines = JSON.parse(arg).upcomingDeadlines.tasks;
+  // dc = JSON.parse(arg).upcomingDeadlines.dc;
+  // days = JSON.parse(arg).upcomingDeadlines.days;
+  // schedule.orderedList = JSON.parse(arg).orderedList;
+
+  document.getElementById("schedule-file-data").innerHTML = JSON.stringify(schedule.orderedList);
+})
