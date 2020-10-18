@@ -916,16 +916,15 @@ function Schedule(dir, content) {
     if (newtasks) this.content.tasks = newtasks;
     fs.writeFileSync(this.info.tasks.path, JSON.stringify(this.content));
     console.log('saving new stuff: '+nowtext);
-    console.log('vvvvvvvvvvvvvvvvvv');
+    console.log('>>> all tasks:');
     for (var task of this.content.tasks) 
       console.log(task);
-    console.log('^^^^^^^^^^^^^^^^^^');
-    console.log(this.remindTasks);
 
     this.updateDeadlines();
   }
 
   this.addTask = function(task) {
+    console.log('>>> addTask:');
     console.log(task);
     task.id = 0;
     this.content.tasks.forEach(function(obj){
@@ -940,6 +939,7 @@ function Schedule(dir, content) {
   }
 
   this.deleteTask = function(task) {
+    console.log('>>> deleteTask:');
     console.log(task);
     var taskindex = this.content.tasks.findIndex(obj => {
       return obj.id == task.id
@@ -1007,6 +1007,7 @@ function Schedule(dir, content) {
   }
   
   this.editTask = function(task, repeatchoice) {
+    console.log('>>> editTask:');
     console.log(task);
     var taskindex = this.content.tasks.findIndex(obj => {
       return obj.id == task.id
@@ -1034,6 +1035,7 @@ function Schedule(dir, content) {
           break;
         case 1:
           // Tylko to zadanie (onetime)
+
           var exception = task; // edytowane zadanie
           var oldtask = this.content.tasks[taskindex]; // rodzic no.1
           exception.repeat = false; // no bo jest onetime - nie powtórzy się
@@ -1072,7 +1074,7 @@ function Schedule(dir, content) {
           oldtask.exceptions[exception.previousdate] = exception;
           break;
         default:
-          console.log('umm edit repeat')
+          console.log('repeattask edit - choice not found');
           break;
       }
     } else this.content.tasks[taskindex] = task; // jeżeli zadanie się nie powtarza
@@ -1399,8 +1401,8 @@ function refreshUpdater() {
   sendSchedule(mainwin);
   renderTray(schedule.upcomingDeadlines, schedule.remindTasks);
 
-      console.log('>>>>>>>>>><<<<<<<<<<<<<<<<')
-      console.log(schedule.remindTasks);
+  console.log('>>> remindTasks:')
+  console.log(schedule.remindTasks);
 }
 
 function alertme(win, context) {
