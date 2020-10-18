@@ -347,6 +347,14 @@ function encodeDate(date) {
   return date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate(); 
 }
 
+function encodeTime(date) {
+  var hour = date.getHours();
+  var minutes = date.getMinutes(); 
+  if (hour < 10) hour = "0"+hour;
+  if (minutes < 10)minutes = "0"+minutes;
+  return hour+":"+minutes;
+}
+
 function decodeDate(s) {
   var strdate = s.split("-");
   if (strdate[1]) strdate[1]--;
@@ -787,11 +795,12 @@ function Schedule(dir, content) {
         remindTasks.splice(i,1);
         i--;
       } else if (remindTasks[i].repeat) {
-        if (remindTasks[i].repeat.end)
+        if (remindTasks[i].repeat.end) {
           if (decodeDate(remindTasks[i].repeat.end).getTime()<decodeDate(strdate)) {
             remindTasks.splice(i,1);
             i--;
           }
+        }
         else {
           switch (remindTasks[i].remind.whenremind) {
             case "whendeadlineends":
@@ -1384,6 +1393,9 @@ function refreshUpdater() {
   schedule = new Schedule(schedulelist[0], schedule.content);
   sendSchedule(mainwin);
   renderTray(schedule.upcomingDeadlines, schedule.remindTasks);
+
+      console.log('>>>>>>>>>><<<<<<<<<<<<<<<<')
+      console.log(schedule.remindTasks);
 }
 
 function alertme(win, context) {
