@@ -881,6 +881,11 @@ function Schedule(dir, content) {
       }
     }
 
+    var now = new Date();
+    remindTasks = remindTasks.filter(function(task) {
+      return task.remind.timeid >= now.getTime();
+    });
+
     return remindTasks.sort(function(a,b) {
       if (a.remind.timeid > b.remind.timeid) return 1
       else if (a.remind.timeid < b.remind.timeid) return -1
