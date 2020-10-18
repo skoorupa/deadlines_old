@@ -1045,10 +1045,18 @@ function Schedule(dir, content) {
           for (var i=0; i<exception.path.length;i++) 
             oldtask = oldtask.exceptions[exception.path[i]]; // oldtask to teraz zadanie, do którego doczepiamy wyjątek
 
-          exception.path.push(exception.previousdate); 
+          if (oldtask.repeat) {
+            exception.path.push(exception.previousdate); 
 
-          oldtask.exceptions = oldtask.exceptions || {};
-          oldtask.exceptions[exception.previousdate] = exception;
+            oldtask.exceptions = oldtask.exceptions || {};
+            oldtask.exceptions[exception.previousdate] = exception;
+          } else {
+            var oldtask = this.content.tasks[taskindex]; // rodzic no.1
+            var i;
+            for (i=1; i<exception.path.length;i++) 
+              oldtask = oldtask.exceptions[exception.path[i-1]]; // oldtask to teraz zadanie, do którego doczepiamy wyjątek + trzeba skipnąć jeden krok
+            oldtask.exceptions[exception.path[i-1]] = exception; 
+          }
           break;
         case 2:
           // To zadanie i wszystkie późniejsze
