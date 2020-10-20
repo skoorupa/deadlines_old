@@ -447,7 +447,7 @@ function Schedule(dir, content) {
     return task.repeat;
   });
 
-  this.getDaySchedule = function (strdate) {
+  this.getDaySchedule = function (strdate, norepeat) {
     // repetitiveTasks
     var date = decodeDate(strdate);
     var dayschedule = this.repetitiveTasks.concat([]);
@@ -463,165 +463,167 @@ function Schedule(dir, content) {
     }
 
     // extend repetitive tasks
-    for (var i = 0; i < dayschedule.length; i++) {
-      var _task = dayschedule[i];
-      var task = JSON.parse(JSON.stringify(_task));
-      if (!task.repeat) continue;
-      var began = decodeDate(task.repeat.began);
-      var end;
-      
-      if (began.getTime()>date.getTime()) continue;
-      if (task.repeat.end) {
-        end = decodeDate(task.repeat.end);
-        if (end.getTime()<date.getTime()) continue;
-      }
-
-      // if (schedule.tasksByDate[strdate])
-      //  if (schedule.tasksByDate[strdate].findIndex(function(obj) {
-      //    return obj.id == task.id
-      //  }) >= 0) break;
-
-      switch (task.repeat.unit) {
-        case "days":
-          var begandays = (date.getTime()-began.getTime())/86400000;
-          if (begandays%task.repeat.amount==0) {
-            var time = new Date(task.timeid);
-            time.setFullYear(
-              began.getFullYear(),
-              began.getMonth(),
-              began.getDate()+begandays
-            );
-            task.timeid = time.getTime();
-            task.date = encodeDate(time);
-          }
-        break;
-        case "weeks":
-          var beganweeks = (date.getTime()-began.getTime())/(86400000*7);
-          if (beganweeks%task.repeat.amount==0) {
-            var time = new Date(task.timeid);
-            time.setFullYear(
-              began.getFullYear(),
-              began.getMonth(),
-              began.getDate()+beganweeks*7
-            );
-            task.timeid = time.getTime();
-            task.date = encodeDate(time);
-          }
-        break;
-        case "months":
-          var beganmonths = (date.getFullYear()-began.getFullYear())*12+(date.getMonth()-began.getMonth());
-          
-          if (beganmonths%task.repeat.amount==0) {
-            if (
-              date.getDate() != began.getDate() && 
-              task.repeat.type == "sameday"
-            ) break;
-            var time = new Date(task.timeid);
-            time.setFullYear(
-              began.getFullYear(),
-              began.getMonth()+beganmonths,
-              began.getDate()
-            );
-            if (task.repeat.type == "sameweekday") {
-              time.setDate(1);
-              while (time.getDay()!=began.getDay()) {
-                time.setDate(time.getDate()+1);
-              }
-              time.setDate(time.getDate()+7*(getWhichWeekDay(began)-1));
-              if (
-                began.getDay() != date.getDay() ||
-                getWhichWeekDay(began) != getWhichWeekDay(date)
-              ) break;
-            }
-            task.timeid = time.getTime();
-            task.date = encodeDate(time);
-          }
-        break;
-        case "years":
-          var beganyears = date.getFullYear()-began.getFullYear();
-          if (
-            beganyears%task.repeat.amount==0 &&
-            date.getMonth() == began.getMonth() && 
-            date.getDate() == began.getDate()
-          ) {
-            var time = new Date(task.timeid);
-            time.setFullYear(
-              began.getFullYear()+beganyears,
-              began.getMonth(),
-              began.getDate()
-            );
-            task.timeid = time.getTime();
-            task.date = encodeDate(time);
-          }
-          break;
-      }
-      if (
-        task.timeid != _task.timeid &&
-        task.date == strdate
-      ) {
-        if (task.remind) {
-          switch (task.remind.whenremind) {
-            case "whendeadlineends":
-              task.remind.reminddate = task.date;
-              task.remind.remindtime = task.time;
-              task.remind.timeid = task.timeid;
-              break;
-            case "5minsbefore":
-              var time = task.timeid;
-              var d;
-              time -= 5*60*1000;
-              d = new Date(time);
-
-              task.remind.reminddate = encodeDate(d);
-              task.remind.remindtime = encodeTime(d);
-              task.remind.timeid = time;
-              break;
-            case "30minsbefore":
-              var time = task.timeid;
-              var d;
-              time -= 30*60*1000;
-              d = new Date(time);
-
-              task.remind.reminddate = encodeDate(d);
-              task.remind.remindtime = encodeTime(d);
-              task.remind.timeid = time;
-              break;
-            case "1hourbefore":
-              var time = task.timeid;
-              var d;
-              time -= 3600*1000;
-              d = new Date(time);
-
-              task.remind.reminddate = encodeDate(d);
-              task.remind.remindtime = encodeTime(d);
-              task.remind.timeid = time;
-              break;
-            case "1daybefore":
-              var time = task.timeid;
-              var d;
-              time -= 24*3600*1000;
-              d = new Date(time);
-
-              task.remind.reminddate = encodeDate(d);
-              task.remind.remindtime = encodeTime(d);
-              task.remind.timeid = time;
-              break;
-            case "1weekbefore":
-              var time = task.timeid;
-              var d;
-              time -= 7*24*3600*1000;
-              d = new Date(time);
-
-              task.remind.reminddate = encodeDate(d);
-              task.remind.remindtime = encodeTime(d);
-              task.remind.timeid = time;
-              break;
-          }
+    if (!norepeat)
+      for (var i = 0; i < dayschedule.length; i++) {
+        var _task = dayschedule[i];
+        var task = JSON.parse(JSON.stringify(_task));
+        if (!task.repeat) continue;
+        var began = decodeDate(task.repeat.began);
+        var end;
+        
+        if (began.getTime()>date.getTime()) continue;
+        if (task.repeat.end) {
+          end = decodeDate(task.repeat.end);
+          if (end.getTime()<date.getTime()) continue;
         }
 
-        dayschedule.push(task);
+        // if (schedule.tasksByDate[strdate])
+        //  if (schedule.tasksByDate[strdate].findIndex(function(obj) {
+        //    return obj.id == task.id
+        //  }) >= 0) break;
+
+        switch (task.repeat.unit) {
+          case "days":
+            var begandays = (date.getTime()-began.getTime())/86400000;
+            if (begandays%task.repeat.amount==0) {
+              var time = new Date(task.timeid);
+              time.setFullYear(
+                began.getFullYear(),
+                began.getMonth(),
+                began.getDate()+begandays
+              );
+              task.timeid = time.getTime();
+              task.date = encodeDate(time);
+            }
+          break;
+          case "weeks":
+            var beganweeks = (date.getTime()-began.getTime())/(86400000*7);
+            if (beganweeks%task.repeat.amount==0) {
+              var time = new Date(task.timeid);
+              time.setFullYear(
+                began.getFullYear(),
+                began.getMonth(),
+                began.getDate()+beganweeks*7
+              );
+              task.timeid = time.getTime();
+              task.date = encodeDate(time);
+            }
+          break;
+          case "months":
+            var beganmonths = (date.getFullYear()-began.getFullYear())*12+(date.getMonth()-began.getMonth());
+            
+            if (beganmonths%task.repeat.amount==0) {
+              if (
+                date.getDate() != began.getDate() && 
+                task.repeat.type == "sameday"
+              ) break;
+              var time = new Date(task.timeid);
+              time.setFullYear(
+                began.getFullYear(),
+                began.getMonth()+beganmonths,
+                began.getDate()
+              );
+              if (task.repeat.type == "sameweekday") {
+                time.setDate(1);
+                while (time.getDay()!=began.getDay()) {
+                  time.setDate(time.getDate()+1);
+                }
+                time.setDate(time.getDate()+7*(getWhichWeekDay(began)-1));
+                if (
+                  began.getDay() != date.getDay() ||
+                  getWhichWeekDay(began) != getWhichWeekDay(date)
+                ) break;
+              }
+              task.timeid = time.getTime();
+              task.date = encodeDate(time);
+            }
+          break;
+          case "years":
+            var beganyears = date.getFullYear()-began.getFullYear();
+            if (
+              beganyears%task.repeat.amount==0 &&
+              date.getMonth() == began.getMonth() && 
+              date.getDate() == began.getDate()
+            ) {
+              var time = new Date(task.timeid);
+              time.setFullYear(
+                began.getFullYear()+beganyears,
+                began.getMonth(),
+                began.getDate()
+              );
+              task.timeid = time.getTime();
+              task.date = encodeDate(time);
+            }
+            break;
+        }
+
+        if (
+          task.timeid != _task.timeid &&
+          task.date == strdate
+        ) {
+          if (task.remind) {
+            switch (task.remind.whenremind) {
+              case "whendeadlineends":
+                task.remind.reminddate = task.date;
+                task.remind.remindtime = task.time;
+                task.remind.timeid = task.timeid;
+                break;
+              case "5minsbefore":
+                var time = task.timeid;
+                var d;
+                time -= 5*60*1000;
+                d = new Date(time);
+
+                task.remind.reminddate = encodeDate(d);
+                task.remind.remindtime = encodeTime(d);
+                task.remind.timeid = time;
+                break;
+              case "30minsbefore":
+                var time = task.timeid;
+                var d;
+                time -= 30*60*1000;
+                d = new Date(time);
+
+                task.remind.reminddate = encodeDate(d);
+                task.remind.remindtime = encodeTime(d);
+                task.remind.timeid = time;
+                break;
+              case "1hourbefore":
+                var time = task.timeid;
+                var d;
+                time -= 3600*1000;
+                d = new Date(time);
+
+                task.remind.reminddate = encodeDate(d);
+                task.remind.remindtime = encodeTime(d);
+                task.remind.timeid = time;
+                break;
+              case "1daybefore":
+                var time = task.timeid;
+                var d;
+                time -= 24*3600*1000;
+                d = new Date(time);
+
+                task.remind.reminddate = encodeDate(d);
+                task.remind.remindtime = encodeTime(d);
+                task.remind.timeid = time;
+                break;
+              case "1weekbefore":
+                var time = task.timeid;
+                var d;
+                time -= 7*24*3600*1000;
+                d = new Date(time);
+
+                task.remind.reminddate = encodeDate(d);
+                task.remind.remindtime = encodeTime(d);
+                task.remind.timeid = time;
+                break;
+            }
+          }
+
+          dayschedule.push(task);
+        }
       }
-    }
     // orderedList
     dayschedule = dayschedule.concat(this.tasksByDate[strdate] || []);
     if (dayschedule[0] == undefined || !dayschedule) return [];
@@ -770,7 +772,7 @@ function Schedule(dir, content) {
       var day = new Date();
       day.setDate(today.getDate()+i);
 
-      var dayschedule = this.getDaySchedule(encodeDate(day));
+      var dayschedule = this.getDaySchedule(encodeDate(day), true);
       if (dayschedule)
         upcomingdeadlines = upcomingdeadlines.concat(dayschedule);
     }
