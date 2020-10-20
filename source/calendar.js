@@ -341,14 +341,14 @@ function getDaySchedule(strdate) {
 
 	//delete olddates
 	dayschedule = dayschedule.filter(function(task,index) {
-      if (task.exceptions) {
-        var response = true;
-        for (exception in task.exceptions) {
-          if (task.exceptions[exception].date == task.date) response = false;
-        }
-        return response;
-      } else return true
-    });
+    if (task.exceptions) {
+      var response = true;
+      for (exception in task.exceptions) {
+        if (task.exceptions[exception].date == task.date) response = false;
+      }
+      return response;
+    } else return true
+  });
 	// deleting all misleading tasks
 	for (var i = 0; i < dayschedule.length; i++) {
 		if (dayschedule[i].date != strdate || dayschedule[i].hide) {
