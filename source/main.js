@@ -368,6 +368,63 @@ function decodeTime(s,date) {
   return time;
 }
 
+function getNextTaskDate(_task, force){
+  var task = JSON.parse(JSON.stringify(_task));;
+  var today = new Date();
+  if (force) today = new Date(task.timeid+1);
+  while (
+    task.timeid < today.getTime()
+  ) {
+    // console.log(task.title);
+    switch (task.repeat.unit) {
+      case "days":
+        var time = new Date(task.timeid);
+        time.setDate(time.getDate()+task.repeat.amount);
+        task.timeid = time.getTime();
+        task.date = encodeDate(time);
+        break;
+      case "weeks":
+        var time = new Date(task.timeid);
+        time.setDate(time.getDate()+task.repeat.amount*7);
+        task.timeid = time.getTime();
+        task.date = encodeDate(time);
+        break;
+      case "months":
+        var time = new Date(task.timeid);
+        if (task.repeat.type == "sameday") {
+          time.setMonth(time.getMonth()+task.repeat.amount);
+        } else if (task.repeat.type == "sameweekday") {
+          var weekday = time.getDay(); // dzień tygodnia
+          var nweekday = 0; // który dzień tygodnia
+          var nd = new Date(time.getTime());
+          while (time.getMonth()==nd.getMonth()) {
+            nweekday++;
+            nd.setDate(nd.getDate()-7);
+          }
+          time.setMonth(time.getMonth()+task.repeat.amount);
+          time.setDate(1);
+          while (time.getDay()!=weekday) {
+            time.setDate(time.getDate()+1);
+          }
+          time.setDate(time.getDate()+7*(nweekday-1));
+        }
+        task.timeid = time.getTime();
+        task.date = encodeDate(time);
+        break;
+      case "years":
+        var time = new Date(task.timeid);
+        time.setFullYear(time.getFullYear()+task.repeat.amount);
+        task.timeid = time.getTime();
+        task.date = encodeDate(time);
+        break;
+      default:
+        loginfo("????? coś nie tak z "+task.id+", "+task.repeat.unit);
+    }
+  }
+
+  return task;
+}
+
 function Schedule(dir, content) {
   this.date = new Date();
   this.info = {};
@@ -595,9 +652,11 @@ function Schedule(dir, content) {
 
     return (dayschedule || []);
   }
-
+  
   this.orderedList = (function (schedule) {
     var today = new Date();
+    var orderedList = JSON.parse(JSON.stringify(schedule.content.tasks));
+
     for (var i = 0; i < schedule.repetitiveTasks.length; i++) {
       if (
           schedule.repetitiveTasks[i].checked <= schedule.repetitiveTasks[i].timeid &&
@@ -605,59 +664,12 @@ function Schedule(dir, content) {
       ) {
         schedule.repetitiveTasks[i].checked = false;
         var repeat = schedule.repetitiveTasks[i].repeat;
-
-        while (
-          schedule.repetitiveTasks[i].timeid < today.getTime()
-        ) {
-          switch (repeat.unit) {
-            case "days":
-              var time = new Date(schedule.repetitiveTasks[i].timeid);
-              time.setDate(time.getDate()+repeat.amount);
-              schedule.repetitiveTasks[i].timeid = time.getTime();
-              schedule.repetitiveTasks[i].date = encodeDate(time);
-              break;
-            case "weeks":
-              var time = new Date(schedule.repetitiveTasks[i].timeid);
-              time.setDate(time.getDate()+repeat.amount*7);
-              schedule.repetitiveTasks[i].timeid = time.getTime();
-              schedule.repetitiveTasks[i].date = encodeDate(time);
-              break;
-            case "months":
-              var time = new Date(schedule.repetitiveTasks[i].timeid);
-              if (repeat.type == "sameday") {
-                time.setMonth(time.getMonth()+repeat.amount);
-              } else if (repeat.type == "sameweekday") {
-                var weekday = time.getDay(); // dzień tygodnia
-                var nweekday = 0; // który dzień tygodnia
-                var nd = new Date(time.getTime());
-                while (time.getMonth()==nd.getMonth()) {
-                  nweekday++;
-                  nd.setDate(nd.getDate()-7);
-                }
-                time.setMonth(time.getMonth()+repeat.amount);
-                time.setDate(1);
-                while (time.getDay()!=weekday) {
-                  time.setDate(time.getDate()+1);
-                }
-                time.setDate(time.getDate()+7*(nweekday-1));
-              }
-              schedule.repetitiveTasks[i].timeid = time.getTime();
-              schedule.repetitiveTasks[i].date = encodeDate(time);
-              break;
-            case "years":
-              var time = new Date(schedule.repetitiveTasks[i].timeid);
-              time.setFullYear(time.getFullYear()+repeat.amount);
-              schedule.repetitiveTasks[i].timeid = time.getTime();
-              schedule.repetitiveTasks[i].date = encodeDate(time);
-              break;
-            default:
-              loginfo("????? coś nie tak z "+schedule.repetitiveTasks[i].id+", "+repeat.unit);
-          }
-        }
-
-        var index = schedule.content.tasks.findIndex((obj) => {
+        schedule.repetitiveTasks[i] = getNextTaskDate(schedule.repetitiveTasks[i]);
+        console.log(getNextTaskDate(schedule.repetitiveTasks[i]).date);
+        var index = orderedList.findIndex((obj) => {
           return obj.id == schedule.repetitiveTasks[i].id;
         });
+
         if (schedule.repetitiveTasks[i].exceptions) {
           for (exception in schedule.repetitiveTasks[i].exceptions) {
             if (schedule.repetitiveTasks[i].date == exception.olddate) {
@@ -667,12 +679,66 @@ function Schedule(dir, content) {
           }
         }
 
-        if (!schedule.repetitiveTasks[i].exception) 
-          schedule.content.tasks[index] = schedule.repetitiveTasks[i];
+        if (!schedule.repetitiveTasks[i].isException) 
+          orderedList[index] = schedule.repetitiveTasks[i];
       }
     }
 
-    return schedule.content.tasks.sort(function(a,b) {
+    // orderedList = orderedList.filter(function(task,index) {
+    //   if (task.exceptions) {
+    //     var response = true;
+    //     for (exception in task.exceptions) {
+    //       if (task.exceptions[exception].date == task.date) {
+    //         response = false;
+    //         orderedList.push(getNextTaskDate(task, true));
+    //       }
+    //     }
+    //     return response;
+    //   } else return true
+    // });
+
+    // for (i in orderedList) {
+    //   if (orderedList[i].exceptions) {
+    //     for (exception in orderedList[i].exceptions) {
+    //       if (orderedList[i].exceptions[exception].date == orderedList[i].date) {
+    //         if (orderedList[i].exceptions[exception].hide) {
+    //           orderedList.push(getNextTaskDate(orderedList[i], true));
+    //           // console.log(orderedList);
+    //         } else {
+    //           orderedList.push(orderedList[i].exceptions[exception]);
+    //         }
+    //         orderedList.splice(i,1);
+    //       }
+    //     }
+    //   }
+    // }
+
+    return orderedList.sort(function(a,b) {
+      if (a.timeid > b.timeid) return 1
+      else if (a.timeid < b.timeid) return -1
+      else return 0
+    });
+  })(this);
+
+  this.showTasks = (function(schedule){
+    var showTasks = JSON.parse(JSON.stringify(schedule.orderedList));
+    for (i in showTasks) {
+      if (showTasks[i].exceptions) {
+        for (exception in showTasks[i].exceptions) {
+          if (showTasks[i].exceptions[exception].date == showTasks[i].date) {
+            if (showTasks[i].exceptions[exception].hide) {
+              showTasks.push(getNextTaskDate(showTasks[i], true));
+              // console.log(showTasks);
+            } else {
+              showTasks.push(showTasks[i].exceptions[exception]);
+            }
+            showTasks.splice(i,1);
+          }
+        }
+      }
+    }
+
+    return showTasks.sort(function(a,b) {
       if (a.timeid > b.timeid) return 1
       else if (a.timeid < b.timeid) return -1
       else return 0
@@ -950,11 +1016,11 @@ function Schedule(dir, content) {
       var answer = dialog.showMessageBoxSync(mainwin, {
         type:"question", 
         title:"Zadanie cykliczne",
-        message: "Wybierz, które zadania chcesz usunąć",
+        message: "Wybierz, które zadania chcesz usunąć:",
         buttons: [
           "Wszystkie zadania",
-          "Tylko to zadanie",
-          "To zadanie i wszystkie późniejsze"
+          "Tylko to zadanie\nn(tylko data "+task.date+")",
+          "To zadanie i wszystkie późniejsze\n(od "+task.date+" do końca)"
         ]
       });
       switch (answer) {
@@ -1020,11 +1086,11 @@ function Schedule(dir, content) {
       else answer = dialog.showMessageBoxSync(mainwin, {
         type:"question", 
         title:"Zadanie cykliczne",
-        message: "Wybierz, które zadania chcesz edytować",
+        message: "Wybierz, które zadania chcesz edytować:",
         buttons: [
           "Wszystkie zadania",
-          "Tylko to zadanie",
-          "To zadanie i wszystkie późniejsze"
+          "Tylko to zadanie\n(tylko data "+task.date+")",
+          "To zadanie i wszystkie późniejsze\nn(od "+task.date+" do końca)"
         ]
       });
       switch (answer) {

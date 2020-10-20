@@ -39,7 +39,8 @@ ipc.on("schedule", function (event, arg) {
       schedule.upcomingDeadlines.tasks, 
       schedule.upcomingDeadlines.dc,
       schedule.upcomingDeadlines.days, 
-      schedule.orderedList, 
+      // schedule.orderedList, 
+      schedule.showTasks, 
       schedule.otherTasks,
       schedule.remindTasks
     );
