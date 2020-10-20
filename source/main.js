@@ -1019,7 +1019,7 @@ function Schedule(dir, content) {
         message: "Wybierz, które zadania chcesz usunąć:",
         buttons: [
           "Wszystkie zadania",
-          "Tylko to zadanie\nn(tylko data "+task.date+")",
+          "Tylko to zadanie\n(tylko data "+task.date+")",
           "To zadanie i wszystkie późniejsze\n(od "+task.date+" do końca)"
         ]
       });
@@ -1090,7 +1090,7 @@ function Schedule(dir, content) {
         buttons: [
           "Wszystkie zadania",
           "Tylko to zadanie\n(tylko data "+task.date+")",
-          "To zadanie i wszystkie późniejsze\nn(od "+task.date+" do końca)"
+          "To zadanie i wszystkie późniejsze\n(od "+task.date+" do końca)"
         ]
       });
       switch (answer) {
