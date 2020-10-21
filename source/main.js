@@ -422,6 +422,66 @@ function getNextTaskDate(_task, force){
     }
   }
 
+  if (task.remind) {
+    switch (task.remind.whenremind) {
+      case "whendeadlineends":
+        task.remind.reminddate = task.date;
+        task.remind.remindtime = task.time;
+        task.remind.timeid = task.timeid;
+        break;
+      case "5minsbefore":
+        var time = task.timeid;
+        var d;
+        time -= 5*60*1000;
+        d = new Date(time);
+
+        task.remind.reminddate = encodeDate(d);
+        task.remind.remindtime = encodeTime(d);
+        task.remind.timeid = time;
+        break;
+      case "30minsbefore":
+        var time = task.timeid;
+        var d;
+        time -= 30*60*1000;
+        d = new Date(time);
+
+        task.remind.reminddate = encodeDate(d);
+        task.remind.remindtime = encodeTime(d);
+        task.remind.timeid = time;
+        break;
+      case "1hourbefore":
+        var time = task.timeid;
+        var d;
+        time -= 3600*1000;
+        d = new Date(time);
+
+        task.remind.reminddate = encodeDate(d);
+        task.remind.remindtime = encodeTime(d);
+        task.remind.timeid = time;
+        break;
+      case "1daybefore":
+        var time = task.timeid;
+        var d;
+        time -= 24*3600*1000;
+        d = new Date(time);
+
+        task.remind.reminddate = encodeDate(d);
+        task.remind.remindtime = encodeTime(d);
+        task.remind.timeid = time;
+        break;
+      case "1weekbefore":
+        var time = task.timeid;
+        var d;
+        time -= 7*24*3600*1000;
+        d = new Date(time);
+
+        task.remind.reminddate = encodeDate(d);
+        task.remind.remindtime = encodeTime(d);
+        task.remind.timeid = time;
+        break;
+    }
+  }
+
   return task;
 }
 
