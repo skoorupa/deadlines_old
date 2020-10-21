@@ -1159,6 +1159,7 @@ function Schedule(dir, content) {
         case 0:
           // Wszystkie zadania
           task.path = [];
+          task.repeat.began = task.date;
           this.content.tasks[taskindex] = task;
           break;
         case 1:
