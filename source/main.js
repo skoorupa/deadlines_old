@@ -837,18 +837,25 @@ function Schedule(dir, content) {
         upcomingdeadlines = upcomingdeadlines.concat(dayschedule);
     }
 
-    return upcomingdeadlines;
+    return upcomingdeadlines.filter(function(task) {
+      // console.log(encodeDate(task.timeid))
+      if (task.timeid < today.getTime()) return false;
+      else return true;
+    });
   }
 
   this.updateDeadlines = function() {
     var days = 1;
     var upcomingdeadlines;
+    var today = new Date();
 
     var ds = [0,1,2,7,14,21,30];
     for (var i = 0; i < ds.length; i++) {
       days = ds[i];
       upcomingdeadlines = this.getUpcomingDeadlines(days);
-      if (upcomingdeadlines.length) break;
+      if (
+        upcomingdeadlines.length
+      ) break;
     }
 
     var deadlinescount = upcomingdeadlines.length;
