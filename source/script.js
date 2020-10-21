@@ -1,4 +1,5 @@
 var deadlinesbar = document.getElementById("deadlinesbar");
+var oldtasksbar = document.getElementById("oldtasksbar");
 var deadlinescounter = document.getElementById("deadlinescounter");
 var deadlinesdescription = document.getElementById("deadlinesdescription");
 var deadlineslist = document.getElementById("deadlineslist");
@@ -8,6 +9,9 @@ var remindersbar = document.getElementById("remindersbar");
 deadlinesbar.getElementsByClassName("description")[0].style.display = "block";
 deadlinesbar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
 deadlinesbar.parentNode.getElementsByClassName("list")[0].style.display = "none";
+// oldtasksbar.getElementsByClassName("description")[0].style.display = "block";
+oldtasksbar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
+oldtasksbar.parentNode.getElementsByClassName("list")[0].style.display = "none";
 
 document.getElementById("version").innerHTML =  remote.app.getVersion();
 
@@ -15,12 +19,14 @@ todayBar();
 setInterval(todayBar, 1000);
 
 function toggleOverviewList(bar) {
-  if (bar.getElementsByClassName("description")[0].style.display=="block"){
-    bar.getElementsByClassName("description")[0].style.display = "none";
+  if (bar.getElementsByClassName("dropdown")[0].innerHTML == "∧"){
+    if (bar.getElementsByClassName("description").length)
+      bar.getElementsByClassName("description")[0].style.display = "none";
     bar.getElementsByClassName("dropdown")[0].innerHTML = "∨";
     bar.parentNode.getElementsByClassName("list")[0].style.display = "block";
   } else {
-    bar.getElementsByClassName("description")[0].style.display = "block";
+    if (bar.getElementsByClassName("description").length)
+      bar.getElementsByClassName("description")[0].style.display = "block";
     bar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
     bar.parentNode.getElementsByClassName("list")[0].style.display = "none";
   }

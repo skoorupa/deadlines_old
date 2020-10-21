@@ -21,6 +21,21 @@
 		<span class="right" id="date"><!-- wtorek, 17 listopada --></span>
 	</div>
 	<div id="overview">
+		<div id="oldtasks">
+			<div class="mini clickable bar" id="oldtasksbar" onclick="toggleOverviewList(this)">
+				<div class="icon left">💥</div>
+				<div class="context left">
+					<div class="clickable underline">
+						Masz pominięte zadania
+					</div>
+					<!-- <div class="description wordwrap"></div> -->
+				</div>
+				<div class="dropdown icon right">∧</div>
+			</div>
+			<div class="list" id="oldtaskslist">
+				<!-- <ul><li><input type="checkbox"><label>polski</label></li></ul> -->
+			</div>
+		</div>
 		<div id="deadline">
 			<div class="big clickable bar" id="deadlinesbar" onclick="toggleOverviewList(this)">
 				<div class="icon left">⏳</div>
@@ -30,7 +45,7 @@
 					</div>
 					<div class="description wordwrap" id="deadlinesdescription"></div>
 				</div>
-				<div class="dropdown icon right">^</div>
+				<div class="dropdown icon right">∧</div>
 			</div>
 			<div class="list" id="deadlineslist">
 				<!-- <ul><li><input type="checkbox"><label>polski</label></li></ul> -->

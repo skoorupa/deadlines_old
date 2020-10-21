@@ -90,7 +90,7 @@ body:after {
 	font-size: 13px;
 	min-height: 16px;
 	display: flex;
-	padding: 3px 3px 0px;
+	padding: 3px;
 }
 
 .small {
@@ -171,6 +171,8 @@ input[type="checkbox"]:checked + label {
 	/* margin: 0px 10px; */
 	width: 70%;
 	display: block;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 .description {
@@ -183,6 +185,8 @@ input[type="checkbox"]:checked + label {
 	text-align: center;
 	font-size: 17px;
 	cursor: default;
+	margin-top: auto;
+	margin-bottom: auto;
 }
 
 /* **********forms********** */
