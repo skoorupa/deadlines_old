@@ -822,8 +822,8 @@ function Schedule(dir, content) {
     return dates;
   })(this);
 
-  this.oldTasks = this.content.tasks.filter(obj => {
-    return obj.timeid < this.date.getTime();
+  this.missedTasks = this.content.tasks.filter(obj => {
+    return obj.timeid < this.date.getTime() && !obj.checked;
   });
 
   this.getUpcomingDeadlines = function (days) {
@@ -901,9 +901,7 @@ function Schedule(dir, content) {
     });
   })(this);
 
-  // this.remindTasks = this.content.tasks.filter(task => {
-  //   return task.remind;
-  // });
+  
 
   this.remindTasks = (function(schedule){
     var remindTasks = [];

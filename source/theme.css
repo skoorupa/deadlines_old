@@ -13,7 +13,7 @@ html, body,
 	background-color: #757575;
 }
 
-#oldtasksbar {
+#missedtasksbar {
 	background-color: #942D2D;
 }
 
@@ -29,7 +29,7 @@ html, body,
 }
 
 #deadlineslist,
-#oldtaskslist,
+#missedtaskslist,
 .reminderlist {
 	background-color: #616161;
 	color:white;

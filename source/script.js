@@ -1,25 +1,26 @@
 var deadlinesbar = document.getElementById("deadlinesbar");
-var oldtasksbar = document.getElementById("oldtasksbar");
 var deadlinescounter = document.getElementById("deadlinescounter");
 var deadlinesdescription = document.getElementById("deadlinesdescription");
 var deadlineslist = document.getElementById("deadlineslist");
+var missedtasksbar = document.getElementById("missedtasksbar");
+var missedtaskslist = document.getElementById("missedtaskslist");
 var othertaskslist = document.getElementById("othertasks");
 var remindersbar = document.getElementById("remindersbar");
 
 deadlinesbar.getElementsByClassName("description")[0].style.display = "block";
 deadlinesbar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
 deadlinesbar.parentNode.getElementsByClassName("list")[0].style.display = "none";
-// oldtasksbar.getElementsByClassName("description")[0].style.display = "block";
-oldtasksbar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
-oldtasksbar.parentNode.getElementsByClassName("list")[0].style.display = "none";
+// missedtasksbar.getElementsByClassName("description")[0].style.display = "block";
+missedtasksbar.getElementsByClassName("dropdown")[0].innerHTML = "∧";
+missedtasksbar.parentNode.getElementsByClassName("list")[0].style.display = "none";
 
 document.getElementById("version").innerHTML =  remote.app.getVersion();
 
 todayBar();
 setInterval(todayBar, 1000);
 
-function toggleOverviewList(bar) {
-  if (bar.getElementsByClassName("dropdown")[0].innerHTML == "∧"){
+function toggleOverviewList(bar, choice) {
+  if ((bar.getElementsByClassName("dropdown")[0].innerHTML == "∧" || choice=="show") && choice!="close"){
     if (bar.getElementsByClassName("description").length)
       bar.getElementsByClassName("description")[0].style.display = "none";
     bar.getElementsByClassName("dropdown")[0].innerHTML = "∨";
@@ -45,6 +46,7 @@ ipc.on("schedule", function (event, arg) {
       schedule.upcomingDeadlines.tasks, 
       schedule.upcomingDeadlines.dc,
       schedule.upcomingDeadlines.days, 
+      schedule.missedTasks,
       // schedule.orderedList, 
       schedule.showTasks, 
       schedule.otherTasks,
@@ -53,12 +55,81 @@ ipc.on("schedule", function (event, arg) {
   }
 })
 
-function update(_deadlines, dc, days, _tasks, otherTasks, remindTasks) {
+function update(_deadlines, dc, days, missedTasks, _tasks, otherTasks, remindTasks) {
   var deadlines = JSON.parse(JSON.stringify(_deadlines));
   var tasks = JSON.parse(JSON.stringify(_tasks));
 
+  missedtaskslist.innerHTML = "";
   deadlineslist.innerHTML = "";
   othertaskslist.innerHTML = "";
+
+  if (missedTasks.length) {
+    missedtasksbar.style.display = 'flex';
+  } else {
+    missedtasksbar.style.display = 'none';
+    toggleOverviewList(missedtasksbar,"close");
+  }
+
+  function createListOfTasks(tasks) {
+    var list = document.createElement("ul");
+    for (var z = 0; z < tasks.length; z++) {
+      (function(z) {
+        var id = z;
+        var task = tasks[id];
+        var listitem = document.createElement("li");
+        var checkbox = document.createElement("input");
+        checkbox.setAttribute("type","checkbox");
+        checkbox.addEventListener('click', function(e) {
+          var newdeadline = JSON.parse(JSON.stringify(task));
+          newdeadline.checked = this.checked;
+          // updateTask(schedule.orderedList, task, newdeadline);
+          updateTask(schedule.content.tasks, task, newdeadline);
+        });
+        if (task.checked)
+          checkbox.setAttribute("checked","checked");
+        listitem.appendChild(checkbox);
+        var label = document.createElement("label");
+        label.innerHTML = task.title;
+        label.classList.add("clickable");
+        label.classList.add("underline");
+        label.classList.add("wordwrap");
+        label.addEventListener('click', function(e) {
+          showForm('show', task);
+        });
+        label.addEventListener("contextmenu", function(event) {
+          event.preventDefault();
+          // if (contextmenu) contextmenu.hide();
+          contextmenu = new ContextMenu([
+            {
+              text:"Edytuj",
+              icon:"📝",
+              events: {
+                click: function (e){
+                  showForm("edit",task);
+                }
+              }
+            },
+            {
+              text:"Usuń",
+              icon:"❌",
+              events: {
+                click: function (e){
+                  deleteTask(task);
+                }
+              }
+            }
+          ], {"close_on_click":true});
+          contextmenu.display(event);
+        });
+
+        listitem.appendChild(label);
+        list.appendChild(listitem);
+      })(z);
+    }
+    return list;
+  }
+
+  missedtaskslist.appendChild(createListOfTasks(missedTasks));
 
   switch (dc) {
     case 0:
@@ -111,61 +182,8 @@ function update(_deadlines, dc, days, _tasks, otherTasks, remindTasks) {
   }
   deadlinesdescription.innerHTML = description;
 
-  var list = document.createElement("ul");
-  for (var z = 0; z < deadlines.length; z++) {
-    (function(z) {
-      var id = z;
-      var task = deadlines[id];
-      var listitem = document.createElement("li");
-      var checkbox = document.createElement("input");
-      checkbox.setAttribute("type","checkbox");
-      checkbox.addEventListener('click', function(e) {
-        var newdeadline = JSON.parse(JSON.stringify(task));
-        newdeadline.checked = this.checked;
-        updateTask(schedule.orderedList, task, newdeadline);
-      });
-      if (task.checked)
-        checkbox.setAttribute("checked","checked");
-      listitem.appendChild(checkbox);
-      var label = document.createElement("label");
-      label.innerHTML = task.title;
-      label.classList.add("clickable");
-      label.classList.add("underline");
-      label.classList.add("wordwrap");
-      label.addEventListener('click', function(e) {
-        showForm('show', task);
-      });
-      label.addEventListener("contextmenu", function(event) {
-        event.preventDefault();
-        // if (contextmenu) contextmenu.hide();
-        contextmenu = new ContextMenu([
-          {
-            text:"Edytuj",
-            icon:"📝",
-            events: {
-              click: function (e){
-                showForm("edit",task);
-              }
-            }
-          },
-          {
-            text:"Usuń",
-            icon:"❌",
-            events: {
-              click: function (e){
-                deleteTask(task);
-              }
-            }
-          }
-        ], {"close_on_click":true});
-        contextmenu.display(event);
-      });
-
-      listitem.appendChild(label);
-      list.appendChild(listitem);
-    })(z);
-  }
-  deadlineslist.appendChild(list);
+  
+  deadlineslist.appendChild(createListOfTasks(deadlines));
 
   if (settings["list-mode"].show_deadlines_with_other_tasks)
     otherTasks = tasks;
@@ -200,7 +218,8 @@ function update(_deadlines, dc, days, _tasks, otherTasks, remindTasks) {
         console.log(task.title);
         var d = new Date();
         newdeadline.checked = (this.checked ? d.getTime() : false);
-        updateTask(schedule.orderedList, task, newdeadline);
+        // updateTask(schedule.orderedList, task, newdeadline);
+        updateTask(schedule.content.tasks, task, newdeadline);
       });
       if (task.checked)
         checkbox.setAttribute("checked","checked");
