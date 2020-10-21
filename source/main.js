@@ -523,7 +523,7 @@ function Schedule(dir, content) {
     }
 
     // extend repetitive tasks
-    if (!norepeat)
+    if (!norepeat) {
       for (var i = 0; i < dayschedule.length; i++) {
         var _task = dayschedule[i];
         var task = JSON.parse(JSON.stringify(_task));
@@ -684,6 +684,7 @@ function Schedule(dir, content) {
           dayschedule.push(task);
         }
       }
+    }
     // orderedList
     dayschedule = dayschedule.concat(this.tasksByDate[strdate] || []);
     if (dayschedule[0] == undefined || !dayschedule) return [];
