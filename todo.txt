@@ -27,7 +27,7 @@ założenia wersji v0.7:
 
 założenia wersji v0.8:
 + usuwanie cyklicznych zadań
-+/- nowy wygląd formularza i wgl
++ nowy wygląd formularza i wgl
 + prawoklik początkowy
 + przypomnienia
 + kolory
@@ -43,6 +43,7 @@ założenia wersji v0.9:
 - prawoklik
 + skróty klawiszowe
 + ustawienia które jakoś wyglądają
+- pominięte zadania
 
 INSTALATOR JEST
 AUTOSTART JEST
