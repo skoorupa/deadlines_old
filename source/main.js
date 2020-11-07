@@ -676,7 +676,7 @@ function Schedule(dir, content) {
         schedule.repetitiveTasks[i].checked = false;
         var repeat = schedule.repetitiveTasks[i].repeat;
         schedule.repetitiveTasks[i] = getNextTaskDate(schedule.repetitiveTasks[i]);
-        console.log(getNextTaskDate(schedule.repetitiveTasks[i]).date);
+        // console.log(getNextTaskDate(schedule.repetitiveTasks[i]).date);
         var index = orderedList.findIndex((obj) => {
           return obj.id == schedule.repetitiveTasks[i].id;
         });
