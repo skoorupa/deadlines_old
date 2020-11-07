@@ -851,7 +851,7 @@ function Schedule(dir, content) {
         i--;
       } else if (remindTasks[i].repeat) {
         if (remindTasks[i].repeat.end) {
-          if (decodeDate(remindTasks[i].repeat.end).getTime()<decodeDate(strdate)) {
+          if (decodeDate(remindTasks[i].repeat.end).getTime()<decodeDate(remindTasks[i].date)) {
             remindTasks.splice(i,1);
             i--;
           }
