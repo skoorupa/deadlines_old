@@ -519,7 +519,8 @@ function getTaskFromForm(name,silent) {
     "description": elems["description"].value,
     "color": elems["color"].value,
     "remind": remind,
-    "priority": 1
+    "priority": 1,
+    "lastcheck": false
   }
   if (elems["date"].checked && elems["time"].checked) 
     task = {

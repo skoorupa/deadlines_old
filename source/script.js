@@ -81,7 +81,10 @@ function update(_deadlines, dc, days, missedTasks, _tasks, otherTasks, remindTas
         checkbox.setAttribute("type","checkbox");
         checkbox.addEventListener('click', function(e) {
           var newdeadline = JSON.parse(JSON.stringify(task));
-          newdeadline.checked = this.checked;
+          var d = new Date();
+          // newdeadline.checked = this.checked;
+          newdeadline.checked = (this.checked ? d.getTime() : false);
+          newdeadline.lastcheck = (this.checked ? d.getTime() : false);
           // updateTask(schedule.orderedList, task, newdeadline);
           updateTask(schedule.content.tasks, task, newdeadline);
         });
@@ -218,6 +221,7 @@ function update(_deadlines, dc, days, missedTasks, _tasks, otherTasks, remindTas
         console.log(task.title);
         var d = new Date();
         newdeadline.checked = (this.checked ? d.getTime() : false);
+        newdeadline.lastcheck = (this.checked ? d.getTime() : false);
         // updateTask(schedule.orderedList, task, newdeadline);
         updateTask(schedule.content.tasks, task, newdeadline);
       });
