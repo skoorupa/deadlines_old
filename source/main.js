@@ -695,34 +695,7 @@ function Schedule(dir, content) {
       }
     }
 
-    // orderedList = orderedList.filter(function(task,index) {
-    //   if (task.exceptions) {
-    //     var response = true;
-    //     for (exception in task.exceptions) {
-    //       if (task.exceptions[exception].date == task.date) {
-    //         response = false;
-    //         orderedList.push(getNextTaskDate(task, true));
-    //       }
-    //     }
-    //     return response;
-    //   } else return true
-    // });
-
-    // for (i in orderedList) {
-    //   if (orderedList[i].exceptions) {
-    //     for (exception in orderedList[i].exceptions) {
-    //       if (orderedList[i].exceptions[exception].date == orderedList[i].date) {
-    //         if (orderedList[i].exceptions[exception].hide) {
-    //           orderedList.push(getNextTaskDate(orderedList[i], true));
-    //           // console.log(orderedList);
-    //         } else {
-    //           orderedList.push(orderedList[i].exceptions[exception]);
-    //         }
-    //         orderedList.splice(i,1);
-    //       }
-    //     }
-    //   }
-    // }
+    schedule.content.tasks = orderedList;
 
     return orderedList.sort(function(a,b) {
       if (a.timeid > b.timeid) return 1
