@@ -368,7 +368,7 @@ function decodeTime(s,date) {
   return time;
 }
 
-function getRemind(task) {
+function getNextRemind(task) {
   switch (task.remind.whenremind) {
     case "whendeadlineends":
       task.remind.reminddate = task.date;
@@ -485,7 +485,7 @@ function getNextTaskDate(_task, force){
   }
 
   if (task.remind) 
-    task = getRemind(task);
+    task = getNextRemind(task);
 
   return task;
 }
@@ -627,7 +627,7 @@ function Schedule(dir, content) {
           task.date == strdate
         ) {
           if (task.remind) 
-            task = getRemind(task);
+            task = getNextRemind(task);
 
           dayschedule.push(task);
         }
@@ -884,7 +884,7 @@ function Schedule(dir, content) {
           }
         }
         else {
-          remindTasks[i] = getRemind(remindTasks[i]);
+          remindTasks[i] = getNextRemind(remindTasks[i]);
 
           // get to original task
           var index = schedule.content.tasks.findIndex(function(item) {
