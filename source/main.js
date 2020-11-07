@@ -368,6 +368,68 @@ function decodeTime(s,date) {
   return time;
 }
 
+function getRemind(task) {
+  switch (task.remind.whenremind) {
+    case "whendeadlineends":
+      task.remind.reminddate = task.date;
+      task.remind.remindtime = task.time;
+      task.remind.timeid = task.timeid;
+      break;
+    case "5minsbefore":
+      var time = task.timeid;
+      var d;
+      time -= 5*60*1000;
+      d = new Date(time);
+
+      task.remind.reminddate = encodeDate(d);
+      task.remind.remindtime = encodeTime(d);
+      task.remind.timeid = time;
+      break;
+    case "30minsbefore":
+      var time = task.timeid;
+      var d;
+      time -= 30*60*1000;
+      d = new Date(time);
+
+      task.remind.reminddate = encodeDate(d);
+      task.remind.remindtime = encodeTime(d);
+      task.remind.timeid = time;
+      break;
+    case "1hourbefore":
+      var time = task.timeid;
+      var d;
+      time -= 3600*1000;
+      d = new Date(time);
+
+      task.remind.reminddate = encodeDate(d);
+      task.remind.remindtime = encodeTime(d);
+      task.remind.timeid = time;
+      break;
+    case "1daybefore":
+      var time = task.timeid;
+      var d;
+      time -= 24*3600*1000;
+      d = new Date(time);
+
+      task.remind.reminddate = encodeDate(d);
+      task.remind.remindtime = encodeTime(d);
+      task.remind.timeid = time;
+      break;
+    case "1weekbefore":
+      var time = task.timeid;
+      var d;
+      time -= 7*24*3600*1000;
+      d = new Date(time);
+
+      task.remind.reminddate = encodeDate(d);
+      task.remind.remindtime = encodeTime(d);
+      task.remind.timeid = time;
+      break;
+  }
+
+  return task;
+}
+
 function getNextTaskDate(_task, force){
   var task = JSON.parse(JSON.stringify(_task));;
   var today = new Date();
@@ -422,65 +484,8 @@ function getNextTaskDate(_task, force){
     }
   }
 
-  if (task.remind) {
-    switch (task.remind.whenremind) {
-      case "whendeadlineends":
-        task.remind.reminddate = task.date;
-        task.remind.remindtime = task.time;
-        task.remind.timeid = task.timeid;
-        break;
-      case "5minsbefore":
-        var time = task.timeid;
-        var d;
-        time -= 5*60*1000;
-        d = new Date(time);
-
-        task.remind.reminddate = encodeDate(d);
-        task.remind.remindtime = encodeTime(d);
-        task.remind.timeid = time;
-        break;
-      case "30minsbefore":
-        var time = task.timeid;
-        var d;
-        time -= 30*60*1000;
-        d = new Date(time);
-
-        task.remind.reminddate = encodeDate(d);
-        task.remind.remindtime = encodeTime(d);
-        task.remind.timeid = time;
-        break;
-      case "1hourbefore":
-        var time = task.timeid;
-        var d;
-        time -= 3600*1000;
-        d = new Date(time);
-
-        task.remind.reminddate = encodeDate(d);
-        task.remind.remindtime = encodeTime(d);
-        task.remind.timeid = time;
-        break;
-      case "1daybefore":
-        var time = task.timeid;
-        var d;
-        time -= 24*3600*1000;
-        d = new Date(time);
-
-        task.remind.reminddate = encodeDate(d);
-        task.remind.remindtime = encodeTime(d);
-        task.remind.timeid = time;
-        break;
-      case "1weekbefore":
-        var time = task.timeid;
-        var d;
-        time -= 7*24*3600*1000;
-        d = new Date(time);
-
-        task.remind.reminddate = encodeDate(d);
-        task.remind.remindtime = encodeTime(d);
-        task.remind.timeid = time;
-        break;
-    }
-  }
+  if (task.remind) 
+    task = getRemind(task);
 
   return task;
 }
@@ -621,65 +626,8 @@ function Schedule(dir, content) {
           task.timeid != _task.timeid &&
           task.date == strdate
         ) {
-          if (task.remind) {
-            switch (task.remind.whenremind) {
-              case "whendeadlineends":
-                task.remind.reminddate = task.date;
-                task.remind.remindtime = task.time;
-                task.remind.timeid = task.timeid;
-                break;
-              case "5minsbefore":
-                var time = task.timeid;
-                var d;
-                time -= 5*60*1000;
-                d = new Date(time);
-
-                task.remind.reminddate = encodeDate(d);
-                task.remind.remindtime = encodeTime(d);
-                task.remind.timeid = time;
-                break;
-              case "30minsbefore":
-                var time = task.timeid;
-                var d;
-                time -= 30*60*1000;
-                d = new Date(time);
-
-                task.remind.reminddate = encodeDate(d);
-                task.remind.remindtime = encodeTime(d);
-                task.remind.timeid = time;
-                break;
-              case "1hourbefore":
-                var time = task.timeid;
-                var d;
-                time -= 3600*1000;
-                d = new Date(time);
-
-                task.remind.reminddate = encodeDate(d);
-                task.remind.remindtime = encodeTime(d);
-                task.remind.timeid = time;
-                break;
-              case "1daybefore":
-                var time = task.timeid;
-                var d;
-                time -= 24*3600*1000;
-                d = new Date(time);
-
-                task.remind.reminddate = encodeDate(d);
-                task.remind.remindtime = encodeTime(d);
-                task.remind.timeid = time;
-                break;
-              case "1weekbefore":
-                var time = task.timeid;
-                var d;
-                time -= 7*24*3600*1000;
-                d = new Date(time);
-
-                task.remind.reminddate = encodeDate(d);
-                task.remind.remindtime = encodeTime(d);
-                task.remind.timeid = time;
-                break;
-            }
-          }
+          if (task.remind) 
+            task = getRemind(task);
 
           dayschedule.push(task);
         }
@@ -936,63 +884,7 @@ function Schedule(dir, content) {
           }
         }
         else {
-          switch (remindTasks[i].remind.whenremind) {
-            case "whendeadlineends":
-              remindTasks[i].remind.reminddate = remindTasks[i].date;
-              remindTasks[i].remind.remindtime = remindTasks[i].time;
-              remindTasks[i].remind.timeid = remindTasks[i].timeid;
-              break;
-            case "5minsbefore":
-              var time = remindTasks[i].timeid;
-              var d;
-              time -= 5*60*1000;
-              d = new Date(time);
-
-              remindTasks[i].remind.reminddate = encodeDate(d);
-              remindTasks[i].remind.remindtime = encodeTime(d);
-              remindTasks[i].remind.timeid = time;
-              break;
-            case "30minsbefore":
-              var time = remindTasks[i].timeid;
-              var d;
-              time -= 30*60*1000;
-              d = new Date(time);
-
-              remindTasks[i].remind.reminddate = encodeDate(d);
-              remindTasks[i].remind.remindtime = encodeTime(d);
-              remindTasks[i].remind.timeid = time;
-              break;
-            case "1hourbefore":
-              var time = remindTasks[i].timeid;
-              var d;
-              time -= 3600*1000;
-              d = new Date(time);
-
-              remindTasks[i].remind.reminddate = encodeDate(d);
-              remindTasks[i].remind.remindtime = encodeTime(d);
-              remindTasks[i].remind.timeid = time;
-              break;
-            case "1daybefore":
-              var time = remindTasks[i].timeid;
-              var d;
-              time -= 24*3600*1000;
-              d = new Date(time);
-
-              remindTasks[i].remind.reminddate = encodeDate(d);
-              remindTasks[i].remind.remindtime = encodeTime(d);
-              remindTasks[i].remind.timeid = time;
-              break;
-            case "1weekbefore":
-              var time = remindTasks[i].timeid;
-              var d;
-              time -= 7*24*3600*1000;
-              d = new Date(time);
-
-              remindTasks[i].remind.reminddate = encodeDate(d);
-              remindTasks[i].remind.remindtime = encodeTime(d);
-              remindTasks[i].remind.timeid = time;
-              break;
-          }
+          remindTasks[i] = getRemind(remindTasks[i]);
 
           // get to original task
           var index = schedule.content.tasks.findIndex(function(item) {
