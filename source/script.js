@@ -70,7 +70,7 @@ function update(_deadlines, dc, days, missedTasks, _tasks, otherTasks, remindTas
     toggleOverviewList(missedtasksbar,"close");
   }
 
-  function createListOfTasks(tasks) {
+  function createListOfTasks(tasks, missed) {
     var list = document.createElement("ul");
     for (var z = 0; z < tasks.length; z++) {
       (function(z) {
@@ -140,7 +140,7 @@ function update(_deadlines, dc, days, missedTasks, _tasks, otherTasks, remindTas
     return list;
   }
 
-  missedtaskslist.appendChild(createListOfTasks(missedTasks));
+  missedtaskslist.appendChild(createListOfTasks(missedTasks,true));
 
   switch (dc) {
     case 0:
