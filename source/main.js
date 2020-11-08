@@ -488,6 +488,56 @@ function getNextTaskDate(_task, force){
   return task;
 }
 
+function getPreviousTaskDate(_task) {
+  var task = JSON.parse(JSON.stringify(_task));
+  var time = new Date(task.timeid);
+  switch (task.repeat.unit) {
+    case "days":
+      time.setDate(time.getDate()-task.repeat.amount);
+      task.timeid = time.getTime();
+      task.date = encodeDate(time);
+      break;
+    case "weeks":
+      time.setDate(time.getDate()-task.repeat.amount*7);
+      task.timeid = time.getTime();
+      task.date = encodeDate(time);
+      break;
+    case "months":
+      if (task.repeat.type == "sameday") {
+        time.setMonth(time.getMonth()-task.repeat.amount);
+      } else if (task.repeat.type == "sameweekday") {
+        var weekday = time.getDay(); // dzień tygodnia
+        var nweekday = 0; // który dzień tygodnia
+        var nd = new Date(time.getTime());
+        while (time.getMonth()==nd.getMonth()) {
+          nweekday++;
+          nd.setDate(nd.getDate()-7);
+        }
+        time.setMonth(time.getMonth()-task.repeat.amount);
+        time.setDate(1);
+        while (time.getDay()!=weekday) {
+          time.setDate(time.getDate()+1);
+        }
+        time.setDate(time.getDate()+7*(nweekday-1));
+      }
+      task.timeid = time.getTime();
+      task.date = encodeDate(time);
+      break;
+    case "years":
+      time.setFullYear(time.getFullYear()-task.repeat.amount);
+      task.timeid = time.getTime();
+      task.date = encodeDate(time);
+      break;
+    default:
+      loginfo("????? coś nie tak z "+task.id+", "+task.repeat.unit);
+  }
+
+  if (task.remind) 
+    task = getNextRemind(task);
+
+  return task;
+}
+
 function Schedule(dir, content) {
   this.date = new Date();
   this.info = {};
