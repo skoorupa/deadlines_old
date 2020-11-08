@@ -791,9 +791,43 @@ function Schedule(dir, content) {
     return dates;
   })(this);
 
-  this.missedTasks = this.content.tasks.filter(obj => {
-    return obj.timeid < this.date.getTime() && !obj.checked;
-  });
+  // this.missedTasks = this.content.tasks.filter(obj => {
+  //   return obj.timeid < this.date.getTime() && !obj.checked;
+  // });
+
+  this.missedTasks = (function(schedule) {
+    var tasks = schedule.content.tasks.filter(obj => {
+      return (obj.timeid < schedule.date.getTime() && !obj.checked) || obj.repeat;
+    });
+    var missedTasks = [];
+    var today = schedule.date.getTime();
+
+    for (task of schedule.repetitiveTasks) {
+      if (task.exceptions) 
+        for (exception in task.exceptions) {
+          tasks.push(task.exceptions[exception]);
+        }
+    }
+
+    for (task of tasks) {
+      var prevtask = getPreviousTaskDate(task);
+      if (task.lastcheck < prevtask.timeid) {
+        if (task.repeat) {
+          if (task.repeat.end) {
+            if (
+              decodeTime(task.time,decodeDate(task.repeat.end)) < task.timeid
+            ) continue;
+          }
+          if (
+            prevtask.timeid >= decodeTime(task.time,decodeDate(task.repeat.began)) &&
+            prevtask.timeid > task.lastcheck
+          ) missedTasks.push(prevtask);
+        } else missedTasks.push(prevtask);
+      }
+    }
+
+    return missedTasks;
+  })(this);
 
   this.getUpcomingDeadlines = function (days) {
     var today = new Date();
@@ -872,7 +906,7 @@ function Schedule(dir, content) {
 
   
 
-  this.remindTasks = (function(schedule){
+  this.remindTasks = (function(schedule) {
     var remindTasks = [];
     var tasks = JSON.parse(JSON.stringify(schedule.content.tasks));
     for (task of tasks) 
