@@ -1223,8 +1223,14 @@ function loadTray() {
       mainwin.hide();
   }
 
+  function traydblclick() {
+    mainwin.show();
+    if (mainwin) mainwin.send("showform", ["add"]);
+  }
+
   tray.removeAllListeners();
   tray.on('click', trayclick);
+  tray.on('double-click', traydblclick);
 }
 
 function renderTray(a, b) {
