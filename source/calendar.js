@@ -96,30 +96,36 @@ function generateCalendar(tasks,month) {
 		//tygodnie
 		week.forEach(function(day) {
 			var cell = document.createElement("span");
+			var date = dbegin.getFullYear()+"-"+(dbegin.getMonth()+1)+"-"+dbegin.getDate();
+			var taskcount = getDaySchedule(date).length||"";
+
 			cell.classList.add("cell");
 			cell.classList.add("day");
 			if (dbegin.getMonth()!=thismonth)
 				cell.classList.add("notthismonth");
+
 			if (dbegin.getTime()==today.getTime()){
-				cell.innerHTML = "<span class='today'>"+dbegin.getDate()+"</span>";
-			} else cell.innerHTML = dbegin.getDate();
-			cell.setAttribute("data-date",dbegin.getFullYear()+"-"+(dbegin.getMonth()+1)+"-"+dbegin.getDate());
-			if (cell.getAttribute("data-date") == clickdate) {
+				cell.innerHTML = `<span class='today'>${dbegin.getDate()}<sup>${taskcount}</sup></span>`;
+			} else 
+				cell.innerHTML = `${dbegin.getDate()}<sup>${taskcount}</sup>`;
+
+			cell.setAttribute("data-date",date);
+			if (date == clickdate) {
 				cell.classList.add("clickeddate");
 			}
-			if (getDaySchedule(cell.getAttribute("data-date")).length) 
-				cell.classList.add("hastasks")
+			if (taskcount) 
+				cell.classList.add("hastasks");
 			
 			cell.addEventListener("click", function() {
-				hoverdate = cell.getAttribute("data-date");
-				clickdate = cell.getAttribute("data-date");
+				hoverdate = date;
+				clickdate = date;
 				update();
 			});
 			cell.addEventListener("dblclick", function() {
-				showForm('add',undefined,cell.getAttribute("data-date"));
+				showForm('add',undefined,date);
 			});
 			cell.addEventListener("mouseover", function() {
-				hoverdate = cell.getAttribute("data-date");
+				hoverdate = date;
 				update(true);
 			});
 			cell.addEventListener("mouseleave", function() {
