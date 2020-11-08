@@ -124,7 +124,8 @@ function settingsHandler() {
       "show_deadlines_with_other_tasks": false
     },
     "calendar-mode": {
-      "default_clickdate": "today"
+      "default_clickdate": "today",
+      "show_repetitive_tasks_on_month_preview": false
     }
   };
   settings.config = JSON.parse(JSON.stringify(defaultsettings));

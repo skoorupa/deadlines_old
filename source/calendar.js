@@ -160,7 +160,7 @@ function jumpMonthCalendar(step) {
 	generateCalendar(schedule.orderedList,d.getMonth()+todayview);
 }
 
-function getDaySchedule(strdate) {
+function getDaySchedule(strdate, month) {
 	// repetitiveTasks
 	var date = decodeDate(strdate);
 	var dayschedule = schedule.repetitiveTasks.concat([]);
@@ -176,6 +176,10 @@ function getDaySchedule(strdate) {
   }
 
 	// extend repetitive tasks
+	if (
+		!month ||
+		(month && settings["calendar-mode"].show_repetitive_tasks_on_month_preview)
+	)
 	for (var i = 0; i < dayschedule.length; i++) {
 		var _task = dayschedule[i];
 		var task = JSON.parse(JSON.stringify(_task));
@@ -366,8 +370,8 @@ function getDaySchedule(strdate) {
 	return (dayschedule || []);
 }
 
-function previewSchedule(strdate, clear) {
-	var dayschedule = getDaySchedule(strdate);
+function previewSchedule(strdate, clear, month) {
+	var dayschedule = getDaySchedule(strdate, month);
 	// clear
 	if (!clear) 
 		document.getElementById("preview").innerHTML = "\
@@ -551,10 +555,10 @@ function previewMonthSchedule (strdate) {
 	var d = decodeDate(strdate);
 	var dend = new Date(d.getTime());
 	dend.setMonth(d.getMonth()+1);
-	previewSchedule(encodeDate(d));
+	previewSchedule(encodeDate(d), false, true);
 	d.setDate(d.getDate()+1);
 	while (d.getTime()<dend.getTime()) {
-		previewSchedule(encodeDate(d), true);
+		previewSchedule(encodeDate(d), true, true);
 		d.setDate(d.getDate()+1);
 	}
 }
