@@ -431,28 +431,27 @@ function getNextRemind(task) {
 }
 
 function getNextTaskDate(_task, force){
-  var task = JSON.parse(JSON.stringify(_task));;
+  var task = JSON.parse(JSON.stringify(_task));
   var today = new Date();
+  var time = new Date(task.timeid);
   if (force) today = new Date(task.timeid+1);
+  if (!task.repeat) return task;
   while (
     task.timeid < today.getTime()
   ) {
     // console.log(task.title);
     switch (task.repeat.unit) {
       case "days":
-        var time = new Date(task.timeid);
         time.setDate(time.getDate()+task.repeat.amount);
         task.timeid = time.getTime();
         task.date = encodeDate(time);
         break;
       case "weeks":
-        var time = new Date(task.timeid);
         time.setDate(time.getDate()+task.repeat.amount*7);
         task.timeid = time.getTime();
         task.date = encodeDate(time);
         break;
       case "months":
-        var time = new Date(task.timeid);
         if (task.repeat.type == "sameday") {
           time.setMonth(time.getMonth()+task.repeat.amount);
         } else if (task.repeat.type == "sameweekday") {
@@ -474,7 +473,6 @@ function getNextTaskDate(_task, force){
         task.date = encodeDate(time);
         break;
       case "years":
-        var time = new Date(task.timeid);
         time.setFullYear(time.getFullYear()+task.repeat.amount);
         task.timeid = time.getTime();
         task.date = encodeDate(time);
