@@ -556,6 +556,19 @@ function Schedule(dir, content) {
   this.content = JSON.parse(this.info.tasks.jsontxt);
   this.content.path = this.info.tasks.path;
 
+  this.updateTasks = function (newtasks, nodeadlines) {
+    var now = new Date();
+    var nowtext = `${now.getDate()}.${now.getMonth()+1}.${now.getFullYear()} ${now.getHours()}:${(now.getMinutes()>9)?now.getMinutes():"0"+now.getMinutes()}`;
+    if (newtasks) this.content.tasks = newtasks;
+    fs.writeFileSync(this.info.tasks.path, JSON.stringify(this.content));
+    console.log('saving new stuff: '+nowtext);
+    console.log('>>> all tasks:');
+    for (var task of this.content.tasks) 
+      console.log(task);
+
+    if (!nodeadlines) this.updateDeadlines();
+  }
+
   this.repetitiveTasks = this.content.tasks.filter(task => {
     return task.repeat;
   });
@@ -743,7 +756,17 @@ function Schedule(dir, content) {
       }
     }
 
-    schedule.content.tasks = orderedList;
+    if (JSON.stringify(schedule.content.tasks) != JSON.stringify(orderedList)) {
+      console.log('orderedList update');
+      schedule.content.tasks = orderedList.sort(function(a,b) {
+        if (a.timeid > b.timeid) return 1
+        else if (a.timeid < b.timeid) return -1
+        else return 0
+      });
+      // fs.writeFileSync(schedule.info.tasks.path, JSON.stringify(schedule.content));
+      // schedule.updateTasks(orderedList,true);
+      // refreshUpdater();
+    }
 
     return orderedList.sort(function(a,b) {
       if (a.timeid > b.timeid) return 1
@@ -989,19 +1012,6 @@ function Schedule(dir, content) {
     }) || [];
 
     return reminders;
-  }
-
-  this.updateTasks = function (newtasks) {
-    var now = new Date();
-    var nowtext = `${now.getDate()}.${now.getMonth()+1}.${now.getFullYear()} ${now.getHours()}:${now.getMinutes()}`;
-    if (newtasks) this.content.tasks = newtasks;
-    fs.writeFileSync(this.info.tasks.path, JSON.stringify(this.content));
-    console.log('saving new stuff: '+nowtext);
-    console.log('>>> all tasks:');
-    for (var task of this.content.tasks) 
-      console.log(task);
-
-    this.updateDeadlines();
   }
 
   this.addTask = function(task) {
@@ -1479,16 +1489,20 @@ function refreshUpdater() {
 
   updater = setInterval(function() {
     var newschedule = new Schedule(schedulelist[0], schedule.content);
-    if (schedule.info.tasks.jsontxt != newschedule.info.tasks.jsontxt){
+    if (
+      // schedule.info.tasks.jsontxt != newschedule.info.tasks.jsontxt
+      JSON.stringify(schedule.content.tasks) != JSON.stringify(newschedule.content.tasks)
+    ) {
       console.log('new schedule');
       schedule = newschedule;
-      sendSchedule(mainwin);
+      if (mainwin) sendSchedule(mainwin);
       renderTray(schedule.upcomingDeadlines, schedule.remindTasks);
     }
     checkReminders();
   }, updatetime);
+
   schedule = new Schedule(schedulelist[0], schedule.content);
-  sendSchedule(mainwin);
+  if (mainwin) sendSchedule(mainwin);
   renderTray(schedule.upcomingDeadlines, schedule.remindTasks);
 
   console.log('>>> remindTasks:')
