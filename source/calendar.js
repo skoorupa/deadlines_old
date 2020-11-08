@@ -405,7 +405,7 @@ function previewSchedule(strdate, clear) {
 				var newdeadline = JSON.parse(JSON.stringify(task));
 				var d = new Date();
 				newdeadline.checked = (this.checked ? d.getTime() : false);
-				newdeadline.lastcheck = (this.checked ? d.getTime() : false);
+				newdeadline.lastcheck = (this.checked ? d.getTime() : newdeadline.lastcheck);
 				updateTask(schedule.orderedList, task, newdeadline);
 			});
 			if (task.checked)
