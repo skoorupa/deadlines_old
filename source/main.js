@@ -1189,7 +1189,8 @@ function Schedule(dir, content) {
 
 function loadTray() {
   if (!tray)
-    tray = new Tray(path.join(__dirname,"tray.ico"));
+    // tray = new Tray(path.join(__dirname,"tray.ico"));
+    tray = new Tray(path.join(__dirname,"icon.png"));
   // else {
   //  tray.destroy();
   //  tray = new Tray(path.join(__dirname,"tray.ico"));

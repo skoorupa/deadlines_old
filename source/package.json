@@ -14,9 +14,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "package_win64": "electron-packager ./ --overwrite --asar --icon=tray.png --out=../build --platform=win32 --arch=x64 --win32metadata.CompanyName=\"Adam Skorupski\" --win32metadata.ProductName=\"Deadlines\"",
+    "package_win64": "electron-packager ./ --overwrite --asar --icon=icon.png --out=../build --platform=win32 --arch=x64 --win32metadata.CompanyName=\"Adam Skorupski\" --win32metadata.ProductName=\"Deadlines\"",
     "setup_win64": "node ./setup_win64.js",
-    "package_win32": "electron-packager ./ --overwrite --asar --icon=tray.png --out=../build --platform=win32 --arch=ia32 --win32metadata.CompanyName=\"Adam Skorupski\" --win32metadata.ProductName=\"Deadlines\"",
+    "package_win32": "electron-packager ./ --overwrite --asar --icon=icon.png --out=../build --platform=win32 --arch=ia32 --win32metadata.CompanyName=\"Adam Skorupski\" --win32metadata.ProductName=\"Deadlines\"",
     "setup_win32": "node ./setup_win32.js"
   },
   "author": "Adam Skorupski",

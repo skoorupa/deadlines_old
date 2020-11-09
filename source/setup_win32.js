@@ -20,6 +20,6 @@ function getInstallerConfig () {
     outputDirectory: path.join(outPath, 'windows-installer','32bit'),
     exe: 'deadlines.exe',
     setupExe: 'DeadlinesSetup32-'+process.env.npm_package_version+'.exe',
-    setupIcon: "./tray.ico"
+    setupIcon: "./icon.ico"
   })
 }
