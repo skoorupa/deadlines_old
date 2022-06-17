@@ -1,7 +1,7 @@
 {
   "name": "deadlines",
   "productName": "Deadlines",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "description": "To-do and time management app.",
   "main": "main.js",
   "dependencies": {
